@@ -112,6 +112,7 @@ public class CharSelectionController : MonoBehaviour {
                 controller.BindData(currentCharactersInfo.Chars[i]);
             }
             controller.OnCharacterSelected = OnCharacterSelected;
+            controller.OnEnterGameRequested = OnEnterGameClicked;
 
             characterSlots.Add(controller);
         }

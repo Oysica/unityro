@@ -129,9 +129,25 @@ public class GameManager : MonoBehaviour {
     }
 
     public void PlayBgm(string name) {
-        var bgm = Addressables.LoadAssetAsync<AudioClip>(Path.Combine("bgm", name).SanitizeForAddressables()).WaitForCompletion();
-        AudioSource.clip = bgm;
-        AudioSource.Play();
+        // TEMPORARY BRING-UP STUB: Tables.MapTable is populated from the same
+        // .lub/msgstringtable-dependent load that's guarded/empty elsewhere
+        // in this data set (see Tables.cs), so a map's .mp3 field can come
+        // back null here. Skip playback instead of crashing Path.Combine -
+        // this was aborting BeginMapLoading's Task entirely, which could
+        // leave whatever awaits it (MapController.Awake) without a
+        // completed map.
+        if (string.IsNullOrEmpty(name)) {
+            Debug.LogWarning("[bring-up] PlayBgm: no bgm name for this map, skipping");
+            return;
+        }
+
+        try {
+            var bgm = Addressables.LoadAssetAsync<AudioClip>(Path.Combine("bgm", name).SanitizeForAddressables()).WaitForCompletion();
+            AudioSource.clip = bgm;
+            AudioSource.Play();
+        } catch (Exception e) {
+            Debug.LogWarning($"[bring-up] PlayBgm: failed to load '{name}': {e.Message}");
+        }
     }
 
     /**

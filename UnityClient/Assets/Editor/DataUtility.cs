@@ -263,6 +263,163 @@ public class DataUtility {
     }
 
     /// <summary>
+    /// Extracts the map textures referenced by the Prontera-area map that
+    /// UnityRO's NodeProperties (3D scene-node prop meshes) requested after
+    /// successfully entering the map (confirmed via Editor.log: 277
+    /// InvalidKeyException hits, deduped to 273 real GRF files, verified
+    /// byte-for-byte present via a one-off Python GRF-table scan before
+    /// writing this method - see session scratchpad verify_map_textures.py).
+    ///
+    /// Prontera proper (data/texture/ÇÁ·ÐÅ×¶ó/, no trailing "³»ºÎ") is taken
+    /// as one bulk folder filter: it holds 196 total GRF entries and ~190
+    /// were needed, so the handful of extra files are harmless. Every other
+    /// folder here is a SHARED prop/UI library used by many other maps
+    /// (내부소품/외부소품/기타마을/나무잡초꽃/워터/유저인터페이스 range from
+    /// 174 to 29,689 total entries each - counted via count_map_folders.py
+    /// before deciding), so those stay per-file exact filters to avoid
+    /// repeating the earlier full-extraction crash (see MinimalBringUp /
+    /// BringUpCharacterBasics comments elsewhere in this file for that
+    /// incident). Same CP1252-mojibake path convention as everywhere else
+    /// in this file - do NOT "fix" these to look like real Korean.
+    /// </summary>
+    [MenuItem("UnityRO/0c. Bring-up: Map Textures (Prontera)")]
+    static void BringUpMapTextures() {
+        string[] textureTargets = {
+            "data/texture/ÇÁ·ÐÅ×¶ó/",   // Prontera proper - bulk folder (196 total, ~190 needed)
+            "data/texture/camp/pr_cannon01",
+            "data/texture/camp/pr_cannon02",
+            "data/texture/grid",
+            "data/texture/pron-ch1",
+            "data/texture/pron-ch2",
+            "data/texture/pron-ch3",
+            "data/texture/pron-ch4",
+            "data/texture/pron-ch5",
+            "data/texture/pron-ch6",
+            "data/texture/pron-ch7",
+            "data/texture/pron-ch8",
+            "data/texture/pron-ch9",
+            "data/texture/±âÅ¸¸¶À»/hand_01",
+            "data/texture/±âÅ¸¸¶À»/hand_02",
+            "data/texture/±âÅ¸¸¶À»/izld-br2",
+            "data/texture/±âÅ¸¸¶À»/izld-br3",
+            "data/texture/±âÅ¸¸¶À»/izld-br5",
+            "data/texture/³ª¹«ÀâÃÊ²É/mo-tree-block",
+            "data/texture/³ª¹«ÀâÃÊ²É/newtree_01",
+            "data/texture/³ª¹«ÀâÃÊ²É/newtree_02",
+            "data/texture/³»ºÎ¼ÒÇ°/box2-side",
+            "data/texture/³»ºÎ¼ÒÇ°/box2",
+            "data/texture/³»ºÎ¼ÒÇ°/ch-side1",
+            "data/texture/³»ºÎ¼ÒÇ°/ch-side2",
+            "data/texture/³»ºÎ¼ÒÇ°/ch-side3",
+            "data/texture/³»ºÎ¼ÒÇ°/cha2-side1",
+            "data/texture/³»ºÎ¼ÒÇ°/cha2-side2",
+            "data/texture/³»ºÎ¼ÒÇ°/cha2-side3",
+            "data/texture/³»ºÎ¼ÒÇ°/d-w",
+            "data/texture/³»ºÎ¼ÒÇ°/drum-1",
+            "data/texture/³»ºÎ¼ÒÇ°/durm-1",
+            "data/texture/¿ÜºÎ¼ÒÇ°/myo-brd1",
+            "data/texture/¿ÜºÎ¼ÒÇ°/myo-msign1",
+            "data/texture/¿ÜºÎ¼ÒÇ°/pron-bench1",
+            "data/texture/¿ÜºÎ¼ÒÇ°/pron-bench2",
+            "data/texture/¿ÜºÎ¼ÒÇ°/pron-bench3",
+            "data/texture/¿ÜºÎ¼ÒÇ°/pron-wag1",
+            "data/texture/¿ÜºÎ¼ÒÇ°/pron-wag2",
+            "data/texture/¿ÜºÎ¼ÒÇ°/pron-wag3",
+            "data/texture/¿öÅÍ/water000",
+            "data/texture/¿öÅÍ/water001",
+            "data/texture/¿öÅÍ/water002",
+            "data/texture/¿öÅÍ/water003",
+            "data/texture/¿öÅÍ/water004",
+            "data/texture/¿öÅÍ/water005",
+            "data/texture/¿öÅÍ/water006",
+            "data/texture/¿öÅÍ/water007",
+            "data/texture/¿öÅÍ/water008",
+            "data/texture/¿öÅÍ/water009",
+            "data/texture/¿öÅÍ/water010",
+            "data/texture/¿öÅÍ/water011",
+            "data/texture/¿öÅÍ/water012",
+            "data/texture/¿öÅÍ/water013",
+            "data/texture/¿öÅÍ/water014",
+            "data/texture/¿öÅÍ/water015",
+            "data/texture/¿öÅÍ/water016",
+            "data/texture/¿öÅÍ/water017",
+            "data/texture/¿öÅÍ/water018",
+            "data/texture/¿öÅÍ/water019",
+            "data/texture/¿öÅÍ/water020",
+            "data/texture/¿öÅÍ/water021",
+            "data/texture/¿öÅÍ/water022",
+            "data/texture/¿öÅÍ/water023",
+            "data/texture/¿öÅÍ/water024",
+            "data/texture/¿öÅÍ/water025",
+            "data/texture/¿öÅÍ/water026",
+            "data/texture/¿öÅÍ/water027",
+            "data/texture/¿öÅÍ/water028",
+            "data/texture/¿öÅÍ/water029",
+            "data/texture/¿öÅÍ/water030",
+            "data/texture/¿öÅÍ/water031",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/bgi_temp",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/loading06",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_doramgirl01",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_doramgirl02",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_doramgirl03",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_doramgirl04",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_doramgirl05",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_doramgirl06",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl01",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl02",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl03",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl04",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl05",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl06",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl07",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl08",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl09",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl10",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl11",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl12",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl13",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl14",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl15",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl16",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl17",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl18",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl19",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl20",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl21",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl22",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/make_character_ver2/img_hairstyle_girl23",
+            "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/map/map_arrow",
+            "data/texture/ÇÁ·ÐÅ×¶ó³»ºÎ/h1-door",
+            "data/texture/ÇÁ·ÐÅ×¶ó³»ºÎ/h2-door",
+            "data/texture/ÇÁ·ÐÅ×¶ó³»ºÎ/h3-door",
+        };
+
+        foreach (var target in textureTargets) {
+            try {
+                s_textureFilter = target;
+                ExtractTextures();
+            } finally {
+                s_textureFilter = DEFAULT_TEXTURE_FILTER;
+            }
+        }
+
+        AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+        CreateTexturesAddressableAssets();
+
+        if (Directory.Exists(GENERATED_RESOURCES_PATH)) {
+            try {
+                AssetDatabase.StartAssetEditing();
+                MergeDirectoryInto(GENERATED_RESOURCES_PATH, GENERATED_ADDRESSABLES_PATH);
+            } finally {
+                AssetDatabase.StopAssetEditing();
+                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            }
+        }
+
+        Debug.Log("[BringUpMapTextures] done.");
+    }
+
+    /// <summary>
     /// Recursively moves every file (and its .meta sidecar, if any) from
     /// sourceDir into destDir, creating destDir subfolders as needed, then
     /// removes the now-empty sourceDir. Used because System.IO.Directory.Move

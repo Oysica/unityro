@@ -12,6 +12,13 @@ public class CharacterCellController : MonoBehaviour, IPointerClickHandler {
     public bool IsEmpty => data == null;
 
     public Action<CharacterData> OnCharacterSelected;
+    // TEMPORARY BRING-UP STUB: classic-RO double-click-to-enter. This client
+    // never wired that up (single click only selects; entering requires a
+    // separate "Start Game" button whose Addressable-driven visuals are
+    // broken/collapsed in this bring-up data set). Wired independently of
+    // any texture/layout state so it works regardless of that button's UI
+    // issues.
+    public Action OnEnterGameRequested;
 
     public void BindData(CharacterData data) {
         this.data = data;
@@ -30,6 +37,13 @@ public class CharacterCellController : MonoBehaviour, IPointerClickHandler {
     }
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left) {
+            // Double-click check runs first and unconditionally: the known
+            // cosmetic KeyNotFoundException inside OnCharacterSelected (empty
+            // job-name table, see Job.cs) is unhandled and would otherwise
+            // abort this whole method before reaching the check below.
+            if (eventData.clickCount >= 2) {
+                OnEnterGameRequested?.Invoke();
+            }
             OnCharacterSelected?.Invoke(data);
         }
     }

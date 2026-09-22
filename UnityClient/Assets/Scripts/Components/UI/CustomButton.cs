@@ -69,6 +69,16 @@ public class CustomButton : Button,
         }
     }
 
+    // TEMPORARY BRING-UP STUB: when this button's background can't be shown
+    // (empty/broken Addressable GUID, or the load itself throws), the button
+    // and any label text on it become effectively invisible/undiscoverable -
+    // e.g. the char-select "Start Game" button, which has no valid
+    // background/hover/pressed GUIDs in this data set. Tint the RawImage a
+    // visible flat color instead of leaving it fully transparent/white-on-
+    // white, purely so the button area (and its text child) stays visible
+    // and clickable. Real fix is extracting/wiring the actual GRF assets.
+    private static readonly Color FallbackTint = new Color(0.25f, 0.45f, 0.85f, 0.55f);
+
     private void LoadIdleTexture() {
         try {
             if (backgroundTexture == null && AddressablesHolder.backgroundTexture.AssetGUID.Length > 0) {
@@ -77,6 +87,10 @@ public class CustomButton : Button,
             }
         } catch (Exception e) {
             Debug.LogError($"Failed to load background image from {this} {e}");
+        } finally {
+            if (backgroundTexture == null) {
+                rawImage.color = FallbackTint;
+            }
         }
     }
 
