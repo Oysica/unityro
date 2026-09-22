@@ -1013,4 +1013,17 @@
     //HC_AVAILABLE_SECOND_PASSWD = 0x8c6,
     //ZC_SKILL_ENTRY3 = 0x8c7,
     LAST = 0x8c9,
+
+    #region PANDAS_CUSTOM
+    // Non-standard packets sent unconditionally by this fork's Pandas-based
+    // server to every session, regardless of client type. The official
+    // client's Gshield.dll relies on both being sent unconditionally (it
+    // hangs waiting for AC_HWID_NONCE if the server ever withholds it), so
+    // these must stay registered/skipped here rather than asking the server
+    // to stop sending them. See session notes for AC_HWID_NONCE (22 bytes:
+    // header + 4-byte magic + 16-byte nonce) and AC_AA_STATUS (101 bytes,
+    // pushed every ~5s to all online players).
+    AC_HWID_NONCE = 0x0F04,
+    AC_AA_STATUS = 0x0F10,
+    #endregion
 }

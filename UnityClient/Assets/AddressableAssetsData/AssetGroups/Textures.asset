@@ -276566,6 +276566,1818 @@ MonoBehaviour:
     m_SerializedLabels:
     - Textures
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bf2df2add249154da6db51ba8f0126b
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/bgi_temp.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e95fa03df06769043ac16e478a7664c2
+    m_Address: ure/camp/pr_cannon01.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89b2fd13a23f1bf4f969ddf7835327d4
+    m_Address: ure/camp/pr_cannon02.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 814dd5adfab2a6a45bede0e7fb0c5dc6
+    m_Address: ure/grid.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c30dee05761e1e4dbb5650f29e9f008
+    m_Address: ure/pron-ch1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8daba3b1685874d488b6e3bd47cce933
+    m_Address: ure/pron-ch2.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33ce30040aa6b99449d0e32b73d04251
+    m_Address: ure/pron-ch3.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64e77d7b3b0ab0448800c11eeb8e62d3
+    m_Address: ure/pron-ch4.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10d65b7ece054d64f8c906157dbefc94
+    m_Address: ure/pron-ch5.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 18f0a0c9381a2a3499b3fec1e7513265
+    m_Address: ure/pron-ch6.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7cfc1b7ee14a0af45ab56688c68efb85
+    m_Address: ure/pron-ch7.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ecd9e0b26feb6f4298c25007d36cf27
+    m_Address: ure/pron-ch8.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4e04ae176afd194cb24e44984cf9992
+    m_Address: ure/pron-ch9.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56349104ad614fe428c22ac85a540caf
+    m_Address: "ure/\xB1\xE2\xC5\xB8\xB8\xB6\xC0\xBB/hand_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80eaa4311091fcf4cbe441e590db67e5
+    m_Address: "ure/\xB1\xE2\xC5\xB8\xB8\xB6\xC0\xBB/hand_02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9dc47ecc143ac3478f40149f157978e
+    m_Address: "ure/\xB1\xE2\xC5\xB8\xB8\xB6\xC0\xBB/izld-br2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 957bf97efa0b650489f564b3267634ff
+    m_Address: "ure/\xB1\xE2\xC5\xB8\xB8\xB6\xC0\xBB/izld-br3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a0ad43fdd933f64bbeef11dad0a7e66
+    m_Address: "ure/\xB1\xE2\xC5\xB8\xB8\xB6\xC0\xBB/izld-br5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 553873fed0043ea4480d5ac61d9cd215
+    m_Address: "ure/\xB3\xAA\xB9\xAB\xC0\xE2\xC3\xCA\xB2\xC9/mo-tree-block.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c6967337f2475645a27c2393ed284bd
+    m_Address: "ure/\xB3\xAA\xB9\xAB\xC0\xE2\xC3\xCA\xB2\xC9/newtree_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dcf43cf87e29ebc4799eee846f73c7ca
+    m_Address: "ure/\xB3\xAA\xB9\xAB\xC0\xE2\xC3\xCA\xB2\xC9/newtree_02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20c577b15c65a8d47b52b2f570ee55f7
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/box2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15d66ddc6111dde4ba3423025db6809c
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/box2-side.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 03eeb2ac418273f4ba986dfc2a4e81d9
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/ch-side1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 08e8e182041152a48b496426aa76e251
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/ch-side2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c025c9688aeeda343a862f8448d78dce
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/ch-side3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 929727c49498de744a3ac9c99688d071
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/cha2-side1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1df5ecf1d47c004ca30d2ab2804095f
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/cha2-side2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba5433514ba2d5646836ffeea20ed448
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/cha2-side3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63cf8da4a8bea454b8b2bfa19850717d
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/d-w.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8cd5f3eaf3dfbb14ab7651c1c4eaac48
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/drum-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8dac2a50d33531f4b8fbd0ce5820f8ce
+    m_Address: "ure/\xB3\xBB\xBA\xCE\xBC\xD2\xC7\xB0/durm-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b49d5bfb939f8740bae18fe1f280fb7
+    m_Address: "ure/\xBF\xDC\xBA\xCE\xBC\xD2\xC7\xB0/myo-brd1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6ccb55eea26c4c4c9675003d9673047
+    m_Address: "ure/\xBF\xDC\xBA\xCE\xBC\xD2\xC7\xB0/myo-msign1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 395ca4f1e93f40d4cb0175b749f432d8
+    m_Address: "ure/\xBF\xDC\xBA\xCE\xBC\xD2\xC7\xB0/pron-bench1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e6fc344479cb624fb13f72397ece5f8
+    m_Address: "ure/\xBF\xDC\xBA\xCE\xBC\xD2\xC7\xB0/pron-bench2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9bdb87c5f95fd8b4b82a3741f7299f7f
+    m_Address: "ure/\xBF\xDC\xBA\xCE\xBC\xD2\xC7\xB0/pron-bench3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6e358ff324325441aa932e6a8a70e50
+    m_Address: "ure/\xBF\xDC\xBA\xCE\xBC\xD2\xC7\xB0/pron-wag1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bab1b1c19a9cf64abb5d72ac20725a2
+    m_Address: "ure/\xBF\xDC\xBA\xCE\xBC\xD2\xC7\xB0/pron-wag2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 191b433883395e14c976c261456c7d08
+    m_Address: "ure/\xBF\xDC\xBA\xCE\xBC\xD2\xC7\xB0/pron-wag3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e55051635732b0a47b9a835663ff17ff
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water000.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd7b9a3018b3bc740bec38e5851d586c
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water001.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 469de6e9beb12a34b98489d5790a036b
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water002.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1922cfa201113f74f8b8cfbd6c4f6bc5
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water003.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dad198d1e783e7c43b60d4739f495fdf
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water004.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f3800f8703deff4bbf3526507e34dba
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water005.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f0bf6ad8e4da234b9b32288740ca623
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water006.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68ccaf1cadd6b474184f0b6e588aa89f
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water007.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1711e02803bc97499b5c4bee3fb1d69
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water008.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 670b90763aba019428292e6e6555934b
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water009.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3fad1ca1f79d28643b95d45f125dd73d
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water010.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d7432b311fc9244c97bada75f6128f8
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water011.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2e7afd6740800449a8f49292679d689
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water012.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c53ddd920de512240afc340ec0c44526
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water013.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 112e009a89bedfb4bbd7ca4056bdee29
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water014.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d5e79521d392b24d94314fd8ac7b6fd
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water015.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7f4452236441a5a4eb82ec7c359855c2
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water016.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6abda2beb52fd140be2594bf19c8964
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water017.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d065b1943c55b8648b08965f9ac6bdd9
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water018.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb2337d1faee5fe4096effa1cee4df77
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water019.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e370de2f1227a44a89ea789394b7174
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water020.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e83ad68746683d449b46ecbc203735e3
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water021.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2300a88f44c694b448620595d1f8937c
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water022.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc96f128f36106c4c93edbf6b78a4e77
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water023.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a3f2a0276ba49c4cb30aaade24feca6
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water024.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6782800b2dc26464db6a6e0377bd66de
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water025.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ea20b3cba7e86d4f8b2bf567e06a1c8
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water026.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a5f6930ca5f4a540af7b5281867077e
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water027.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b2748a94f914f545ad08e011209ba9e
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water028.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0d92b7aa3ee6e349aecadd06f0e9039
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water029.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7a14ea277ac48b498bbe0defdc1480d
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water030.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1e14a52ad89a7e4cb54fac5846dcc96
+    m_Address: "ure/\xBF\xF6\xC5\xCD/water031.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac476e561d217c247ba3f530103683dd
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/bgi_temp.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6a10fdf982aa9074d944cfb571c7b32b
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/loading06.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf67f141c81f26749b6d9229424d00d1
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_doramgirl01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69524c97113fa8646b353989c7ea7772
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_doramgirl02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 548dcacea105b5a45a1ccf696036210c
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_doramgirl03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e398dcfd9e422b4478a3826beb028fe5
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_doramgirl04.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f62a34e98d080034886ed0bacb9c7c90
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_doramgirl05.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02e94f746a1db734399b3699a419f0f6
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_doramgirl06.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bde818a0e2b665846978ee81c01d169a
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df5b880d07cca4b46862693659c16de1
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b9a8ae6e6c5e0b4293a70fdb99fd9f2
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 25d32c482ac0d134a93ca0e58ded6ec0
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl04.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9de4c930a618e634abfa78fb42988b8d
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl05.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1b0a73e80a6fb3449faa2b2dbe8bfbd
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl06.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7a85e7fc41147d40968882e2f2d6eaa
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl07.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2811544171671d641befbb014ccfd087
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl08.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9947ec3082a98f446bb9c2f12cb284ce
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl09.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0cb6154dae009664d8556482643aac28
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl10.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b506850911d7f93439ed7433bd2a3b7c
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl11.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de046335ad331ef438f09940bb54141d
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl12.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e26c36807af2e6c468418b83740a9b95
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl13.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c30fe39037ef4c24db90674a01664242
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl14.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c45cfa26823323049acd775e471be835
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl15.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dcd725449633bc941bb10b45d7c10737
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl16.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 55db2b981422edb4b962fcf61630f45b
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl17.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fea91c876252054985cb9a652d5c650
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl18.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ca0879c18f9f62468b2590141939930
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl19.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c666d740f92d84f4a8804c6b8792e38c
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl20.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc76d2abe480f2a4d875f911ecaf2a88
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl21.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 091aaba48c919444b9d09548fba81ac2
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl22.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9eeb7a3d1fe15e4991ebf30a94e29db
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/make_character_ver2/img_hairstyle_girl23.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19560f063c3be9a4185acb624f1c929c
+    m_Address: "ure/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/map/map_arrow.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ce9d425c042890428a3659f3fc6ef51
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/al-hou-r1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1774e8bcf1b71c342a62f79a266af6e7
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/al-hou-sw1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23c1cf76987fecf40b262338870343a1
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/al-hou-w1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dac68625d5ab011449db111e1bcdce23
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/al-hou-w2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6160211c82e2e3b4e8748ae2bd034f81
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/al-hou-w3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b626d154a5453b744b173b40a97038af
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/al-hou-w4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac2e1e388b852024e8e17580cef9b1e2
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/body.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1dd4f673aa77ff74a8f33e9808946e7d
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/bri-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a82e76366cdf814aa87541b9735fa1c
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/bri-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cedccf088361cc64f8a447252eb1f232
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/bri-3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a528aef261ed9e468349c36eaa1a6dd
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/d-side.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1cefa3254395bf489d58ae5b8c21fe8
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/dong.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd16cccc00bccdb4b8801f9dc02e9bee
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/dong-d-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1da9a68a06fd89b4389165aa5711e234
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/dong-d-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 604d333d78211e34394f49fe96787c9f
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/dong-d-3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b72469fadf3807348b9c23b7cbc9a5d4
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/dong-d-4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e30c5ec84157b374f9348f414446e6a0
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/dong-d-5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c82bbb1cf784a6469129fd29983fb4b
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/dong-ho.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36b84e3fad0ce064dbf4ce1b95122178
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/dong-land.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a921a6cb6dcdeb340837206ff70210ad
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/gid..(side).png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41aa7303d17258a4dac1268c6050074b
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/gid..down(side).png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0966f2232b53b954d980e80b749f7dca
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/go-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74b0eaa7b1cb413498dfde65a4186703
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/go-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92abf896ac3a4ac42ba307ee0f5fe2c6
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/go-3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e25efc491dc05554aa62281cd321b2ec
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/go-roof.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f63f47d3b129c0a4384e67f2b0e866af
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-roof.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 618c7005ed3bcf749a8672322e3527d9
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-roof-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b882b108ff5fa814fb7e4a0cfdbe4eca
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-wall.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24503cb7e1ce070498f5f224ec24c273
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-wall-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8726db2156c4334b9049762be7dfe98
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-wall-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f259d5b1940188b4baac95d5dd4d31b8
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-wall-3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7935e1e82703eb4caa4dda1a097299d
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-wall-4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f791e5697fb2227478eb8686d3f10d46
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-wall-b.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 259ecd468c3b82d48a6d1e0758bafa03
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/ho-wall-b-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74098e10aea7b7147b5fea7e4512c9ae
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-f.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3f89f2b8cbe40744b647c30355bbd35
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-open.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5820fd56e88d1bc4c97ea75b05f3f3c2
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-roof.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2c01e66169199846bac9f2226744b13
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-roof-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a5cedf05fca6b9469e94b8f09ab4130
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-wall.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8a8bad8256cbd84da728e4a33ae545e
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-wall-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e5761b2ea31dc640bdc29e74e1435a1
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-wall-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cca2ce77e6d4c104fb67d8cb1df5c18e
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-wall-3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e48d901fc7df31345a516649c1659ef3
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-wall-4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de31ab6ab9a70714eab1fd194a7092cd
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/jop-wall-5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ce2626f1675fef4283fa7a6a1868f87
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-bak1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c3f8e64abfb55348989a4ee2fb5d4ac
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-bak2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb736422b08ff6c49ac2fd897957d015
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-bgate1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3eb75f42ae46fe045b21ae19c348f747
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-bgate2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab7010f6766bf0c45a6b832ff1a1d531
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-bgate3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e363bb210aa1284dbd21d49d41fb481
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-castle-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 750392cb8f02f6a46be28612d479e46e
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-castle1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 925eed44d3803f143b2e0aa245a7ce7b
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-castle2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 742de4e23f892504b8159f6d0c608ddd
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-castle3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12558e44d4313c2478145ecb487fc3ed
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-castle4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c6f3ade1c362a04091c4b56659e3308
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-castle5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7655c523e60c89b44ab66aeff959a208
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-castle6.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91ee9bc669c1df646a506d5ac55a4046
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-castle7.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d1a5512e7a675943ba69614e7e0512d
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ctwr1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0b1dea0ffe622444b918e16274fc782
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ctwr2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bed3f83892179704cb4dfc19cad6be83
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ctwr3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75e94e8880043164284969f18012fdd6
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ctwr4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5c838401f06ba946a3d4d86027b9d97
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-fishm1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da054f48cdae7c643bf3ff4c0b0cdd99
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-fishm2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cbf7acde896561246b59f6ea8df4f45b
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-flo-bloc.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e032a0979a815e341acea27dfbc75621
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-flo-f.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b12ecb7cff5d1b543aadaa1f8438978e
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-floshp1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72f3dc7a2e7bd1249924cef026c1d6f9
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-floshp2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ec9aa66a18b0474f9198fffcf98dd23
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-floshp3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e672208717309d48aadce6b7371f637
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-floshp4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2655c7e406cd9e341bdcb0f3b5df4f82
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-frm1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7040be5dc1a71e849a956a86883257c5
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-frm2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aeaae9acff1704c48971298517b93ef8
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-guar.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9ccde32f2b20d64dab9783358941786
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-guaw1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4db19b03eff6d85489ecfac1a2721d6e
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-house.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 985e38cf1f4261045a1b06de2afaa367
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-house-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 158ac6c7d5d410540b601205b7788281
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-house-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d5e94bc922a6f942a5790b5a12118eb
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-house-3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74c00b97301706b42ae97b02222a1862
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-house-4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a7a8c89e5a938d4f8dc23fa409003f5
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-house-5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0870565bcbf1c0e42af2287361821478
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-house-roof.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4294ad124794cef4ea198d301c0f3979
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-house-roof-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bbb0615762902945a79146cec58786e
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-hr1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9333469d941e024f915fe3358d3e6c4
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-hrcol1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bca5ff3f559bb6a4c867c610d7e7656b
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-hrcol2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f564ffda739a684782ffc4331d988bd
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-roof.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02de6d373b11b644a9ec4a016b0a0bf7
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-roof-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc59842c3b62dcd47858498e14a5d8ed
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-wall.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2ff0a9ed6d2bbb4288d254a6ee6a9b3
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-wall-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7ed219bc4c118d46ae99f4b3d90d6ff
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-wall-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51739c99d50ea984eb42be0df36c0648
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-wall-4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7391ee5aa986f540ac733c0b1fe6e3d
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-wall-5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a4f79b251511c9479c375c18e82050c
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-wall-6.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a31214207ec169649b35c03cb68b43d9
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-wall-7.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31f35f7b80024e7428d3a954aa2752be
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-ju-wall-8.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc031a15b29f11444a3a7eb686f541c2
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-lamp1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0558bd14c33fd44892c0bc3df11f67d
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-lamp2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57d93a893a8008a4498a8890572a42e1
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-lamp3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3bc24236b5f46e74791f789c49ffa5fe
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-lib-r.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ac6e9d8b5ec1454aba45106a932d730
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-lib-w1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 663931f40a1715f4c924a77158afce7e
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-lib-w2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2d9dd56980351b49a29b8666e1a09e0
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-lib-w3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a141fc0be600014188ccf6674f4b4bd
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-meatm1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b21b5af5037b48c45a88b9325d8ef770
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-meatm2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51c1b600f7444c24b827c55bdce35ff7
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 639b634d064934142a5c0ede9208da54
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d318faafb004a4e4bbb6724d6f7c5b66
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-roof.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c16200b184aa24546ba4fe1bb195d71d
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-roof-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92472bec1c69ba24c9f5a67c9a5197fe
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-roof-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0fdaff99c263d64b9b34e6f8bda7039
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-wall.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f1ad413ef0d807449b0d8725f661a21
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-wall-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02011797d4659fb4a883526231f7a4cf
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-wall-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2261c24b29ffe14faf5f7642856a125
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-wall-3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb0a169558a77a7468199d0258791d25
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-wall-4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d5bd01100e243849a9878da7f85ed8f
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-nai-wall-5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c66ac0d9690343d4e867b8a01b48e49f
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17c1320471775494bb97840dbceecfca
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bc9907c7fade7e40a6cf8ebde26846c
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e3ba4201abe32c43af1d366b89719cb
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0fc9dfb681d066948a184bee836f2aab
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 506aaf3b2e3053447932565780c28221
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-6.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8cdffdf72b7c3454da38cb3c4db339c6
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-7.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c6754354f895194086543a13431cf04
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-8.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62a7e7fb1c9458c44ac6e9031051eed0
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-9.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7986aa79c05324c4e92e845c1fdd3e44
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-newcastle-roof.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7877b657385630f40a9400a224cc7e57
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-tl1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7766b0b6040031c4ca2e589ace218ce8
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-tl2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0979fc9e86251f40a262d3c9d2a3d51
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-tl3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d80052d9af93ffd4593deec19ba3c9de
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-tl4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f47da2c694183b34c82907fd57b10e16
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-trader1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 182376b72bb5ebb49b918df517bc0ca1
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-tradew1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7455adc69de331b46b3432e070b79920
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-tradew2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 243486c61658799488c10a77fb00f095
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-tradew3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad1cfc2cc3a745542b1eb94d058a78e2
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron-zang.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ddc5e39694bb28469dcb955658058cf
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min02_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 04e09c40258f53c49ae8aa752022516f
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min02_02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9580b2368a275a4f8f22f3f7258fa79
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min02_03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d3aec54d9b040c449afcf899b613708
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min02_04.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c21644b7455e229458a705c0b544cc3d
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min03_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 474b0a9c516aae449ad80253e10810ec
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min03_02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71903425d5c43e5448a2817d9e1d1f75
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min03_03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4462bc9572198f247b6808007e488176
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min04_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07bde8fadc1a6c14b9a00ebd92332bb4
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min04_02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af7023ce67fca8348a7ae7103d8f86b8
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min04_03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a65daaff250d4d941a083c871ccc8bdb
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min04_04.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 562c9d406d73135479b56fa9517c6023
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min04_05.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69cb4495160141c4f91f1822e946fe8b
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pron_min04_06.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f1b75e7381c1274b9b8b33eb619109c
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/pronmok_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ead3c9bff92fbc419a1df53c95ba622
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prontomb01_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5247ba2ce7900b34890ab99051330b00
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prontomb02_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b6e6218e90b2af458b12db5b397ce5c
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prontrade_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12055e4129171af4a87310baf0bc257a
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prontrade_02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d3b7202ad43cd84d92f9e5cd1a665c3
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prontrade_03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bcded9f9defb1445b48c9d7405b3013
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prontrade_04.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c97354775514f446a440db8b87226a7
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prontrade_05.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 718fab81f4578ab4a97b306fcef7618a
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b02_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3942b1109bc6a5f459225b17bda3a39c
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b04_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67508544d3632114d9bd70d543e0800b
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b04_02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3dc33b7473ec644d81e8b4197f5184a
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b04_03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea520f86d367f97489e974c98b98f225
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b04_04.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6620859f58f5e24585f5717d0d12cab
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b04_05.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc700a183463cf34fa0968e362bc15d4
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b04_06.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef40246e16da2bf448a4431500a39711
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b04_07.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e540b0570eebfd743b617e5bda167450
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b05_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4dd7e3bf402f59b43940de37625d9a59
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b_01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc70c28347598b44f9f01f6fc12f1ce1
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b_02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e4f11685c4e89b4dae78706d21de676
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b_03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee8dbbefbc07fdc4ca47b62f62c7f3ed
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b_04.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98156b092c8e15b49b462ece3ade8a4f
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b_05.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: efe23bea6cfbd2345b8c966dda570840
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b_06.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fa064c117d20324ba978ef39c693f59
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b_07.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e70c79f53d8a7f4d81bc71dc36d8daa
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_b_08.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9cd772fe4083c194b80fc538912165a6
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_entrance01.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51fca02949095a5448ada5df9e6312d0
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_entrance02.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0baea9ff9c87670429684c3a845e6526
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_f_entrance03.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35d0f1233bd082c4f8bfe7cafee80ebc
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_mo_entrance01_.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 00c2b53523fc2a74f9283501e904c769
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_mo_entrance02_.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0de732ecd13b19541bba7da0f8945431
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_mo_entrance03_.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 388c70244310b3f4c9dde5b62ac5af4f
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/prt_mo_entrance04_.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff061a80f8f7cc14996f8f4664ec89c3
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/rponsramp_08.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a319b8114cab6b24eaf2a23c0d799c4a
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/stone-down.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2789d0fc895da34988e3c1f73d8d3e7
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/stone-up.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3fc52b95351cdd419797d2683a67fcc
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/tomb(side1).png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 078467bb1cd8bc74ba969fec5b17f5ec
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/tomb(side2).png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1770413690454d64aa041b66135b2659
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/tomb(stone)up.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71f405bbb4ea81f4288d6c50d3bb5c24
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/up.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 190c0fb9928107e47a18e9957f1f505a
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/weed.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cea1d8f9c92ea74ebf24a478ce091c3
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-roof.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f459b2258ddcca3488d3bce69a19a8cf
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-wall.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e03465df30ecf0488d757ccf6ccc9da
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-wall-1.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93814eb31bde93d4d9bc8b026c7b71b8
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-wall-2.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c7eb581d7d43df46885bc670501d782
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-wall-3.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07d52323b197f4247ad622a9269e8436
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-wall-4.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8925e279bbd4eb46abb4edd852a9a0d
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-wall-5.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d84e840c8f50224ca58997bbdabe118
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-wall-6.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64c8285529399f94e894a73d54979d20
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3/wepon-wall-7.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ad8fabd7ed761349b5ce0a270c25a36
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3\xB3\xBB\xBA\xCE/h1-door.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac372caaafba82848ac5d297ab4fbe80
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3\xB3\xBB\xBA\xCE/h2-door.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4caf91d1370b0343b19b3715461d763
+    m_Address: "ure/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3\xB3\xBB\xBA\xCE/h3-door.png"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Textures
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c99779a8de5df7a409366194290f8300, type: 2}
   m_SchemaSet:
