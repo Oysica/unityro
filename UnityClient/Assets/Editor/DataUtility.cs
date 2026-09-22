@@ -34,9 +34,18 @@ public class DataUtility {
     public static string GENERATED_RESOURCES_PATH = Path.Combine("Assets", "_Generated", "Resources");
     public static string GENERATED_ADDRESSABLES_PATH = Path.Combine("Assets", "_Generated", "AddressablesAssets");
 
+    /// <summary>
+    /// Path prefix used by <see cref="ExtractTextures"/>. Defaults to the full
+    /// texture tree, i.e. the original behaviour of that menu item. Same
+    /// reasoning as <see cref="s_spriteFilter"/>: this GRF set holds 70,042
+    /// texture entries, too many to extract wholesale for a bring-up test.
+    /// </summary>
+    private const string DEFAULT_TEXTURE_FILTER = "data/texture";
+    private static string s_textureFilter = DEFAULT_TEXTURE_FILTER;
+
     [MenuItem("UnityRO/Utils/Extract/Textures")]
     static void ExtractTextures() {
-        var textureDescriptors = FilterDescriptors(FileManager.GetFileDescriptors(), "data/texture").ToList();
+        var textureDescriptors = FilterDescriptors(FileManager.GetFileDescriptors(), s_textureFilter).ToList();
         var shouldContinue = true;
 
         try {
@@ -104,7 +113,7 @@ public class DataUtility {
                     continue;
                 }
 
-                if (path.IndexOf("�����������̽�") > -1) { //make everything under the interface path be a sprite
+                if (path.IndexOf("�����������̽�") > -1) { //make everything under the interface path be a sprite
                     importer.textureType = TextureImporterType.Sprite;
                     importer.spriteImportMode = SpriteImportMode.Single;
                     var textureSettings = new TextureImporterSettings();
@@ -129,11 +138,180 @@ public class DataUtility {
         }
     }
 
+    /// <summary>
+    /// Path prefix used by <see cref="ExtractSprites"/>. Defaults to the full
+    /// sprite tree, i.e. the original behaviour of that menu item.
+    ///
+    /// It exists so a caller can narrow the extraction without duplicating the
+    /// 120 lines below. Extracting the whole tree is not viable on a full kRO
+    /// GRF: this client's data set holds 188,547 sprite entries, and each .spr
+    /// expands into an atlas texture plus one Unity Sprite per frame. That
+    /// overruns Unity's graphics resource id space (observed:
+    /// "Resource ID out of range in GetResource: 1114156 (max is 1048575)")
+    /// and exhausts memory long before the run completes.
+    ///
+    /// Always restore this to <see cref="DEFAULT_SPRITE_FILTER"/> in a finally
+    /// block so the stock menu items keep working.
+    /// </summary>
+    private const string DEFAULT_SPRITE_FILTER = "data/sprite/";
+    private static string s_spriteFilter = DEFAULT_SPRITE_FILTER;
+
+    /// <summary>
+    /// Bring-up path: extract only what GameManager.Start() needs in order to
+    /// reach the network layer, so the rAthena connection can be verified on
+    /// its own.
+    ///
+    /// Covers the two things that throw before any socket is opened:
+    ///   LuaInterface.LoadTable -> lua/data/luafiles514/...  (Extract/Lua Files
+    ///                             is already a hand-picked whitelist, ~35 files)
+    ///   CursorRenderer.Start   -> data/sprite/cursors.asset / cursors.png
+    ///
+    /// Roughly 1,570 files instead of 281,076. No maps, no character sprites,
+    /// no models - the client will look broken, which is expected here.
+    /// </summary>
+    [MenuItem("UnityRO/0. Minimal Bring-up (lua + cursors)")]
+    static void MinimalBringUp() {
+        try {
+            s_spriteFilter = "data/sprite/cursors";
+            ExtractSprites();
+        } finally {
+            s_spriteFilter = DEFAULT_SPRITE_FILTER;
+        }
+
+        ExtractLuaFiles();
+
+        AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+
+        CreateSpritesAddressableAssets();
+        CreateDataTablesAddressableAssets();
+
+        Debug.Log("[MinimalBringUp] done - extracted cursors + lua tables only.");
+    }
+
+    /// <summary>
+    /// Second, additive bring-up pass: extract just enough to render the
+    /// Novice body/hair sprites, the shared shadow sprite, and the login
+    /// background texture, so CharSelection stops being a wall of red
+    /// errors. Runs AFTER "0. Minimal Bring-up" and AFTER "4. Rename
+    /// Generated Resources folder" has already been run once (this project's
+    /// _Generated/AddressablesAssets folder already exists with content).
+    ///
+    /// IMPORTANT - path encoding: this project does NOT use proper Unicode
+    /// Korean for its Addressable keys. GrfSupport.getCString (see
+    /// UnityRO.io/GRF/GrfSupport.cs) builds filenames with
+    /// System.Convert.ToChar(byte) per raw CP949 byte, i.e. every Korean
+    /// path segment ends up as its CP949-bytes-read-as-CP1252 mojibake form
+    /// - exactly what StringExtensions.KoreanTo1252() produces on purpose,
+    /// and exactly what's already hardcoded all over DBManager.cs (e.g.
+    /// INTERFACE_PATH = "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/"). The literals below
+    /// were generated the same way (proper Korean -> encode CP949 -> decode
+    /// CP1252) and verified byte-for-byte against DBManager.cs's existing
+    /// constants before being pasted in here. Do NOT "fix" these to look
+    /// like real Korean - that would break the address match.
+    /// </summary>
+    [MenuItem("UnityRO/0b. Bring-up: Character Basics")]
+    static void BringUpCharacterBasics() {
+        try {
+            s_textureFilter = "data/texture/À¯ÀúÀÎÅÍÆäÀÌ½º/bgi_temp";
+            ExtractTextures();
+        } finally {
+            s_textureFilter = DEFAULT_TEXTURE_FILTER;
+        }
+
+        string[] spriteTargets = {
+            "data/sprite/ÀÎ°£Á·/¸öÅë/¿©/ÃÊº¸ÀÚ_¿©",   // body, female novice
+            "data/sprite/ÀÎ°£Á·/¸öÅë/³²/ÃÊº¸ÀÚ_³²",   // body, male novice
+            "data/sprite/ÀÎ°£Á·/¸Ó¸®Åë/¿©/1_¿©",       // hair style 1, female
+            "data/sprite/ÀÎ°£Á·/¸Ó¸®Åë/³²/1_³²",       // hair style 1, male
+            "data/sprite/shadow",                          // shared shadow sprite (plain ASCII)
+        };
+
+        foreach (var target in spriteTargets) {
+            try {
+                s_spriteFilter = target;
+                ExtractSprites();
+            } finally {
+                s_spriteFilter = DEFAULT_SPRITE_FILTER;
+            }
+        }
+
+        AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+
+        // Tag as Addressable while the new files are still under the
+        // Resources-named folder (Resources.LoadAll requires that literal
+        // folder name) - same ordering the stock "1./3./4." pipeline uses.
+        CreateTexturesAddressableAssets();
+        CreateSpritesAddressableAssets();
+
+        // _Generated/AddressablesAssets already exists from a previous "4."
+        // run, so Directory.Move (whole-folder rename) would throw. Merge
+        // the newly-extracted files into it instead, moving each file
+        // together with its .meta sidecar so GUIDs (and the Addressable
+        // Group entries just created above, which reference those GUIDs)
+        // stay intact.
+        if (Directory.Exists(GENERATED_RESOURCES_PATH)) {
+            try {
+                AssetDatabase.StartAssetEditing();
+                MergeDirectoryInto(GENERATED_RESOURCES_PATH, GENERATED_ADDRESSABLES_PATH);
+            } finally {
+                AssetDatabase.StopAssetEditing();
+                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            }
+        }
+
+        Debug.Log("[BringUpCharacterBasics] done.");
+    }
+
+    /// <summary>
+    /// Recursively moves every file (and its .meta sidecar, if any) from
+    /// sourceDir into destDir, creating destDir subfolders as needed, then
+    /// removes the now-empty sourceDir. Used because System.IO.Directory.Move
+    /// throws if destDir already exists, which a whole-folder rename can't
+    /// handle but a per-file merge can.
+    /// </summary>
+    private static void MergeDirectoryInto(string sourceDir, string destDir) {
+        if (!Directory.Exists(sourceDir)) {
+            return;
+        }
+        Directory.CreateDirectory(destDir);
+
+        foreach (var file in Directory.GetFiles(sourceDir)) {
+            if (file.EndsWith(".meta")) {
+                continue; // moved alongside its asset below
+            }
+
+            var destFile = Path.Combine(destDir, Path.GetFileName(file));
+            if (File.Exists(destFile)) {
+                File.Delete(destFile);
+            }
+            File.Move(file, destFile);
+
+            var metaSrc = file + ".meta";
+            var metaDest = destFile + ".meta";
+            if (File.Exists(metaSrc)) {
+                if (File.Exists(metaDest)) {
+                    File.Delete(metaDest);
+                }
+                File.Move(metaSrc, metaDest);
+            }
+        }
+
+        foreach (var dir in Directory.GetDirectories(sourceDir)) {
+            MergeDirectoryInto(dir, Path.Combine(destDir, Path.GetFileName(dir)));
+        }
+
+        var sourceDirMeta = sourceDir + ".meta";
+        if (File.Exists(sourceDirMeta)) {
+            File.Delete(sourceDirMeta);
+        }
+        Directory.Delete(sourceDir, false);
+    }
+
     [MenuItem("UnityRO/Utils/Extract/Sprites")]
     static void ExtractSprites() {
         try {
             var shouldContinue = true;
-            var descriptors = FilterDescriptors(FileManager.GetFileDescriptors(), "data/sprite/")
+            var descriptors = FilterDescriptors(FileManager.GetFileDescriptors(), s_spriteFilter)
                 .Select(it => it[..it.IndexOf(Path.GetExtension(it))])
                 .Where(it => it.Length > 0)
                 .Distinct()
@@ -356,7 +534,7 @@ public class DataUtility {
 
     [MenuItem("UnityRO/Utils/Fix interface textures")]
     static void FixInterfaceTextures() {
-        var paths = GetFilesFromDir(Path.Combine("Assets", "_Generated", "AddressablesAssets", "data", "texture", "�����������̽�"))
+        var paths = GetFilesFromDir(Path.Combine("Assets", "_Generated", "AddressablesAssets", "data", "texture", "�����������̽�"))
             .Where(it => Path.GetExtension(it) == ".png")
             .ToList();
         Debug.Log(paths.Count);

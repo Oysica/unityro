@@ -1161,6 +1161,1176 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72e1c5373d8b5f148867b757adac0767
+    m_Address: Assets/_Generated/Resources/lua/achievement_list.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46bbbfd6a01624348a6ff8a303af4b77
+    m_Address: lua/CheckAttendance.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07e54d124fbc44a46b3874341a05ce40
+    m_Address: lua/data/luafiles514/lua files/datainfo/accessoryid.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b54f6992c3234d43821e220b16e17a3
+    m_Address: lua/data/luafiles514/lua files/datainfo/accname.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b81490b584ff7ba40bf22eb919578086
+    m_Address: lua/data/luafiles514/lua files/datainfo/accname_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2865cb04319739c41803fd275a545b62
+    m_Address: lua/data/luafiles514/lua files/datainfo/addrandomoption_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75b51e6ca9644a64abb36b9105fe1df5
+    m_Address: lua/data/luafiles514/lua files/datainfo/addrandomoptionnametable.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 865b85c91b9899d49a0cd655c4e4b55b
+    m_Address: lua/data/luafiles514/lua files/datainfo/changedirectorylist.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7e4fe30c04aab4469d2c8dd1ed92dbc
+    m_Address: lua/data/luafiles514/lua files/datainfo/enumvar.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b22e1baa9f7dc5041a37a6c3ae0e398d
+    m_Address: lua/data/luafiles514/lua files/datainfo/helpmsgstr.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b4fda9af55ab494fb89f8b11a73ab46
+    m_Address: lua/data/luafiles514/lua files/datainfo/jobidentity.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f02e66e3eeb10b4283d5cfd8cc9e917
+    m_Address: lua/data/luafiles514/lua files/datainfo/jobname.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ccee5a1fef4ffe4f88fea0924deda4b
+    m_Address: lua/data/luafiles514/lua files/datainfo/jobname_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4496812af29bad44e932d9cadba051a6
+    m_Address: lua/data/luafiles514/lua files/datainfo/kaframovemapservicelist.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: baf0cfb50231b6a4f93e95a25f1d024a
+    m_Address: lua/data/luafiles514/lua files/datainfo/kaframovemapservicelist_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c62ea7bdc0174f64fa6fffd4a2cf1084
+    m_Address: lua/data/luafiles514/lua files/datainfo/lapineddukddakbox.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b44986677e563dc489030073620476fd
+    m_Address: lua/data/luafiles514/lua files/datainfo/LapineUpgradeBox.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1b99e76931dce248b5861849522b7ff
+    m_Address: lua/data/luafiles514/lua files/datainfo/npcidentity.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41a5d0d8467cd794fb59699f1da56643
+    m_Address: lua/data/luafiles514/lua files/datainfo/npclocationradius.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b52f6b65a664fdf4dae8ee55fe0b5fb1
+    m_Address: lua/data/luafiles514/lua files/datainfo/npclocationradius_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51073d5dd9966b04abe383d61c5b1016
+    m_Address: lua/data/luafiles514/lua files/datainfo/pcjobnamegender.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5844969d1f83e1f42ba5a047e2f6a028
+    m_Address: lua/data/luafiles514/lua files/datainfo/petinfo.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a612fd1c3d7e92944963863c1c6fa284
+    m_Address: lua/data/luafiles514/lua files/datainfo/questinfo_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2516a83b611f005459274de118f4d791
+    m_Address: lua/data/luafiles514/lua files/datainfo/shadowtable.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d95599e43465e614b9c35596c4b07c42
+    m_Address: lua/data/luafiles514/lua files/datainfo/shadowtable_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3eba5bb1f9ec1454c8a192194923975b
+    m_Address: lua/data/luafiles514/lua files/datainfo/spriterobeid.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 512acd52f11036843b885a03823571d2
+    m_Address: lua/data/luafiles514/lua files/datainfo/spriterobename.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acd1013a8b2a41c4ab4557fd6b133a20
+    m_Address: lua/data/luafiles514/lua files/datainfo/spriterobename_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1483005693d44b2449395536af723839
+    m_Address: lua/data/luafiles514/lua files/datainfo/tb_cashshop_banner.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74c7c57127d758443841d539508e25fe
+    m_Address: lua/data/luafiles514/lua files/datainfo/TB_Layer_Priority.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f18c9558ef5ad24a88e4d1fd93f8131
+    m_Address: lua/data/luafiles514/lua files/datainfo/titletable.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 865b9b23ef5978547acc2fd32cd81e8c
+    m_Address: lua/data/luafiles514/lua files/datainfo/weapontable.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7fdafa189792fa94cb6dbc8e595a195d
+    m_Address: lua/data/luafiles514/lua files/datainfo/weapontable_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8213e6814ad5d1d478aea9882f130819
+    m_Address: lua/data/luafiles514/lua files/dressroom/dress_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e28ffac1da91d04a9d3368a6daed36f
+    m_Address: lua/data/luafiles514/lua files/dressroom/jobdresslist.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60d304e2b6784b84baf1099cc3354bbe
+    m_Address: lua/data/luafiles514/lua files/effecttool/forcerendereffect.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b09eb303268dc60428e3bf264f9a7004
+    m_Address: lua/data/luafiles514/lua files/entryqueue/entryqueuelist.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a2d95edad3ecbd4fafa11561cadae49
+    m_Address: lua/data/luafiles514/lua files/hateffectinfo/hateffectinfo.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4cd0634322357284e87eb226a056c919
+    m_Address: lua/data/luafiles514/lua files/msgstring_kr.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e2e102e690085742928385b0c221c4f
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_f_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8b0ef1d599a4c645be99d8a12ce4fbc
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_link_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b34c48f6c20823d4c94e9867bb00e860
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_linkdistance_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f1601ca3ac8d204396890d441622f44
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_map_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa405c566b0888d479258b34345bc381
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_mob_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a24cc545e26270459dc020ba1df0695
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_npc_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a3f1fa61a7ffe5478a8f6738774bd95
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_npcdistance_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1403e8a4ea8152349bbd6ae772dc734f
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_picknpc_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a847f0a10a7f35147a3dce79aeca0de2
+    m_Address: lua/data/luafiles514/lua files/navigation/navi_scroll_krpri.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 883e43bccf322254dbdcdd238689c903
+    m_Address: lua/data/luafiles514/lua files/optioninfo/cmdinfo.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c23ce8dcf29a0b4ba62c637c9d3454e
+    m_Address: lua/data/luafiles514/lua files/optioninfo/optioninfo_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1b5321998be20d459875daec0e8e229
+    m_Address: lua/data/luafiles514/lua files/signboardlist.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8d43a1286eb5e340a2ea2d0fab1e1a1
+    m_Address: lua/data/luafiles514/lua files/skilleffectinfo/actorstate.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2cec868fed1aaf848ab64e121662b7f7
+    m_Address: lua/data/luafiles514/lua files/skilleffectinfo/effectid.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b562f42b221e1d4487797c2fe43d832
+    m_Address: lua/data/luafiles514/lua files/skilleffectinfo/skilleffectinfo_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7d6966f01648a814ca4bdd8c308780c2
+    m_Address: lua/data/luafiles514/lua files/skilleffectinfo/skilleffectinfolist.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0c4a3cb5dbb52e489412bae49d99ef1
+    m_Address: lua/data/luafiles514/lua files/skillinfoz/jobinheritlist.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1707c3d5f5fa984a924658ba3fff47b
+    m_Address: lua/data/luafiles514/lua files/skillinfoz/skilldescript.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c359ccfca4f82342a61a58451de43c5
+    m_Address: lua/data/luafiles514/lua files/skillinfoz/skillid.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64fee59a4fc114a43abc68954713e09e
+    m_Address: lua/data/luafiles514/lua files/skillinfoz/skillinfo_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f546f6659340aad468339aec69044b69
+    m_Address: lua/data/luafiles514/lua files/skillinfoz/skillinfolist.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 479c5407db93ed347934d878b82cfb7a
+    m_Address: lua/data/luafiles514/lua files/skillinfoz/skilltreeview.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8450c03b23bde5b45b07450b03d0a211
+    m_Address: lua/data/luafiles514/lua files/stateicon/efstids.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc3dcaddb4ed82946871b6160885105f
+    m_Address: lua/data/luafiles514/lua files/stateicon/stateiconimginfo.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93671fdc7055c3f4296f23d815be63de
+    m_Address: lua/data/luafiles514/lua files/stateicon/stateiconinfo.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e82ada2764a1a444a639ec1a2d83670
+    m_Address: lua/data/luafiles514/lua files/stateicon/stateiconinfo_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 801b73d3ce5cff14899cbf4e85b01cec
+    m_Address: lua/data/luafiles514/lua files/transparentItem/transparentItem.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81d536aadfe75864fa784376847eedc6
+    m_Address: lua/data/luafiles514/lua files/transparentItem/transparentItem_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da0e00dd35856aa4c9774486d55b75fb
+    m_Address: lua/data/luafiles514/lua files/worldviewdata/worldviewdata_f.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 860744e75ab7c8648b4ee3aa17bd9eeb
+    m_Address: lua/data/luafiles514/lua files/worldviewdata/worldviewdata_info.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c0285ded8e40c648b96a02914eb3eba
+    m_Address: lua/data/luafiles514/lua files/worldviewdata/worldviewdata_language.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c77fc6e930d45eb478caaa56a2b86fce
+    m_Address: lua/data/luafiles514/lua files/worldviewdata/worldviewdata_list.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 66d35081397211d4cbe238b9e945a7cf
+    m_Address: lua/data/luafiles514/lua files/worldviewdata/worldviewdata_table.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a790bc79d797a1f4c89e8ecbb1094ff7
+    m_Address: lua/itemInfo_true.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f220c1bc35906f47b957a24104e6c99
+    m_Address: lua/LuaFiles514/OptionInfo.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 905b637589797964388229f517a5451f
+    m_Address: lua/mapInfo_true.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f094546e3c66f074296f01144792cd51
+    m_Address: lua/PetEvolutionCln_true.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f937e8e24d118854c8ab9f26e43ffa4b
+    m_Address: lua/PrivateAirplane_true.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f42a82fab4e622439206bb274f43f9f
+    m_Address: lua/RecommendedQuestInfoList_True.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a148c2ce5f8a58418b633b2799613d0
+    m_Address: lua/tipbox.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5262e00b356e9c249ad0c94f1650d1fe
+    m_Address: lua/Towninfo.lub.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70a8c95e54fd92c41a82ea668ee10b74
+    m_Address: txt/data/ba_frostjoke.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1b6cc65e6e034348a462ee904b1c9c4
+    m_Address: txt/data/ba_frostjoker.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39dac61228b06ce4c8a6747ad470315e
+    m_Address: txt/data/book/1000897.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56069c546ccd3e44694f80d26ff66f9b
+    m_Address: txt/data/book/1000898.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ccf4ffd457da4c4b98ee97888cc2975
+    m_Address: txt/data/book/1000899.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f43e5601252abf24ba8764bd24149824
+    m_Address: txt/data/book/1000900.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c435c5e6947beb646bfdff2aecd7afee
+    m_Address: txt/data/book/1000901.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65d86d28195d5804b8b4cd98bef1a9e1
+    m_Address: txt/data/book/1000902.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b19b5b1715dbafe4ca5a95a184fd3aee
+    m_Address: txt/data/book/1000903.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: decd3158842762d48813717bb399a685
+    m_Address: txt/data/book/1000904.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49fc4b382f9b75947ad8b6c567194423
+    m_Address: txt/data/book/1000905.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94717901a1b34c24ba8bb183cdceb145
+    m_Address: txt/data/book/1000906.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 980a83c6ee4246f46be299b7ad33652c
+    m_Address: txt/data/book/1000907.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad1afbb670f73f5408f2535500367f7c
+    m_Address: txt/data/book/1000908.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad979722f8b4f5e4ea9e8bf94837794f
+    m_Address: txt/data/book/1000909.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f06950ffa8a2c7d4ab6227624e899330
+    m_Address: txt/data/book/1000910.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1d89d6c4006bf546a3919e5ec0f5b2d
+    m_Address: txt/data/book/1000911.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c6cd5d5b7e337a42a1379a9962e13e2
+    m_Address: txt/data/book/1000912.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b967bf830de59d4d93c555faf22bf5f
+    m_Address: txt/data/book/1000913.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 794f2630cbc03ce4fb1b811621da8fb3
+    m_Address: txt/data/book/1000914.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23a3111b05448b6438949be7dd8e6954
+    m_Address: txt/data/book/1000915.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bc311a1a1202fc4282f90ea2b767882
+    m_Address: txt/data/book/1000916.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d2f153a07ee4bc49a3e648f8807ffdb
+    m_Address: txt/data/book/1000917.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f341981a067e18f40aa37955ecacd9af
+    m_Address: txt/data/book/1000918.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8fe15fb78cb08444b81f1b9179676ea3
+    m_Address: txt/data/book/1000919.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 322a604a05130e649b7a2f9236032105
+    m_Address: txt/data/book/1000920.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ff9eb7b92e61324eb802e7d767c903d
+    m_Address: txt/data/book/11000.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0643ea49e36e4ca429e3a81c2227c7ef
+    m_Address: txt/data/book/11001.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e98c72e9ad58eff428db4183f1d80f0f
+    m_Address: txt/data/book/11002.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f1d5b9781418dc4bacdb1d631b187c0
+    m_Address: txt/data/book/11003.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 876304680bf351040a834a6ea9333b63
+    m_Address: txt/data/book/11004.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99c30ac36e11cd0438527058ed8263a6
+    m_Address: txt/data/book/11005.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9639b6c8007cdf94eb8045cc4c193a4a
+    m_Address: txt/data/book/11006.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5da404b937c8414da604d95553ead05
+    m_Address: txt/data/book/11007.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07a53c48826700b43b6832b5d6dbce17
+    m_Address: txt/data/book/11008.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6646957c825a130489c16636df518113
+    m_Address: txt/data/book/11009.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5d94b2e5df37c04ca9e84710822260c
+    m_Address: txt/data/book/11010.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e6b9eddc7e71204fb5bf884df5efd35
+    m_Address: txt/data/book/11011.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f167ce5583f92c4db0fcdb29eb5fc3b
+    m_Address: txt/data/book/11017.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd1963bb533429a40a367a3a0cb4cfd0
+    m_Address: txt/data/book/11018.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b53bd7d3d34b81643ae1c768ac445999
+    m_Address: txt/data/book/11019.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d7468adcc4682f49bd52ce33ce9d5ab
+    m_Address: txt/data/book/11022.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c51507eca7e5f5448d32766f82aa576
+    m_Address: txt/data/book/11023.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fef0997ddec2584db3462bbfb0f14c7
+    m_Address: txt/data/book/11024.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06a71e82b8cd2684b9598aa30fe50afc
+    m_Address: txt/data/book/11056.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f93566bcd8c40804c9da1c9ec6b4f26c
+    m_Address: txt/data/book/11057.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9afd9f8181e27540a312add3051299b
+    m_Address: txt/data/book/11058.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 285f0501c3a9bdb4dab977c12d4d9ad5
+    m_Address: txt/data/book/11059.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d957a10a7cad91408ace5ea3483b7b9
+    m_Address: txt/data/book/11060.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7909a96fc0bf2d54f949ad53bdcca43d
+    m_Address: txt/data/book/11061.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b9a5c6ee0061ca45bd37bf921a49a83
+    m_Address: txt/data/book/11064.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f443d7d6775ffcd4c92f3fdd8dfd42dc
+    m_Address: txt/data/book/7127.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b9cf64ba0a3e2e4daaaa79b9769bba8
+    m_Address: txt/data/book/7128.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fecf2a98ada45454784728e52cf750d5
+    m_Address: txt/data/book/7129.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06cdf8cec17a2ee4c96fc265a098eec0
+    m_Address: txt/data/book/7130.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c98bc524b2be3fa4083c788b16e5279f
+    m_Address: txt/data/book/7131.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa53b95c3cace784a854064bb4e1c5f1
+    m_Address: txt/data/book/7132.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 456f8e81d309d8f42ab4f799b4aaf9b5
+    m_Address: txt/data/book/7133.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 290414f7125bce0419c725bc4e220dbb
+    m_Address: txt/data/book/7144.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 04dd62706476e494f9dbfec4dad7c64b
+    m_Address: txt/data/book/7172.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0821f4ca194f1294eb76fc3e420a303a
+    m_Address: txt/data/book/7434.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e03dff5436a15141b5117c9b5305c08
+    m_Address: txt/data/book/7472.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32c8ab343a6d4304da59f433fa9f7e56
+    m_Address: txt/data/book/7473.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 058c1436ec045884bbaf86d31e020394
+    m_Address: txt/data/book/7474.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e38524fb651d89e4d9b3237eba7fc00a
+    m_Address: txt/data/book/7475.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c4d3ff7e082e2948858be1c36f738dd
+    m_Address: txt/data/book/7476.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 704a027625e58eb49a95b7fd517b8cac
+    m_Address: txt/data/book/7477.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49b7b228ee222694a9e4ad07c223bd44
+    m_Address: txt/data/book/7478.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46986b3971cce754c81ad6851775e53c
+    m_Address: txt/data/book/7479.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab4caa7be9f055a4e98c9819e12adf9d
+    m_Address: txt/data/book/7480.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e72a6a7fc8f7f84d974008dec9d46d5
+    m_Address: txt/data/book/7481.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c37cfeb04f662614fab987b73d3a0cc4
+    m_Address: txt/data/book/7755.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 938ca8ee20e75f9458df59fea8906407
+    m_Address: "txt/data/book/\xC7\xC1\xB7\xD0\xC5\xD7\xB6\xF3\xC0\xFC\xC1\xFD01.txt.txt"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a5ce94c80303cf146b46054501a88ad4
+    m_Address: txt/data/bookitemnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73294372bac7ee34b8512b0f8552dff8
+    m_Address: txt/data/buyingstoreItemList.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 878b9a575ef56bc479e0fa71eaba5c83
+    m_Address: txt/data/carditemnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe30261adb9fae74fa3582e1c5f0338b
+    m_Address: txt/data/cardpostfixnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6514a29c36a175146ab00d5caf774860
+    m_Address: txt/data/cardprefixnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48993e0eb8492da448ffb3f0a4fb9593
+    m_Address: txt/data/dc_scream.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 466b98dafb718cb43bdeb9b579cd2239
+    m_Address: txt/data/etcinfo.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b8b6a4f213ffb04caf5d65d076447b2
+    m_Address: txt/data/eventidnum2itemresnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 601c6e8e063c56b4ba0594dc7c7b4281
+    m_Address: txt/data/eventnum2itemresnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d9390866f1cfaf4f9fcd6d4d537974c
+    m_Address: txt/data/exceptionminimapnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2158c8e13ad3fd94bb8e7b7ae15d40ab
+    m_Address: txt/data/fogparametertable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e5e907009c9dac4bbf7999a358e2019
+    m_Address: txt/data/guildtip.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e09bec5843717444096530013b85ed03
+    m_Address: txt/data/idnum2itemdesctable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c2a665efcbcf3f4c9998899fa7ff285
+    m_Address: txt/data/idnum2itemdisplaynametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19b9f793a9ca2f84b939a8e79e39cb5b
+    m_Address: txt/data/idnum2itemresnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 797a9b27f32c3de40bc522968304ce52
+    m_Address: txt/data/indoorRswTable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a96acccd50cf944ca9ccf01c661e7e2
+    m_Address: txt/data/ItemMoveInfoV5.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9743b87f3da08a4f9089b0421bc9507
+    m_Address: txt/data/itemparamtable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be06eb0ca42ade44cba4a48f02eedc65
+    m_Address: txt/data/itemslotcounttable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f30ad41f65ee71146b7fa6599f731444
+    m_Address: txt/data/itemslottable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e1449c1acb15264f9e7fc3b7e22f3ee
+    m_Address: txt/data/manner.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a94cafcb5b29e63499434bebcb2e71d8
+    m_Address: txt/data/mapnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47cce0cf6ca95f24f97e27dc7598ed1a
+    m_Address: txt/data/mapobjlighttable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3bad68ff70ef4fc4682ef84e8700ac05
+    m_Address: txt/data/mappostable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ddffee99824d4343a7083a6bbb8a6de
+    m_Address: txt/data/metalprocessitemlist.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2f3465238731114abb96d75feec7ca8
+    m_Address: txt/data/metalprocessitemtable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c82828af031848142b33fa289ea9fa7e
+    m_Address: txt/data/mp3NameTable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b51164b05584ae479998e6f6ebbd6bc
+    m_Address: txt/data/num2cardillustnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 084a41ffa1552fe47b4928f556514e7b
+    m_Address: txt/data/num2itemdesctable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6e8b06b76719d04d8324c6ab5fce6da
+    m_Address: txt/data/num2itemdisplaynametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64511e99b2574c842b271255d33ec68b
+    m_Address: txt/data/num2itemresnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45d973685af7f6f4ea49020a8100bbbf
+    m_Address: txt/data/questid2display.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfc057a9280d64442b4613bb135c6d7a
+    m_Address: txt/data/resnametable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 084cf81bb33b42b44a623ba235e87472
+    m_Address: "txt/data/sprite/npc/npc db\xB8\xED_20040430.txt.txt"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa5ad8ea18e2cd54291dffea4e91d64b
+    m_Address: "txt/data/texture/effect/custom/RedSwordPro_Sta/Pro\xE0\xE2\xEF\xD2.txt.txt"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 379e84b6fb48bc74d88104bf494c4fb8
+    m_Address: "txt/data/texture/effect/mineffect/new_varetyrspear/\xB9\xD9\xB7\xB9\xC6\xBC\xB8\xA3\xBD\xBA\xC7\xC7\xBE\xEE_\xC2\xFC\xB0\xED.txt.txt"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c82bf988e39b04541b91996fdf0ed72f
+    m_Address: txt/data/texture/effect/work.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50879b60203c6b5429fc755545a34ed7
+    m_Address: "txt/data/texture/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/indoorrswtable.txt.txt"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e04958c1644e0ab4f880660b76abdf84
+    m_Address: "txt/data/texture/\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA/viewpointtable.txt.txt"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2246af36e39e54d438706d6bdb1a3414
+    m_Address: txt/data/tipofday.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a284ebadd777694a9c18c7996c0fb85
+    m_Address: txt/data/tipoftheday.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89a45e97229aa45469f9e883082b6b60
+    m_Address: txt/data/viewpointtable.txt.txt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DataTables
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c99779a8de5df7a409366194290f8300, type: 2}
   m_SchemaSet:
