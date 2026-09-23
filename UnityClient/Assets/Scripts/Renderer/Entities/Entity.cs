@@ -419,7 +419,15 @@ public class Entity : MonoBehaviour, INetworkEntity {
                 // update info window
                 break;
             case ZC.SPRITE_CHANGE2.LookType.LOOK_WEAPON:
-                throw new NotImplementedException();
+                // TEMPORARY BRING-UP STUB: never implemented upstream. This
+                // threw unconditionally, and since OnSpriteChange runs from
+                // a reflection-invoked packet handler, the unhandled
+                // exception could abort mid-setup for whatever entity
+                // triggered it - a likely cause of "No Entity found for
+                // given ID" on later packets for that same entity. Skip the
+                // weapon-sprite update instead of crashing.
+                Debug.LogWarning("[bring-up] Entity.OnSpriteChange: LOOK_WEAPON not implemented, skipping");
+                break;
             default:
                 break;
         }

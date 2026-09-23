@@ -159,9 +159,18 @@ public class CharSelectionController : MonoBehaviour {
                     fields[i].text = character.MapName; // @todo get map name
                     break;
                 case 1: // job
-                    fields[i].text =
-                        CultureInfo.InvariantCulture.TextInfo.ToTitleCase(
-                            JobHelper.GetJobName(character.Job, character.Sex));
+                    // TEMPORARY BRING-UP GUARD: JobHelper.GetJobName throws
+                    // KeyNotFoundException (empty job-name table, .lub
+                    // bytecode issue). Unhandled, this was aborting the
+                    // rest of this loop - level/exp/hp/sp/stats fields
+                    // never got set after this case ran.
+                    try {
+                        fields[i].text =
+                            CultureInfo.InvariantCulture.TextInfo.ToTitleCase(
+                                JobHelper.GetJobName(character.Job, character.Sex));
+                    } catch (System.Exception) {
+                        fields[i].text = $"Job {character.Job}";
+                    }
                     break;
                 case 2: // lv.
                     fields[i].text = character.Level.ToString();

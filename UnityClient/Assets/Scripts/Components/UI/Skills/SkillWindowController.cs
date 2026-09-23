@@ -78,9 +78,19 @@ public class SkillWindowController : DraggableUIWindow, ISkillWindowController {
             tab.onValueChanged.AddListener(delegate {
                 OnTabChanged(tab, job);
             });
+            // TEMPORARY BRING-UP GUARD: JobHelper.GetJobName throws
+            // KeyNotFoundException (empty job-name table, .lub bytecode
+            // issue). Unhandled, this was aborting the rest of this
+            // foreach - later skill tree tabs never got created.
+            string tabLabel;
+            try {
+                tabLabel = JobHelper.GetJobName(job.Key, Session.CurrentSession.Entity.GetBaseStatus().sex);
+            } catch (System.Exception) {
+                tabLabel = $"Job {job.Key}";
+            }
             tab
                 .GetComponent<Tab>()
-                .SetLabel(JobHelper.GetJobName(job.Key, Session.CurrentSession.Entity.GetBaseStatus().sex));
+                .SetLabel(tabLabel);
             tab.group = tabLayout;
             tab.transform.SetParent(tabLayout.transform);
             tabLayout.RegisterToggle(tab);

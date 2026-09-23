@@ -28,7 +28,20 @@ public class SmallBasicInfoWindow : DraggableUIWindow {
         if (status.next_base_exp > 0) {
             exp = status.base_exp / (float)status.next_base_exp * 100;
         }
-        line1.text = $"Nv. {status.base_level} / {CultureInfo.InvariantCulture.TextInfo.ToTitleCase(JobHelper.GetJobName(status.jobId, status.sex).ToLower())} / Nv. {status.job_level} / Exp. {exp}%";
+
+        // JobHelper.GetJobName throws KeyNotFoundException when the
+        // job-name table is empty (.lub bytecode MoonSharp can't parse -
+        // see LuaInterface.cs/Tables.cs). Uncaught, this aborts the whole
+        // packet handling call it runs under (reflection-invoked from
+        // NetworkClient.TryHandleReceivedPacket with no try-catch there).
+        string jobName;
+        try {
+            jobName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(JobHelper.GetJobName(status.jobId, status.sex).ToLower());
+        } catch (System.Exception) {
+            jobName = $"Job {status.jobId}";
+        }
+
+        line1.text = $"Nv. {status.base_level} / {jobName} / Nv. {status.job_level} / Exp. {exp}%";
         line2.text = $"HP. {status.hp} / {status.max_hp} | SP. {status.sp} / {status.max_sp}";
     }
 }

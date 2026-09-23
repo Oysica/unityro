@@ -1014,6 +1014,32 @@
     //ZC_SKILL_ENTRY3 = 0x8c7,
     LAST = 0x8c9,
 
+    #region NEWER_PACKETVER
+    // Standard official protocol packets for PACKETVER ranges newer than
+    // this fork's last upstream commit (2022-12-27) - not custom/Pandas,
+    // just never implemented here. Server default is PACKETVER 20250716.
+    // Registered as parse-and-discard since this client has no guild UI.
+    ZC_GUILD_INFO3 = 0x0B7B, // PACKET_ZC_GUILD_INFO, PACKETVER >= 20200902, 118 bytes fixed (packets_struct.hpp:5014)
+    ZC_UPDATE_GDID = 0x02F7, // PACKET_ZC_UPDATE_GDID, PACKETVER_MAIN_NUM >= 20220216, 47 bytes fixed (packets_struct.hpp:5574)
+    // These three caused real damage: any packet the parser doesn't
+    // recognize desyncs PacketSerializer.ReadPacket() and silently drops
+    // whatever else was batched in the same TCP read alongside it -
+    // including, in the City_Buff speed bring-up investigation, the
+    // ZC_PAR_CHANGE(SP_SPEED) packet that happened to be queued behind one
+    // of these. Registering them (even as pure discards) is what actually
+    // fixes packet loss, not just silences a console warning.
+    ZC_SKILLINFO_DELETE = 0x0441, // PACKET_ZC_SKILLINFO_DELETE, packets.hpp:1082, 4 bytes fixed (header+skillID)
+    ZC_REQ_GROUPINFO_CHANGE_V2 = 0x07D8, // clif.cpp:9114/9129, PACKETVER >= 20090603, 8 bytes fixed (header+expOption+itemPickRule+itemShareRule)
+    ZC_LIST_EMOTE = 0x0BF6, // PACKET_ZC_LIST_EMOTE, PACKETVER >= 20230920, variable length (packets_struct.hpp:6364)
+    // Found via a SECOND round of the same desync bug: after fixing the
+    // three above, City_Buff speed was STILL not reaching the client, and
+    // the console showed a fresh batch of unknown commands (0x0a30, 0x0ae5,
+    // plus garbage 0x200d/0x3030/0x3035 downstream of the resulting
+    // misalignment). These two are the real headers responsible.
+    ZC_ACK_REQNAMEALL = 0x0A30, // PACKET_ZC_ACK_REQNAMEALL, PACKETVER_MAIN_NUM >= 20150225, 106 bytes fixed (packets_struct.hpp:3568)
+    ZC_GROUP_LIST = 0x0AE5, // PACKET_ZC_GROUP_LIST ("partyinfo"), PACKETVER >= 20171207, variable length (packets_struct.hpp:2086, clif.cpp:9009)
+    #endregion
+
     #region PANDAS_CUSTOM
     // Non-standard packets sent unconditionally by this fork's Pandas-based
     // server to every session, regardless of client type. The official

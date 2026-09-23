@@ -90,6 +90,12 @@ public class EntityWalk : MonoBehaviour {
         nodes = PathFinder.GetPath(startX, startY, endX, endY).Select(node => new Vector3(node.x, (float) node.y, node.z)).ToList();
 
         if (!nodes.IsEmpty()) {
+            // A walk interrupted mid-stride can report a new path whose
+            // start is several tiles from the current render position;
+            // snap here instead of letting Update() interpolate the gap
+            // (which reads as the character rewinding/sliding backward).
+            transform.position = nodes[0];
+
             Entity.ChangeMotion(new MotionRequest { Motion = SpriteMotion.Walk });
             isWalking = true;
         }

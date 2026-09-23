@@ -42,6 +42,16 @@ public class Sounds
         }
         var clip = Addressables.LoadAssetAsync<AudioClip>(sound.file.SanitizeForAddressables()).WaitForCompletion();
 
+        // TEMPORARY BRING-UP GUARD: ambient map sound-emitter .wav files
+        // were never extracted in this data set (only textures/sprites
+        // were pulled this session), so clip comes back null here without
+        // throwing. Skip registering a Playing entry for it instead of
+        // letting Update() call PlayOneShot(null) every cycle.
+        if (clip == null) {
+            Debug.LogWarning($"[bring-up] Sounds.Add: no clip for '{sound.file}', skipping");
+            return;
+        }
+
         Playing p = new Playing();
         p.playAt = 0;
         p.info = sound;

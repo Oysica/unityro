@@ -116,16 +116,20 @@ public class NetworkClient : MonoBehaviour, IPacketHandler {
     }
 
     private void TryHandleReceivedPacket() {
-        if (InPacketQueue.Count == 0) {
-            return;
-        }
+        // Packet handling stays paused for the whole map-load (see
+        // PausePacketHandling/ResumePacketHandling), so the socket can
+        // queue up many packets before Update() resumes draining it -
+        // process the whole queue per call instead of one packet/frame so
+        // that backlog doesn't lag behind the server's current state.
+        while (InPacketQueue.Count > 0) {
+            var packet = InPacketQueue.Dequeue();
+            var isHandled = PacketHooks.TryGetValue(packet.Header, out var hook);
 
-        var packet = InPacketQueue.Dequeue();
-        var isHandled = PacketHooks.TryGetValue(packet.Header, out var hook);
-        if (hook != null) {
-            hook?.DynamicInvoke((ushort) packet.Header, -1, packet);
+            if (hook != null) {
+                hook?.DynamicInvoke((ushort) packet.Header, -1, packet);
+            }
+            OnPacketEvent?.Invoke(packet, isHandled);
         }
-        OnPacketEvent?.Invoke(packet, isHandled);
     }
     #endregion
 
