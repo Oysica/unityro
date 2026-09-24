@@ -1042,6 +1042,15 @@
     // header was still missing, and something after it decoded as garbage
     // (0x018a) - same desync pattern as before, different specific packet.
     ZC_ADD_MEMBER_TO_GROUP = 0x0AE4, // PACKET_ZC_ADD_MEMBER_TO_GROUP ("partymemberinfo"), PACKETVER >= 20171207, 89 bytes fixed (packets_struct.hpp:2050, clif.cpp:8955)
+    // Fourth round: a live sweep of PacketSerializer.RegisteredPackets vs
+    // this enum (via MCP) plus fresh Unknown Command warnings found
+    // ZC_BROADCAST (declared above but never given a handler class) and
+    // these two more party packets, all confirmed actually sent by this
+    // server and desyncing the stream - same root cause as "No Entity
+    // found for given ID" (some other player's spawn packet getting
+    // dropped behind one of these before it could be cached).
+    ZC_NOTIFY_POSITION_TO_GROUPM = 0x0107, // PACKET_ZC_NOTIFY_POSITION_TO_GROUPM, 10 bytes fixed (packets_struct.hpp:5298)
+    ZC_NOTIFY_HP_TO_GROUPM = 0x080E, // PACKET_ZC_NOTIFY_HP_TO_GROUPM, PACKETVER >= 20100119 non-ZERO branch, 14 bytes fixed (packets_struct.hpp:5316)
     #endregion
 
     #region PANDAS_CUSTOM
