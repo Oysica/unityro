@@ -1038,6 +1038,10 @@
     // misalignment). These two are the real headers responsible.
     ZC_ACK_REQNAMEALL = 0x0A30, // PACKET_ZC_ACK_REQNAMEALL, PACKETVER_MAIN_NUM >= 20150225, 106 bytes fixed (packets_struct.hpp:3568)
     ZC_GROUP_LIST = 0x0AE5, // PACKET_ZC_GROUP_LIST ("partyinfo"), PACKETVER >= 20171207, variable length (packets_struct.hpp:2086, clif.cpp:9009)
+    // Third round, same bug class: ZC_GROUP_LIST's sibling "partymemberinfo"
+    // header was still missing, and something after it decoded as garbage
+    // (0x018a) - same desync pattern as before, different specific packet.
+    ZC_ADD_MEMBER_TO_GROUP = 0x0AE4, // PACKET_ZC_ADD_MEMBER_TO_GROUP ("partymemberinfo"), PACKETVER >= 20171207, 89 bytes fixed (packets_struct.hpp:2050, clif.cpp:8955)
     #endregion
 
     #region PANDAS_CUSTOM
