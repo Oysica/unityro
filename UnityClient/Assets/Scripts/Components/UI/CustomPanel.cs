@@ -32,7 +32,10 @@ public class CustomPanel : RawImage,
             AddressablesHolder = gameObject.GetComponent<CustomUIAddressablesHolder>();
         }
 
-        if (AddressablesHolder.backgroundTexture.Asset != null) {
+        // What SetBackground picked (e.g. the selected tab) stays when the window is reopened
+        if (backgroundTexture != null) {
+            texture = backgroundTexture;
+        } else if (AddressablesHolder.backgroundTexture.Asset != null) {
             texture = (Texture2D) AddressablesHolder.backgroundTexture.Asset;
         }
     }
@@ -40,6 +43,7 @@ public class CustomPanel : RawImage,
     protected override void Start() {
         texture = null;
         LoadTextures();
+        texture = backgroundTexture;
     }
 
     private void LoadTextures() {
@@ -82,7 +86,14 @@ public class CustomPanel : RawImage,
     }
 
     public void SetBackground(string path) {
-        backgroundTexture = Addressables.LoadAssetAsync<Texture2D>(DBManager.INTERFACE_PATH + path).WaitForCompletion();
+        // Only some of these were extracted (the first inventory tab, not the others); the editor
+        // reads the rest from the GRF. A missing one used to throw and stop the tab from switching
+        var loaded = TextureAssetLoader.Load(DBManager.INTERFACE_PATH + path);
+        if (loaded == null) {
+            return;
+        }
+
+        backgroundTexture = loaded;
         texture = backgroundTexture;
         GetComponent<RectTransform>().sizeDelta = new Vector2(backgroundTexture.width, backgroundTexture.height);
     }
