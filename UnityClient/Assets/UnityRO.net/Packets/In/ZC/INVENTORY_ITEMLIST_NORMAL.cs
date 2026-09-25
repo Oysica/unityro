@@ -15,9 +15,11 @@ public partial class ZC {
         public PacketHeader Header => HEADER;
 
         public List<ItemInfo> Inventory = new List<ItemInfo>();
+        // 0 inventory, 1 cart, 2 storage, 3 guild storage (clif.cpp enum inventory_type)
+        public byte InvType;
 
         public void Read(MemoryStreamReader br, int size) {
-            byte invType = (byte)br.ReadByte();
+            InvType = (byte)br.ReadByte();
 
             var count = (br.Length - br.Position) / BLOCK_SIZE;
 

@@ -79,12 +79,12 @@ public class ItemManager : MonoBehaviour {
 
     private void OnInventoryUpdate(ushort cmd, int size, InPacket packet) {
         var list = new List<ItemInfo>();
-        if (packet is ZC.INVENTORY_ITEMLIST_EQUIP) {
-            var pkt = packet as ZC.INVENTORY_ITEMLIST_EQUIP;
-            list = pkt.Inventory;
-        } else if (packet is ZC.INVENTORY_ITEMLIST_NORMAL) {
-            var pkt = packet as ZC.INVENTORY_ITEMLIST_NORMAL;
-            list = pkt.Inventory;
+        // The same packets carry cart and storage contents; only the character's inventory
+        // belongs here (opening Kafra storage used to merge the storage into it)
+        if (packet is ZC.INVENTORY_ITEMLIST_EQUIP equipList && equipList.InvType == 0) {
+            list = equipList.Inventory;
+        } else if (packet is ZC.INVENTORY_ITEMLIST_NORMAL normalList && normalList.InvType == 0) {
+            list = normalList.Inventory;
         }
 
         if (list.IsEmpty())
