@@ -41,7 +41,7 @@ public class SmallBasicInfoWindow : DraggableUIWindow {
             jobName = $"Job {status.jobId}";
         }
 
-        line1.text = $"Nv. {status.base_level} / {jobName} / Nv. {status.job_level} / Exp. {exp}%";
+        line1.text = $"Lv. {status.base_level} / {jobName} / Job. {status.job_level} / Exp. {exp}%";
         line2.text = $"HP. {status.hp} / {status.max_hp} | SP. {status.sp} / {status.max_sp}";
     }
 }
