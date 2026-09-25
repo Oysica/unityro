@@ -113,10 +113,13 @@ public class EntityWalk : MonoBehaviour {
 
             Entity.ChangeMotion(new MotionRequest { Motion = SpriteMotion.Walk });
             isWalking = true;
-        } else if (startX == endX && startY == endY && isWalking) {
-            // Told to stay where the step being walked ends (a stop): the walk ends on that cell
-            transform.position = new Vector3(startX, PathFinder.GetCellHeight(startX, startY), startY);
-            StopMoving();
+        } else {
+            // Nothing to walk: told to stay where it is (a stop), or no way this client finds. Be
+            // where the server says, and done walking, or the walk animation would play on in place
+            transform.position = new Vector3(endX, PathFinder.GetCellHeight(endX, endY), endY);
+            if (isWalking) {
+                StopMoving();
+            }
         }
 
         lastPosition = transform.position;

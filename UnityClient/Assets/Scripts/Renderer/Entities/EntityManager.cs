@@ -19,21 +19,27 @@ public class EntityManager : MonoBehaviour {
     }
 
     public Entity Spawn(EntitySpawnData data) {
+        if (data.objecttype != EntityType.PC && data.objecttype != EntityType.NPC && data.objecttype != EntityType.MOB) {
+            return null;
+        }
+
+        // Known already: it's where the server says now. Not ?. / ??: a destroyed one isn't null to them
+        if (entityCache.TryGetValue(data.AID, out var known)) {
+            if (known != null) {
+                known.gameObject.SetActive(true);
+                known.Respawn(data);
+                return known;
+            }
+            entityCache.Remove(data.AID);
+        }
+
         switch (data.objecttype) {
             case EntityType.PC:
-                entityCache.TryGetValue(data.AID, out var pc);
-                pc?.gameObject.SetActive(true);
-                return pc ?? SpawnPC(data);
+                return SpawnPC(data);
             case EntityType.NPC:
-                entityCache.TryGetValue(data.AID, out var npc);
-                npc?.gameObject.SetActive(true);
-                return npc ?? SpawnNPC(data);
-            case EntityType.MOB:
-                entityCache.TryGetValue(data.AID, out var mob);
-                mob?.gameObject.SetActive(true);
-                return mob ?? SpawnMOB(data);
+                return SpawnNPC(data);
             default:
-                return null;
+                return SpawnMOB(data);
         }
     }
 
@@ -57,9 +63,19 @@ public class EntityManager : MonoBehaviour {
         }
     }
 
-    //TODO this needs checking
     public void VanishEntity(uint AID, VanishType type) {
-        GetEntity(AID)?.Vanish(type);
+        var entity = GetEntity(AID);
+        if (entity == null) {
+            entityCache.Remove(AID);
+            return;
+        }
+
+        entity.Vanish(type);
+        // A player who died lies there until it gets up, leaves or goes out of sight: it must still
+        // be found then, or its body stays on screen for good
+        if (type == VanishType.DIED && entity.Type == EntityType.PC) {
+            return;
+        }
         entityCache.Remove(AID);
     }
 
@@ -179,5 +195,13 @@ public class EntityManager : MonoBehaviour {
             Destroy(entity.gameObject);
         }
         entityCache.Clear();
+
+        // And any the cache lost track of, which would otherwise follow us to the next map
+        var self = Session.CurrentSession?.Entity as Entity;
+        foreach (var entity in FindObjectsOfType<Entity>()) {
+            if (entity != self && entity.AID != 0) {
+                Destroy(entity.gameObject);
+            }
+        }
     }
 }

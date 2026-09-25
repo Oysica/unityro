@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Rendering;
@@ -398,10 +399,27 @@ public class SpriteEntityViewer : GameEntityViewer {
     }
 
     public override IEnumerator FadeOut() {
-        var currentAlpha = MeshRenderer.material.GetFloat("_Alpha");
+        // The body and what's drawn with it (head, weapon, ...) fade together. A viewer that isn't
+        // set up yet (a unit that left the frame it came) has nothing to fade: throwing here used
+        // to stop the unit from ever being destroyed, leaving a copy of it on screen
+        var materials = new List<Material>();
+        foreach (var viewer in Children.Prepend(this)) {
+            if (viewer != null && viewer.MeshRenderer != null && viewer.MeshRenderer.material.HasProperty("_Alpha")) {
+                materials.Add(viewer.MeshRenderer.material);
+            }
+        }
+        if (materials.Count == 0) {
+            yield break;
+        }
+
+        var currentAlpha = materials[0].GetFloat("_Alpha");
         while (currentAlpha > 0f) {
             currentAlpha -= Time.deltaTime * 5f;
-            MeshRenderer.material.SetFloat("_Alpha", currentAlpha);
+            foreach (var material in materials) {
+                if (material != null) {
+                    material.SetFloat("_Alpha", currentAlpha);
+                }
+            }
             yield return new WaitForEndOfFrame();
         }
     }

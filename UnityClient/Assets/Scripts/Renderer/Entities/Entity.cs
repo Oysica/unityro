@@ -417,12 +417,15 @@ public class Entity : MonoBehaviour, INetworkEntity {
         StopMoving();
         switch (type) {
             case VanishType.OUT_OF_SIGHT:
+                // Gone even if the fade can't finish
+                Destroy(gameObject, FADE_OUT_SECONDS);
                 StartCoroutine(DestroyWithFade());
                 break;
             case VanishType.DIED:
                 var isPC = Type == EntityType.PC;
                 ChangeMotion(new MotionRequest { Motion = SpriteMotion.Dead });
                 if (!isPC) {
+                    Destroy(gameObject, DEATH_SECONDS + FADE_OUT_SECONDS);
                     StartCoroutine(DestroyAfterSecondsWithFade());
                 }
                 break;
@@ -432,8 +435,29 @@ public class Entity : MonoBehaviour, INetworkEntity {
         }
     }
 
+    // How long a dead monster lies there, and the longest its fade out may take
+    private const float DEATH_SECONDS = 2.5f;
+    private const float FADE_OUT_SECONDS = 1f;
+
+    /// <summary>
+    /// Sent again while still known (a player who lay dead and got up, one seen anew before it
+    /// was told gone): where it is and how it stands now
+    /// </summary>
+    public void Respawn(EntitySpawnData data) {
+        StopMoving();
+        Direction = ((NpcDirection) data.PosDir[2]).ToDirection();
+        transform.position = new Vector3(data.PosDir[0], PathFinder?.GetCellHeight(data.PosDir[0], data.PosDir[1]) ?? 0f, data.PosDir[1]);
+
+        var motion = data.state switch {
+            EntitySpawnData.EntitySpawnState.Dead => SpriteMotion.Dead,
+            EntitySpawnData.EntitySpawnState.Sit => SpriteMotion.Sit,
+            _ => SpriteMotion.Idle
+        };
+        ChangeMotion(new MotionRequest { Motion = motion });
+    }
+
     private IEnumerator DestroyAfterSecondsWithFade() {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(DEATH_SECONDS);
         IsReady = false;
         yield return EntityViewer.FadeOut();
         Destroy(gameObject);

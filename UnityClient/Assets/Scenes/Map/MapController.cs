@@ -130,6 +130,9 @@ public class MapController : MonoBehaviour {
     private void OnEntityResurrected(ushort cmd, int size, InPacket packet) {
         if (packet is ZC.RESURRECTION RESURRECTION) {
             var entity = EntityManager.GetEntity(RESURRECTION.GID);
+            if (entity == null) {
+                return;
+            }
             entity.ChangeMotion(new MotionRequest { Motion = SpriteMotion.Idle });
             
             // If it's our main character update Escape ui
@@ -224,8 +227,9 @@ public class MapController : MonoBehaviour {
         } else if (packet is ZC.NOTIFY_MOVEENTRY11) {
             var pkt = packet as ZC.NOTIFY_MOVEENTRY11;
             var entity = EntityManager.Spawn(pkt.entityData);
+            if (entity == null) return;
 
-            entity.ChangeMotion(new MotionRequest { Motion = SpriteMotion.Walk });
+            // StartMoving plays the walk when there is one to walk
             entity.StartMoving(pkt.entityData.PosDir[0], pkt.entityData.PosDir[1], pkt.entityData.PosDir[2], pkt.entityData.PosDir[3]);
         }
     }
@@ -237,15 +241,15 @@ public class MapController : MonoBehaviour {
             var entity = EntityManager.GetEntity(pkt.GID);
             if (entity == null) return;
 
-            entity.ChangeMotion(new MotionRequest { Motion = SpriteMotion.Walk });
             entity.StartMoving(pkt.StartPosition[0], pkt.StartPosition[1], pkt.EndPosition[0], pkt.EndPosition[1]);
         } else if (packet is ZC.STOPMOVE) {
             var pkt = packet as ZC.STOPMOVE;
             var entity = EntityManager.GetEntity(pkt.AID);
             if (entity == null) return;
 
-            entity.ChangeMotion(new MotionRequest { Motion = SpriteMotion.Walk });
-            entity.StartMoving((int)entity.transform.position.x, (int)entity.transform.position.z, pkt.PosX, pkt.PosY);
+            // Stopped at that cell: walk the rest of the way there, or just stop when already on it
+            var position = entity.transform.position;
+            entity.StartMoving(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z), pkt.PosX, pkt.PosY);
         }
     }
 
