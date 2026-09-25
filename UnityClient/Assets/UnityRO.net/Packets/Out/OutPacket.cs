@@ -38,6 +38,7 @@ public abstract class OutPacket : NetworkPacket {
     public void Write(int value) => buffer = buffer.Concat(BitConverter.GetBytes(value));
     public void Write(long value) => buffer = buffer.Concat(BitConverter.GetBytes(value));
     public void Write(byte value) => buffer = buffer.Append(value);
+    public void Write(byte[] bytes) => buffer = buffer.Concat(bytes);
     public void Write(short value) => buffer = buffer.Concat(BitConverter.GetBytes(value));
     public void Write(ushort value) => buffer = buffer.Concat(BitConverter.GetBytes(value));
     public void Write(ulong value) => buffer = buffer.Concat(BitConverter.GetBytes(value));

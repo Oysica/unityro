@@ -1069,5 +1069,12 @@
     // pushed every ~5s to all online players).
     AC_HWID_NONCE = 0x0F04,
     AC_AA_STATUS = 0x0F10,
+    // Auto attack (內掛), as the official client's Gshield.dll overlay drives it
+    // (tools/hwid_dll/src/protocol.h, clif.cpp clif_parse_AaToggle/AaSetRequest/AaSetUpdate)
+    CA_AA_TOGGLE = 0x0F20,
+    CA_AA_TOGGLE_SUPPORT = 0x0F21,
+    CA_AA_SET_REQUEST = 0x0F30,
+    AC_AA_SET_SNAPSHOT = 0x0F31,
+    CA_AA_SET_UPDATE = 0x0F32,
     #endregion
 }

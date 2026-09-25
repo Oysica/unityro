@@ -55,6 +55,7 @@ public class MapUiController : MonoBehaviour {
         StatusIconsController.Create(transform);
         Storage = StorageController.Create(InventoryWindow);
         MobileControlsController.Create(this);
+        AutoAttackWindow.Create(this);
     }
 
     public void DisplayItemDetails(ItemInfo itemInfo, Vector2 position) {
@@ -65,6 +66,14 @@ public class MapUiController : MonoBehaviour {
     }
 
     private void Update() {
+        // Home opens the auto attack window, as it does the official client's overlay; not while typing
+        if (Input.GetKeyDown(KeyCode.Home) && AutoAttackWindow.Instance != null) {
+            var selected = UnityEngine.EventSystems.EventSystem.current != null ? UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject : null;
+            if (selected == null || selected.GetComponent<TMPro.TMP_InputField>() == null) {
+                AutoAttackWindow.Instance.ToggleVisible();
+            }
+        }
+
         if (Event.current == null)
             return;
 

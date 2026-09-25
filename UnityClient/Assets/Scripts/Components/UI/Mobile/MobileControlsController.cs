@@ -43,7 +43,7 @@ public class MobileControlsController : MonoBehaviour {
     private const float SKILL_ICON_SIZE = 46f;
     private const float UTILITY_SIZE = 62f;
     private const float UTILITY_ROW_Y = 392f;
-    private static readonly float[] UtilityColumnsX = { -75f, -145f, -215f, -285f };
+    private static readonly float[] UtilityColumnsX = { -75f, -145f, -215f, -285f, -355f };
     private const float CHAT_MAX_WIDTH = 440f;
     private const float CHAT_MIN_WIDTH = 300f;
     private const float CHAT_SIDE_MARGIN = 350f;
@@ -76,6 +76,7 @@ public class MobileControlsController : MonoBehaviour {
     private readonly HashSet<GameObject> SkillButtons = new HashSet<GameObject>();
 
     private Image AutoLockButton;
+    private Image AutoAttackButton;
     private RectTransform TargetRing;
     private bool AttackHeld;
     private Entity AttackedTarget;
@@ -126,10 +127,12 @@ public class MobileControlsController : MonoBehaviour {
     private void Awake() {
         Instance = this;
         MobileControls.Changed += OnMobileControlsChanged;
+        AutoAttackWindow.StatusChanged += OnAutoAttackStatus;
     }
 
     private void OnDestroy() {
         MobileControls.Changed -= OnMobileControlsChanged;
+        AutoAttackWindow.StatusChanged -= OnAutoAttackStatus;
         if (Instance == this) {
             Instance = null;
         }
@@ -219,6 +222,8 @@ public class MobileControlsController : MonoBehaviour {
         RefreshAutoLockButton();
         CreateButton("Pick Up", new Vector2(UtilityColumnsX[2], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "撿取", OnPickUp, "small_button");
         CreateButton("Sit", new Vector2(UtilityColumnsX[3], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "坐下", OnSitStand, "small_button");
+        var autoAttack = CreateButton("Auto Attack", new Vector2(UtilityColumnsX[4], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "內掛", OnAutoAttack, "small_button");
+        AutoAttackButton = autoAttack.targetGraphic as Image;
     }
 
     private Button CreateButton(string name, Vector2 position, float size, Color color, string label, UnityAction onClick, string art = null) {
@@ -568,6 +573,30 @@ public class MobileControlsController : MonoBehaviour {
             return;
         }
         control.PickUp(item);
+    }
+
+    private void OnAutoAttack() {
+        if (AutoAttackWindow.Instance != null) {
+            AutoAttackWindow.Instance.ToggleVisible();
+        }
+    }
+
+    /// <summary>
+    /// The 內掛 button lights up while the bot runs
+    /// </summary>
+    private void OnAutoAttackStatus(Pandas.AA_STATUS status) {
+        if (AutoAttackButton == null) {
+            return;
+        }
+        var running = status.State != Pandas.AA_STATUS.STATE_OFF;
+        var art = LoadArt(running ? "small_button_on" : "small_button");
+        if (art != null) {
+            if (AutoAttackButton.sprite != art) {
+                AutoAttackButton.sprite = art;
+            }
+        } else {
+            AutoAttackButton.color = running ? AutoLockOnColor : ButtonColor;
+        }
     }
 
     private void OnSitStand() {

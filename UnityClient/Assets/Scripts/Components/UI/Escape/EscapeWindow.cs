@@ -58,6 +58,12 @@ public class EscapeWindow : DraggableUIWindow, IEscapeWindowController {
         BuildButton("Close shop", () => { new CZ.NPC_TRADE_QUIT().Send(); });
 #endif
 
+        BuildButton("內掛系統", () => {
+            Hide();
+            if (AutoAttackWindow.Instance != null) {
+                AutoAttackWindow.Instance.Show();
+            }
+        });
         BuildButton(MobileControls.Enabled ? "手機操作：開" : "手機操作：關", () => {
             MobileControls.Enabled = !MobileControls.Enabled;
             BuildButtons(IsPlayerDead);
