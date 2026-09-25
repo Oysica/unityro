@@ -103,6 +103,7 @@ public class Entity : MonoBehaviour, INetworkEntity {
         NetworkClient.HookPacket(ZC.LONGPAR_CHANGE.HEADER, OnParameterChange);
         NetworkClient.HookPacket(ZC.LONGPAR_CHANGE2.HEADER, OnParameterChange);
         NetworkClient.HookPacket(ZC.COUPLESTATUS.HEADER, OnParameterChange);
+        NetworkClient.HookPacket(ZC.STATUS_CHANGE.HEADER, OnParameterChange);
         NetworkClient.HookPacket(ZC.STATUS.HEADER, OnStatsWindowData);
         NetworkClient.HookPacket(ZC.NOTIFY_EXP2.HEADER, OnExpReceived);
         NetworkClient.HookPacket(ZC.SKILLINFO_LIST.HEADER, OnSkillsUpdated);
@@ -634,6 +635,9 @@ public class Entity : MonoBehaviour, INetworkEntity {
             status = COUPLESTATUS.status;
             value = COUPLESTATUS.value;
             plusValue = COUPLESTATUS.plusValue;
+        } else if (packet is ZC.STATUS_CHANGE STATUS_CHANGE) {
+            status = STATUS_CHANGE.status;
+            value = STATUS_CHANGE.value;
         }
 
         if (status == null) {
@@ -687,6 +691,30 @@ public class Entity : MonoBehaviour, INetworkEntity {
 
             case EntityStatus.SP_STATUSPOINT:
                 Status.StatusPoints = (uint) value;
+                MapUiController.Instance.StatsWindow.UpdateParameter(status.Value, value);
+                break;
+
+            // Points needed to raise a stat, and the stats they derive
+            case EntityStatus.SP_USTR:
+            case EntityStatus.SP_UAGI:
+            case EntityStatus.SP_UVIT:
+            case EntityStatus.SP_UINT:
+            case EntityStatus.SP_UDEX:
+            case EntityStatus.SP_ULUK:
+            case EntityStatus.SP_ATK1:
+            case EntityStatus.SP_ATK2:
+            case EntityStatus.SP_MATK1:
+            case EntityStatus.SP_MATK2:
+            case EntityStatus.SP_DEF1:
+            case EntityStatus.SP_DEF2:
+            case EntityStatus.SP_MDEF1:
+            case EntityStatus.SP_MDEF2:
+            case EntityStatus.SP_HIT:
+            case EntityStatus.SP_FLEE1:
+            case EntityStatus.SP_FLEE2:
+            case EntityStatus.SP_CRITICAL:
+            case EntityStatus.SP_ASPD:
+                MapUiController.Instance.StatsWindow.UpdateParameter(status.Value, value);
                 break;
 
             case EntityStatus.SP_SKILLPOINT:
