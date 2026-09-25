@@ -18,7 +18,7 @@ namespace Assets.Scripts.Renderer.Map {
         private int currentTextureId;
         private Texture2D[] textures;
 
-        private async void Start() {
+        private void Start() {
             material = gameObject.GetComponent<MeshRenderer>().material;
 
             material.SetFloat("Wave Height", WaterInfo.waveHeight);
@@ -26,8 +26,9 @@ namespace Assets.Scripts.Renderer.Map {
 
             textures = new Texture2D[32];
             for (int i = 0; i < 32; i++) {
-                var texture = await Addressables.LoadAssetAsync<Texture2D>(Path.ChangeExtension(WaterInfo.images[i], ".png").SanitizeForAddressables()).Task;
-                textures[i] = texture;
+                // Water that was never extracted (most maps') is read from the GRF in the editor
+                var key = Path.ChangeExtension(WaterInfo.images[i], ".png").SanitizeForAddressables();
+                textures[i] = TextureAssetLoader.Load(key, WaterInfo.images[i], mapTexture: true);
             }
         }
 
