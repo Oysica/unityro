@@ -19,8 +19,9 @@ public static class TextureAssetLoader {
     /// <param name="key">Addressable key, e.g. data/texture/.../item/apple.png</param>
     /// <param name="grfPath">Path in the GRF when it can't be derived from <paramref name="key"/>
     /// (e.g. a model texture whose name had to be sanitized for Addressables)</param>
+    /// <param name="mapTexture">A texture of the current map, freed with it on the next map change</param>
     /// <returns>null when the texture exists neither as an Addressable nor in the GRF</returns>
-    public static Texture2D Load(string key, string grfPath = null) {
+    public static Texture2D Load(string key, string grfPath = null, bool mapTexture = false) {
         if (SpriteAssetLoader.HasAddressable(key)) {
             return Addressables.LoadAssetAsync<Texture2D>(key).WaitForCompletion();
         }
@@ -50,6 +51,15 @@ public static class TextureAssetLoader {
                 };
             } catch (System.Exception) {
                 texture = null;
+            }
+            // FileManager parks what it decodes in the map file cache under a "maptexture@" name,
+            // and MapRenderer.Clear destroys those on every map change. Only a map's own textures
+            // should go with it; this cache owns the rest (icons would vanish after a warp)
+            if (!mapTexture) {
+                FileCache.Remove(file);
+                if (texture != null) {
+                    texture.name = "ui@" + file;
+                }
             }
             break;
         }

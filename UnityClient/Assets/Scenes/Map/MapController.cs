@@ -170,7 +170,8 @@ public class MapController : MonoBehaviour {
                 GameMap map = await GameManager.BeginMapLoading(mapname);
                 PathFinding = map.GetPathFinder();
 
-                Session.CurrentSession.SetCurrentMap(pkt.MapName);
+                // Without the extension, as on login: a teleport within this map must not load it again
+                Session.CurrentSession.SetCurrentMap(mapname);
             }
 
             entity.transform.position = new Vector3(pkt.PosX, PathFinding.GetCellHeight(pkt.PosX, pkt.PosY), pkt.PosY);

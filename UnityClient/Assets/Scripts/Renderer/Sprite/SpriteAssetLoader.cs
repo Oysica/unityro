@@ -43,6 +43,11 @@ public static class SpriteAssetLoader {
     /// <param name="addressablePath">Addressable key without extension when it differs from <paramref name="path"/></param>
     /// <returns>null when the sprite exists neither as an Addressable nor in the GRF</returns>
     public static LoadedSprite Load(string path, string addressablePath = null) {
+        // The DBManager lookups give no path for a view id their tables don't know (e.g. a custom headgear)
+        if (string.IsNullOrEmpty(path)) {
+            return null;
+        }
+
         addressablePath ??= path;
         if (HasAddressable($"{addressablePath}.asset") && HasAddressable($"{addressablePath}.png")) {
             return new LoadedSprite {

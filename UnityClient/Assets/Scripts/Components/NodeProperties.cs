@@ -34,12 +34,12 @@ public class NodeProperties : MonoBehaviour {
         var path = Path.Combine("data", "texture", directory, $"{nameWithoutExtension}.png").SanitizeForAddressables();
         // Only prontera's model textures were extracted; elsewhere the editor reads them from the GRF
         var grfPath = Path.Combine("data", "texture", textureName).Replace('\\', '/');
-        var texture = TextureAssetLoader.Load(path, grfPath);
+        var texture = TextureAssetLoader.Load(path, grfPath, mapTexture: true);
 
         if (texture == null) {
             var filename = nameWithoutExtension.ToLowerInvariant();
             var newPath = Path.Combine("data", "texture", directory, $"{filename}.png").SanitizeForAddressables();
-            texture = TextureAssetLoader.Load(newPath, grfPath);
+            texture = TextureAssetLoader.Load(newPath, grfPath, mapTexture: true);
         }
 
         MeshRenderer.material.mainTexture = texture;
