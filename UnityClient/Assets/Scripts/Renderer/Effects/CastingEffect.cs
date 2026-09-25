@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Effects;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 class CastingEffect : MonoBehaviour {
     public static Dictionary<string, Material> CastMaterials = new Dictionary<string, Material>();
@@ -19,7 +18,8 @@ class CastingEffect : MonoBehaviour {
             cast.CastMaterial = CastMaterials[texture];
         } else {
             cast.CastMaterial = new Material(Shader.Find("Mobile/Particles/Additive"));
-            cast.CastMaterial.mainTexture = Addressables.LoadAssetAsync<Texture2D>(texture).WaitForCompletion();
+            // Falls back to the GRF in the editor: ring_yellow was never extracted
+            cast.CastMaterial.mainTexture = TextureAssetLoader.Load(texture);
             CastMaterials.Add(texture, cast.CastMaterial);
         }
 
