@@ -80,9 +80,17 @@ public class Entity : MonoBehaviour, INetworkEntity {
     }
 
     private void CheckForMouseOver() {
-        // Nothing hovers on a touch screen: the monster being targeted keeps its name up
-        if (MobileControls.Enabled && MobileControls.Target == this) {
-            Canvas?.ShowEntityName();
+        // Nothing hovers on a touch screen: monsters show their names while near, as in mobile
+        // games, and the one being targeted keeps it
+        if (MobileControls.Enabled && (Type == EntityType.MOB || MobileControls.Target == this)) {
+            var self = Session.CurrentSession?.Entity as Entity;
+            var alive = EntityViewer == null || EntityViewer.State != SpriteState.Dead;
+            var near = self != null && MobileControls.CellDistance(self.transform.position, transform.position) <= MobileControls.TARGET_RANGE;
+            if (alive && (near || MobileControls.Target == this)) {
+                Canvas?.ShowEntityName();
+            } else {
+                Canvas?.HideEntityName();
+            }
             return;
         }
 
