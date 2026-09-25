@@ -60,6 +60,11 @@ public class MobileControlsController : MonoBehaviour {
     private static readonly Color AutoLockOnColor = new Color(0.15f, 0.5f, 0.2f, 0.75f);
     private static readonly Color TargetRingColor = new Color(1f, 0.25f, 0.15f, 0.9f);
 
+    // Art for the controls (PixelLab), one sprite per piece; a plain tinted circle stands in for
+    // any that's missing
+    private const string ART_PATH = "Textures/MobileControls/";
+    private static readonly Color ArtColor = new Color(1f, 1f, 1f, 0.92f);
+
     private static Sprite CircleSprite;
     private static Sprite RingSprite;
     private static MobileControlsController Instance;
@@ -166,15 +171,19 @@ public class MobileControlsController : MonoBehaviour {
         TargetRing.anchorMin = TargetRing.anchorMax = TargetRing.pivot = new Vector2(0.5f, 0.5f);
         ring.gameObject.SetActive(false);
 
-        var joystick = CreateCircle(transform, "Joystick", BottomLeft, JoystickCenter, JOYSTICK_SIZE, BaseColor);
-        var knob = CreateCircle(joystick.transform, "Knob", new Vector2(0.5f, 0.5f), Vector2.zero, KNOB_SIZE, KnobColor);
+        var joystick = CreateCircle(transform, "Joystick", BottomLeft, JoystickCenter, JOYSTICK_SIZE, BaseColor, "joystick_base");
+        var knob = CreateCircle(joystick.transform, "Knob", new Vector2(0.5f, 0.5f), Vector2.zero, KNOB_SIZE, KnobColor, "knob");
         knob.raycastTarget = false;
+        // The stick sits over the game: let it show through
+        if (joystick.sprite != CircleSprite) {
+            joystick.color = new Color(1f, 1f, 1f, 0.8f);
+        }
         Joystick = joystick.gameObject.AddComponent<VirtualJoystick>();
         Joystick.Knob = knob.rectTransform;
         Joystick.Radius = (JOYSTICK_SIZE - KNOB_SIZE) / 2f + 10f;
 
         // Attacks as soon as it's touched; held, it goes on with the next monster
-        var attack = CreateButton("Attack", AttackCenter, ATTACK_SIZE, AttackColor, "攻擊", null);
+        var attack = CreateButton("Attack", AttackCenter, ATTACK_SIZE, AttackColor, "攻擊", null, "attack");
         var attackTrigger = attack.gameObject.AddComponent<EventTrigger>();
         var press = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
         press.callback.AddListener(delegate { OnAttackPressed(); });
@@ -187,7 +196,7 @@ public class MobileControlsController : MonoBehaviour {
             var angle = (SKILL_ARC_START + i * SKILL_ARC_STEP) * Mathf.Deg2Rad;
             var position = AttackCenter + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * SKILL_ARC_RADIUS;
             var slot = i;
-            var button = CreateButton($"Shortcut {i + 1}", position, SKILL_SIZE, ButtonColor, null, () => UseShortcut(slot));
+            var button = CreateButton($"Shortcut {i + 1}", position, SKILL_SIZE, ButtonColor, null, () => UseShortcut(slot), "skill_slot");
 
             var icon = new GameObject("Icon", typeof(RectTransform)).AddComponent<RawImage>();
             icon.transform.SetParent(button.transform, false);
@@ -204,16 +213,16 @@ public class MobileControlsController : MonoBehaviour {
             SkillButtons.Add(button.gameObject);
         }
 
-        CreateButton("Target", new Vector2(UtilityColumnsX[0], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "目標", OnNextTarget);
-        var autoLock = CreateButton("Auto Lock", new Vector2(UtilityColumnsX[1], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "自動\n鎖定", OnAutoLock);
+        CreateButton("Target", new Vector2(UtilityColumnsX[0], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "目標", OnNextTarget, "small_button");
+        var autoLock = CreateButton("Auto Lock", new Vector2(UtilityColumnsX[1], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "自動\n鎖定", OnAutoLock, "small_button");
         AutoLockButton = autoLock.targetGraphic as Image;
         RefreshAutoLockButton();
-        CreateButton("Pick Up", new Vector2(UtilityColumnsX[2], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "撿取", OnPickUp);
-        CreateButton("Sit", new Vector2(UtilityColumnsX[3], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "坐下", OnSitStand);
+        CreateButton("Pick Up", new Vector2(UtilityColumnsX[2], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "撿取", OnPickUp, "small_button");
+        CreateButton("Sit", new Vector2(UtilityColumnsX[3], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "坐下", OnSitStand, "small_button");
     }
 
-    private Button CreateButton(string name, Vector2 position, float size, Color color, string label, UnityAction onClick) {
-        var image = CreateCircle(transform, name, BottomRight, position, size, color);
+    private Button CreateButton(string name, Vector2 position, float size, Color color, string label, UnityAction onClick, string art = null) {
+        var image = CreateCircle(transform, name, BottomRight, position, size, color, art);
         var button = image.gameObject.AddComponent<Button>();
         button.targetGraphic = image;
         if (onClick != null) {
@@ -233,15 +242,20 @@ public class MobileControlsController : MonoBehaviour {
             text.color = Color.white;
             text.enableWordWrapping = false;
             text.raycastTarget = false;
+            // Readable over the button art
+            text.outlineWidth = 0.2f;
+            text.outlineColor = new Color32(0, 0, 0, 220);
         }
         return button;
     }
 
-    private static Image CreateCircle(Transform parent, string name, Vector2 anchor, Vector2 position, float size, Color color) {
+    private static Image CreateCircle(Transform parent, string name, Vector2 anchor, Vector2 position, float size, Color color, string art = null) {
         var image = new GameObject(name, typeof(RectTransform)).AddComponent<Image>();
         image.transform.SetParent(parent, false);
-        image.sprite = GetCircleSprite();
-        image.color = color;
+        var sprite = art != null ? LoadArt(art) : null;
+        image.sprite = sprite != null ? sprite : GetCircleSprite();
+        image.color = sprite != null ? ArtColor : color;
+        image.preserveAspect = true;
 
         var rect = image.rectTransform;
         rect.anchorMin = rect.anchorMax = anchor;
@@ -517,9 +531,21 @@ public class MobileControlsController : MonoBehaviour {
     }
 
     private void RefreshAutoLockButton() {
-        if (AutoLockButton != null) {
+        if (AutoLockButton == null) {
+            return;
+        }
+
+        var art = LoadArt(MobileControls.AutoLock ? "small_button_on" : "small_button");
+        if (art != null) {
+            AutoLockButton.sprite = art;
+            AutoLockButton.color = ArtColor;
+        } else {
             AutoLockButton.color = MobileControls.AutoLock ? AutoLockOnColor : ButtonColor;
         }
+    }
+
+    private static Sprite LoadArt(string name) {
+        return Resources.Load<Sprite>(ART_PATH + name);
     }
 
     private void OnNextTarget() {
