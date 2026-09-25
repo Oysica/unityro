@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using ROIO.Utils.Extensions;
+using System.Collections.Generic;
 
 public static class JobHelper {
     //The following system marks a different job ID system used by the map server,
@@ -331,8 +332,105 @@ public static class JobHelper {
 
     public static string GetJobName(int job, int sex) {
         var table = LuaInterface.GetTable(sex == 1 ? "PCJobNameTableMan" : "PCJobNameTableWoman");
-        return table.Keys.ToDictionary(t => int.Parse(t.ToString()), t => table[t].ToString().Replace("\"", ""))[job];
+        var name = table?.Get(job).CastToString();
+        if (name != null) {
+            return name.Replace("\"", "").LuaToText();
+        }
+
+        // This client ships pcjobnamegender.lub with empty tables; the names are in msgstringtable
+        if (JobNameMsgIds.TryGetValue((Job) job, out var msgId) && ROIO.Tables.MsgStringTable[$"{msgId}"] is string msg) {
+            return msg;
+        }
+
+        throw new KeyNotFoundException($"No name for job {job}");
     }
+
+    /// <summary>
+    /// msgstringtable entries naming each job (the party booking job list).
+    /// It has no names for baby jobs or the mounted variants.
+    /// </summary>
+    private static readonly Dictionary<Job, int> JobNameMsgIds = new Dictionary<Job, int> {
+        { Job.JOB_NOVICE, 1680 },
+        { Job.JOB_SWORDMAN, 1629 },
+        { Job.JOB_MAGE, 1630 },
+        { Job.JOB_ARCHER, 1631 },
+        { Job.JOB_ACOLYTE, 1632 },
+        { Job.JOB_MERCHANT, 1633 },
+        { Job.JOB_THIEF, 1634 },
+        { Job.JOB_KNIGHT, 1635 },
+        { Job.JOB_PRIEST, 1636 },
+        { Job.JOB_WIZARD, 1637 },
+        { Job.JOB_BLACKSMITH, 1638 },
+        { Job.JOB_HUNTER, 1639 },
+        { Job.JOB_ASSASSIN, 1640 },
+        { Job.JOB_KNIGHT2, 1635 },
+        { Job.JOB_CRUSADER, 1641 },
+        { Job.JOB_MONK, 1642 },
+        { Job.JOB_SAGE, 1643 },
+        { Job.JOB_ROGUE, 1644 },
+        { Job.JOB_ALCHEMIST, 1645 },
+        { Job.JOB_BARD, 1646 },
+        { Job.JOB_DANCER, 1647 },
+        { Job.JOB_CRUSADER2, 1641 },
+        { Job.JOB_SUPER_NOVICE, 1682 },
+        { Job.JOB_GUNSLINGER, 1683 },
+        { Job.JOB_NINJA, 1684 },
+
+        { Job.JOB_NOVICE_HIGH, 1681 },
+        { Job.JOB_SWORDMAN_HIGH, 1661 },
+        { Job.JOB_MAGE_HIGH, 1662 },
+        { Job.JOB_ARCHER_HIGH, 1663 },
+        { Job.JOB_ACOLYTE_HIGH, 1664 },
+        { Job.JOB_MERCHANT_HIGH, 1665 },
+        { Job.JOB_THIEF_HIGH, 1666 },
+        { Job.JOB_LORD_KNIGHT, 1667 },
+        { Job.JOB_HIGH_PRIEST, 1668 },
+        { Job.JOB_HIGH_WIZARD, 1669 },
+        { Job.JOB_WHITESMITH, 1670 },
+        { Job.JOB_SNIPER, 1671 },
+        { Job.JOB_ASSASSIN_CROSS, 1672 },
+        { Job.JOB_LORD_KNIGHT2, 1667 },
+        { Job.JOB_PALADIN, 1673 },
+        { Job.JOB_CHAMPION, 1674 },
+        { Job.JOB_PROFESSOR, 1675 },
+        { Job.JOB_STALKER, 1676 },
+        { Job.JOB_CREATOR, 1677 },
+        { Job.JOB_CLOWN, 1678 },
+        { Job.JOB_GYPSY, 1679 },
+        { Job.JOB_PALADIN2, 1673 },
+
+        { Job.JOB_TAEKWON, 1685 },
+        { Job.JOB_STAR_GLADIATOR, 1686 },
+        { Job.JOB_STAR_GLADIATOR2, 1686 },
+        { Job.JOB_SOUL_LINKER, 1687 },
+
+        { Job.JOB_RUNE_KNIGHT, 1648 },
+        { Job.JOB_WARLOCK, 1649 },
+        { Job.JOB_RANGER, 1650 },
+        { Job.JOB_ARCH_BISHOP, 1651 },
+        { Job.JOB_MECHANIC, 1652 },
+        { Job.JOB_GUILLOTINE_CROSS, 1653 },
+        { Job.JOB_RUNE_KNIGHT_T, 1648 },
+        { Job.JOB_WARLOCK_T, 1649 },
+        { Job.JOB_RANGER_T, 1650 },
+        { Job.JOB_ARCH_BISHOP_T, 1651 },
+        { Job.JOB_MECHANIC_T, 1652 },
+        { Job.JOB_GUILLOTINE_CROSS_T, 1653 },
+        { Job.JOB_ROYAL_GUARD, 1654 },
+        { Job.JOB_SORCERER, 1655 },
+        { Job.JOB_MINSTREL, 1656 },
+        { Job.JOB_WANDERER, 1657 },
+        { Job.JOB_SURA, 1658 },
+        { Job.JOB_GENETIC, 1659 },
+        { Job.JOB_SHADOW_CHASER, 1660 },
+        { Job.JOB_ROYAL_GUARD_T, 1654 },
+        { Job.JOB_SORCERER_T, 1655 },
+        { Job.JOB_MINSTREL_T, 1656 },
+        { Job.JOB_WANDERER_T, 1657 },
+        { Job.JOB_SURA_T, 1658 },
+        { Job.JOB_GENETIC_T, 1659 },
+        { Job.JOB_SHADOW_CHASER_T, 1660 },
+    };
 }
 
 public enum Job : int {

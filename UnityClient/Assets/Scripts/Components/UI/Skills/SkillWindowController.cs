@@ -58,14 +58,16 @@ public class SkillWindowController : DraggableUIWindow, ISkillWindowController {
 
         // Check if the current tabs are present on the current skill tree
         // we might have changed classes
-        foreach (var toggle in CurrentTabs) {
-            if (!skillTree.ClassTree.ContainsKey(toggle.Key)) {
-                var tab = toggle.Value;
-                tab.group = null;
-                tab.transform.SetParent(null);
-                tabLayout.UnregisterToggle(tab);
-                DestroyImmediate(tab);
+        foreach (var job in CurrentTabs.Keys.Where(it => !skillTree.ClassTree.ContainsKey(it)).ToList()) {
+            var tab = CurrentTabs[job];
+            if (CurrentToggle == tab) {
+                CurrentToggle = null;
             }
+            tab.group = null;
+            tabLayout.UnregisterToggle(tab);
+            tab.transform.SetParent(null);
+            Destroy(tab.gameObject);
+            CurrentTabs.Remove(job);
         }
 
         // populate tabs
@@ -92,10 +94,23 @@ public class SkillWindowController : DraggableUIWindow, ISkillWindowController {
                 .GetComponent<Tab>()
                 .SetLabel(tabLabel);
             tab.group = tabLayout;
-            tab.transform.SetParent(tabLayout.transform);
+            // Keep the prefab's local scale: the map canvas is scaled down, so keeping the
+            // world scale blew each tab up ~26x and pushed every tab after the first off screen
+            tab.transform.SetParent(tabLayout.transform, false);
             tabLayout.RegisterToggle(tab);
 
             CurrentTabs.Add(job.Key, tab);
+        }
+
+        // Keep the tabs in tree order (novice first) when a job change adds tabs later
+        var order = 0;
+        foreach (var job in skillTree.ClassTree.Keys) {
+            CurrentTabs[job].transform.SetSiblingIndex(order++);
+        }
+
+        // The selected tab can be gone after a job change; fall back to the first one
+        if (CurrentToggle == null && CurrentTabs.Count > 0) {
+            CurrentToggle = CurrentTabs[skillTree.ClassTree.Keys.First()];
         }
 
         if (CurrentToggle != null) {
