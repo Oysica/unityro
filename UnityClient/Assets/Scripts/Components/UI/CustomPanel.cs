@@ -24,6 +24,9 @@ public class CustomPanel : RawImage,
     private CustomUIAddressablesHolder AddressablesHolder;
 
     protected override void OnEnable() {
+        // Registers the graphic with its canvas: without it the panel is never raycast,
+        // so clicks and hovers on it (e.g. the title bar close button) went nowhere
+        base.OnEnable();
         texture = null;
         if (AddressablesHolder == null) {
             AddressablesHolder = gameObject.GetComponent<CustomUIAddressablesHolder>();
