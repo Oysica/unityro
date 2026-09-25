@@ -25,6 +25,10 @@ public class HotkeyBarController : MonoBehaviour {
         FindObjectOfType<NetworkClient>().HookPacket(ZC.SHORTCUT_KEY_LIST_V3.HEADER, OnHotkeyList);
     }
 
+    public UsableContainer GetSlot(int index) {
+        return Slots != null && index >= 0 && index < Slots.Length ? Slots[index] : null;
+    }
+
     private void Update() {
         for (var i = 0; i < SlotKeys.Length && i < Slots.Length; i++) {
             if (Input.GetKeyDown(SlotKeys[i])) {

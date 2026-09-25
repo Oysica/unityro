@@ -54,6 +54,7 @@ public class MapUiController : MonoBehaviour {
         PacketLogWindow.Hide();
         StatusIconsController.Create(transform);
         Storage = StorageController.Create(InventoryWindow);
+        MobileControlsController.Create(this);
     }
 
     public void DisplayItemDetails(ItemInfo itemInfo, Vector2 position) {

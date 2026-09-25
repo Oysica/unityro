@@ -19,6 +19,21 @@ public class EntityWalk : MonoBehaviour {
     private GameManager GameManager;
     private PathFinder PathFinder;
 
+    public bool IsWalking => isWalking;
+
+    /// <summary>
+    /// The cell being walked into
+    /// </summary>
+    public Vector2Int? NextCell {
+        get {
+            if (!isWalking || nodes == null || nodeIndex >= nodes.Count) {
+                return null;
+            }
+            var node = nodes[nodeIndex];
+            return new Vector2Int(Mathf.RoundToInt(node.x), Mathf.RoundToInt(node.z));
+        }
+    }
+
     private void Awake() {
         NetworkClient = FindObjectOfType<NetworkClient>();
         GameManager = FindObjectOfType<GameManager>();
@@ -98,6 +113,10 @@ public class EntityWalk : MonoBehaviour {
 
             Entity.ChangeMotion(new MotionRequest { Motion = SpriteMotion.Walk });
             isWalking = true;
+        } else if (startX == endX && startY == endY && isWalking) {
+            // Told to stay where the step being walked ends (a stop): the walk ends on that cell
+            transform.position = new Vector3(startX, PathFinder.GetCellHeight(startX, startY), startY);
+            StopMoving();
         }
 
         lastPosition = transform.position;

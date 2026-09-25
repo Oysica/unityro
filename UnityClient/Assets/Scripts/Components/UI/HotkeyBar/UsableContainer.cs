@@ -28,6 +28,11 @@ public class UsableContainer : MonoBehaviour,
         SetHotkey(null);
     }
 
+    /// <summary>
+    /// What the slot shows: the skill or item icon, none when empty
+    /// </summary>
+    public Texture Icon => UsableImage.enabled ? UsableImage.texture : null;
+
     public void SetHotkey(Hotkey hotkey) {
         Hotkey = hotkey == null || hotkey.IsEmpty ? null : hotkey;
         UsableImage.texture = GetTexture();
@@ -99,7 +104,8 @@ public class UsableContainer : MonoBehaviour,
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        if (eventData.clickCount == 2) {
+        // A tap is enough on a touch screen
+        if (eventData.clickCount == 2 || (MobileControls.Enabled && !eventData.dragging)) {
             Use();
         }
     }
@@ -142,7 +148,7 @@ public class UsableContainer : MonoBehaviour,
         DragImage = null;
 
         var target = eventData.pointerCurrentRaycast.gameObject;
-        if (target == null || target.GetComponentInParent<UsableContainer>() == null) {
+        if (target == null || (target.GetComponentInParent<UsableContainer>() == null && !MobileControlsController.IsHotkeyButton(target))) {
             ChangeHotkey(null);
         }
     }

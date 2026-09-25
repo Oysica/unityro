@@ -80,6 +80,12 @@ public class Entity : MonoBehaviour, INetworkEntity {
     }
 
     private void CheckForMouseOver() {
+        // Nothing hovers on a touch screen: the monster being targeted keeps its name up
+        if (MobileControls.Enabled && MobileControls.Target == this) {
+            Canvas?.ShowEntityName();
+            return;
+        }
+
         var ray = MainCamera.ScreenPointToRay(Input.mousePosition);
         var didHitAnyEntity = Physics.Raycast(ray, out var entityHit, 150, EntityMask);
 

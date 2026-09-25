@@ -24,6 +24,11 @@ public class ChatBoxController : MonoBehaviour {
         NetworkClient.HookPacket(ZC.NOTIFY_CHAT.HEADER, OnMessageRecieved);
         NetworkClient.HookPacket(ZC.MSG.HEADER, OnMessageRecieved);
         NetworkClient.HookPacket(ZC.NPC_CHAT.HEADER, OnMessageRecieved);
+
+        // A phone's keyboard has no Return key press to catch: it submits the input instead
+        if (Application.isMobilePlatform) {
+            MessageInput.onSubmit.AddListener(delegate { SendChatMessage(); });
+        }
     }
 
     private void OnMessageRecieved(ushort cmd, int size, InPacket packet) {
@@ -86,8 +91,21 @@ public class ChatBoxController : MonoBehaviour {
             new CZ.REQUEST_CHAT(message).Send();
         }
         MessageInput.text = "";
-        MessageInput.ActivateInputField();
-        MessageInput.Select();
+        // On a phone that would bring the keyboard straight back over the game
+        if (!Application.isMobilePlatform) {
+            MessageInput.ActivateInputField();
+            MessageInput.Select();
+        }
+    }
+
+    public void DisplayText(string text, ChatMessageType messageType) {
+        var prefab = Instantiate(TextLinePrefab);
+        var uiText = prefab.GetComponentInChildren<TextMeshProUGUI>();
+
+        uiText.text = text;
+        uiText.color = GetTextColor(messageType);
+
+        prefab.transform.SetParent(LinearLayout.transform, false);
     }
 
     public void DisplayMessage(int messageID, ChatMessageType messageType) {

@@ -69,6 +69,15 @@ public class CursorRenderer : MonoBehaviour {
         if (!isReady)
             return;
 
+        // Nothing points on a touch screen
+        var hidden = ScreenInput.UsesTouch;
+        if (MeshRenderer != null && MeshRenderer.enabled == hidden) {
+            MeshRenderer.enabled = !hidden;
+        }
+        if (hidden) {
+            return;
+        }
+
         if (CursorCamera != null) {
             Cursor.visible = false;
         } else {

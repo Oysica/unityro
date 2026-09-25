@@ -12,6 +12,8 @@ namespace UnityRO.GameCamera {
         public Vector2 MouseSensitivity = Vector2.one;
         public float ScrollPitchSensitivity = 1f;
         public float ScrollZoomSensitivity = 1f;
+        // Camera distance per pixel the fingers pinch
+        public float TouchZoomSensitivity = 0.05f;
         [Header(":: Settings")]
         public CameraControlProfile YawControl;
         public CameraControlProfile ZoomControl;
@@ -81,6 +83,8 @@ namespace UnityRO.GameCamera {
                 ZoomControl.Release();
             }
 
+            UpdateTouchGestures();
+
             if (YawControl.Update(dt)) {
                 m_Yaw -= YawControl.Velocity * dt;
                 if (m_Yaw < 0f) {
@@ -91,6 +95,36 @@ namespace UnityRO.GameCamera {
             if (ZoomControl.Update(dt)) {
                 float zoomVel = ZoomControl.Velocity * dt;
                 Distance = Mathf.Clamp(Distance + zoomVel, ZoomConstraint.x, ZoomConstraint.y);
+            }
+        }
+
+        /// <summary>
+        /// Two fingers on the world: pinch to zoom, twist to turn around the character
+        /// </summary>
+        private void UpdateTouchGestures() {
+            var touches = ScreenInput.WorldTouches;
+            if (touches.Count != 2) {
+                return;
+            }
+
+            var a = touches[0];
+            var b = touches[1];
+            var previousA = a.position - a.deltaPosition;
+            var previousB = b.position - b.deltaPosition;
+
+            var pinch = (a.position - b.position).magnitude - (previousA - previousB).magnitude;
+            Distance = Mathf.Clamp(Distance - pinch * TouchZoomSensitivity, ZoomConstraint.x, ZoomConstraint.y);
+
+            // Turning the view the other way makes the world follow the fingers
+            var twist = Vector2.SignedAngle(previousB - previousA, b.position - a.position);
+            if (twist != 0f) {
+                m_Yaw -= twist * Mathf.Deg2Rad;
+                if (m_Yaw < 0f) {
+                    m_Yaw += s_PI2;
+                } else if (m_Yaw >= s_PI2) {
+                    m_Yaw -= s_PI2;
+                }
+                RecomputeHorizontalDirection();
             }
         }
 

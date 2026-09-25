@@ -43,10 +43,23 @@ public class EntityControl : MonoBehaviour {
             PathFinder = FindObjectOfType<PathFinder>();
         }
 
-        var ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+        if (ScreenInput.UsesTouch) {
+            // No cursor to follow: act where the world is tapped
+            foreach (var tap in ScreenInput.WorldTaps) {
+                HandlePointer(tap, true);
+            }
+        } else {
+            var isActionRequested = Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject();
+            HandlePointer(Input.mousePosition, isActionRequested);
+        }
+
+        ProcessInput();
+    }
+
+    private void HandlePointer(Vector2 screenPosition, bool isActionRequested) {
+        var ray = MainCamera.ScreenPointToRay(screenPosition);
         var didHitAnything = Physics.Raycast(ray, out var hit, 150, EntityMask | GroundMask);
         var didHitAnyEntity = Physics.Raycast(ray, out var entityHit, 150, EntityMask);
-        var isActionRequested = Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject();
 
         if (isActionRequested && CurrentPendingAction is PendingAction.TargetSelection && !didHitAnyEntity) {
             CurrentPendingAction = new PendingAction.None();
@@ -91,8 +104,6 @@ public class EntityControl : MonoBehaviour {
                 Entity.RequestMove(Mathf.FloorToInt(hit.point.x), Mathf.FloorToInt(hit.point.z), 0);
             }
         }
-
-        ProcessInput();
     }
 
     private void ProcessInput() {
@@ -121,7 +132,7 @@ public class EntityControl : MonoBehaviour {
         }
     }
 
-    private void RequestSitStand() {
+    public void RequestSitStand() {
         new CZ.REQUEST_ACT2() {
             action = Entity.EntityViewer.State == SpriteState.Sit ? EntityActionType.STAND : EntityActionType.SIT,
             TargetID = Entity.GID
@@ -161,6 +172,8 @@ public class EntityControl : MonoBehaviour {
                 break;
             case EntityType.MOB:
                 // TODO render lock arrow
+                // What the attack button and attack skills go for on a touch screen
+                MobileControls.Target = target;
 
                 List<PathNode> path;
                 OutPacket actionPacket;
@@ -186,6 +199,8 @@ public class EntityControl : MonoBehaviour {
                 };
 
                 if (path.Count == 0) {
+                    // Out of reach: a skill waiting for its target mustn't take the next attack
+                    CurrentPendingAction = new PendingAction.None();
                     return;
                 } else if (path.Count <= 1) {
                     actionDelegate.Invoke();
@@ -218,8 +233,97 @@ public class EntityControl : MonoBehaviour {
         }
 
         if ((skillInfo.SkillType & (int) SkillTargetType.Target) > 0) {
+            // A touch screen has no cursor to aim with: pick the target like the attack button
+            if (MobileControls.Enabled && UseSkillOnAutomaticTarget(skillInfo, level)) {
+                return;
+            }
             CurrentPendingAction = new PendingAction.TargetSelection(skillInfo, level);
         }
+    }
+
+    /// <summary>
+    /// Attacks a monster, walking into range first
+    /// </summary>
+    public void Attack(Entity target) {
+        CurrentPendingAction = new PendingAction.None();
+        ProcessEntityClick(target);
+    }
+
+    /// <summary>
+    /// Picks an item up, walking to it first
+    /// </summary>
+    public void PickUp(Entity item) {
+        ProcessEntityClick(item);
+    }
+
+    /// <summary>
+    /// Uses a skill on a monster, walking into the skill's range first
+    /// </summary>
+    public void UseSkillOn(SkillInfo skillInfo, short level, Entity target) {
+        CurrentPendingAction = new PendingAction.TargetSelection(skillInfo, level);
+        ProcessEntityClick(target);
+    }
+
+    /// <summary>
+    /// Uses a skill on a cell, walking into the skill's range first
+    /// </summary>
+    public void UseSkillAt(SkillInfo skillInfo, short level, Vector3 position) {
+        var x = Mathf.RoundToInt(position.x);
+        var y = Mathf.RoundToInt(position.z);
+        OutPacket packet = new CZ.USE_SKILL_TOGROUND2(skillInfo.SkillID, level, x, y);
+
+        var cell = Entity.transform.position;
+        var path = x == Mathf.RoundToInt(cell.x) && y == Mathf.RoundToInt(cell.z)
+            ? new List<PathNode>()
+            : PathFinder.GetPath(cell, new Vector3(x, 0, y), skillInfo.AttackRange + 1);
+        if (path.Count <= 1) {
+            // In range, or no way there: the server says whether it can be used
+            packet.Send();
+            return;
+        }
+
+        var endNode = path[path.Count - 1];
+        Entity.AfterMoveAction = delegate {
+            packet.Send();
+        };
+        new CZ.REQUEST_MOVE2() {
+            x = (short) endNode.x,
+            y = (short) endNode.z,
+            dir = (byte) Entity.Direction
+        }.Send();
+    }
+
+    private bool UseSkillOnAutomaticTarget(SkillInfo skillInfo, short level) {
+        var type = skillInfo.SkillType;
+
+        if ((type & (int) SkillTargetType.Enemy) > 0) {
+            var target = MobileControls.FindTarget(Entity);
+            if (target == null) {
+                return false;
+            }
+            UseSkillOn(skillInfo, level, target);
+            return true;
+        }
+
+        if ((type & (int) SkillTargetType.Place) > 0) {
+            // On the target, or where we stand (Pneuma, Sanctuary, ...)
+            var target = MobileControls.FindTarget(Entity);
+            UseSkillAt(skillInfo, level, target != null ? target.transform.position : Entity.transform.position);
+            return true;
+        }
+
+        if ((type & (int) SkillTargetType.Friend) > 0) {
+            // Heal, Blessing, ... go on ourselves: the server knows us by account id, as it does
+            // every player on the map
+            new CZ.USE_SKILL2() {
+                SkillId = skillInfo.SkillID,
+                SelectedLevel = level,
+                TargetId = (int) Session.CurrentSession.AccountID
+            }.Send();
+            return true;
+        }
+
+        return false;
     }
 
     public partial class PendingAction {

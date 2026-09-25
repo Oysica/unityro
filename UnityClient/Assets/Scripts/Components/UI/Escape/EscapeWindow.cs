@@ -19,6 +19,7 @@ public class EscapeWindow : DraggableUIWindow, IEscapeWindowController {
 
     private EntityControl EntityControl;
     private Toggle CurrentToggle;
+    private bool IsPlayerDead;
 
     private void Awake() {
         EntityControl = FindObjectOfType<EntityControl>();
@@ -37,6 +38,7 @@ public class EscapeWindow : DraggableUIWindow, IEscapeWindowController {
     }
 
     public void BuildButtons(bool isPlayerDead = false) {
+        IsPlayerDead = isPlayerDead;
         foreach (Transform child in Body.transform) {
             Destroy(child.gameObject);
         }
@@ -56,6 +58,10 @@ public class EscapeWindow : DraggableUIWindow, IEscapeWindowController {
         BuildButton("Close shop", () => { new CZ.NPC_TRADE_QUIT().Send(); });
 #endif
 
+        BuildButton(MobileControls.Enabled ? "手機操作：開" : "手機操作：關", () => {
+            MobileControls.Enabled = !MobileControls.Enabled;
+            BuildButtons(IsPlayerDead);
+        });
         BuildButton("Sound Settings", () => { SoundSettingsWindow.Show(); });
         BuildButton("Exit game", () => Application.Quit());
         BuildButton("Cancel", () => Hide());
