@@ -35,7 +35,16 @@ public class GenericUIItem : MonoBehaviour,
         MapUiController.Instance.DisplayItemDetails(itemInfo, position);
     }
 
+    public ItemInfo ItemInfo => itemInfo;
+
     private void UseItem() {
+        UseItem(itemInfo);
+    }
+
+    /// <summary>
+    /// What a double click does to an item: use it, or put it on or take it off.
+    /// </summary>
+    public static void UseItem(ItemInfo itemInfo) {
         switch ((ItemType) itemInfo.itemType) {
             // Usable item
             case ItemType.HEALING:
