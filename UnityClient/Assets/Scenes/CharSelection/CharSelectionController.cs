@@ -36,8 +36,13 @@ public class CharSelectionController : MonoBehaviour {
         NetworkClient.HookPacket(HC.NOTIFY_ZONESVR2.HEADER, OnCharacterSelectionAccepted);
         NetworkClient.HookPacket(HC.ACCEPT_MAKECHAR.HEADER, OnMakeCharAccepted);
         NetworkClient.HookPacket(ZC.ACCEPT_ENTER2.HEADER, OnMapServerLoginAccepted);
+        NetworkClient.HookPacket(HC.REFUSE_ENTER.HEADER, OnSelectRefused);
 
         PopulateUI();
+    }
+
+    private void OnSelectRefused(ushort cmd, int size, InPacket packet) {
+        SystemMessageBox.Show(ROIO.Tables.MsgStringTable["9"] as string ?? "Rejected from server"); // MSI_ACCESS_DENIED
     }
 
     private void OnMakeCharAccepted(ushort cmd, int size, InPacket packet) {
@@ -141,7 +146,8 @@ public class CharSelectionController : MonoBehaviour {
         if (charIndex < 0)
             return;
 
-        new CH.SELECT_CHAR(charIndex).Send();
+        // The server looks the character up by its slot, which differs from the list index once slots have gaps
+        new CH.SELECT_CHAR(selectedCharacter.CharNum).Send();
     }
 
     public void CreateChar() {

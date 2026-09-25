@@ -29,8 +29,17 @@ public class CharServerSelectionController : MonoBehaviour {
 
         // Hook packets
         NetworkClient.HookPacket(HC.ACCEPT_ENTER.HEADER, OnEnterResponse);
+        NetworkClient.HookPacket(HC.REFUSE_ENTER.HEADER, OnEnterRefused);
 
         BuildServerList();
+    }
+
+    private void OnEnterRefused(ushort cmd, int size, InPacket packet) {
+        // E.g. the login expired before a server was picked: the char server drops the
+        // connection, so the only way on is logging in again
+        NetworkClient.Disconnect();
+        var message = ROIO.Tables.MsgStringTable["9"] as string ?? "Rejected from server"; // MSI_ACCESS_DENIED
+        SystemMessageBox.Show(message, () => SceneManager.LoadScene("LoginScene"));
     }
 
     private void OnEnterResponse(ushort cmd, int size, InPacket packet) {
