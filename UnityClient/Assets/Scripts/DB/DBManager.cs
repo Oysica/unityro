@@ -149,13 +149,13 @@ public class DBManager {
             return null;
         }
 
-        // NPC
-        if (job < 1000) {
+        // NPC (10000-19999 is the second NPC id range newer clients use)
+        if (job < 1000 || (job >= 10000 && job < 20000)) {
             return "data/sprite/npc/" + (monsterPath ?? JobIdentityPath[46]).ToLower();
         }
 
-        // Monsters
-        if (job < 4000) {
+        // Monsters (20000+ is the second monster id range)
+        if (job < 4000 || job >= 20000) {
             return "data/sprite/¸ó½ºÅÍ/" + (monsterPath ?? JobIdentityPath[1001]).ToLower();
         }
 

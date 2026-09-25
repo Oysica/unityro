@@ -315,6 +315,11 @@ public class Entity : MonoBehaviour, INetworkEntity {
     }
 
     private void SetupCanvas() {
+        // Ground items are spawned without a name/HP canvas
+        if (Canvas == null) {
+            return;
+        }
+
         Canvas.Init(this);
         Canvas.SetEntityName(Status.name);
         Canvas.SetEntityHP(Status.hp, Status.max_hp);
@@ -455,6 +460,15 @@ public class Entity : MonoBehaviour, INetworkEntity {
 
     private void OnAttackFailureForDistance(ushort cmd, int size, InPacket packet) {
         if (packet is ZC.ATTACK_FAILURE_FOR_DISTANCE ATTACK_FAILURE_FOR_DISTANCE) {
+            // The target moved out of range: chase it and attack again on arrival,
+            // otherwise the character just walks over and stands there
+            var targetId = (uint) ATTACK_FAILURE_FOR_DISTANCE.targetAID;
+            AfterMoveAction = delegate {
+                new CZ.REQUEST_ACT2() {
+                    TargetID = targetId,
+                    action = EntityActionType.CONTINUOUS_ATTACK
+                }.Send();
+            };
             RequestMove(ATTACK_FAILURE_FOR_DISTANCE.targetXPos, ATTACK_FAILURE_FOR_DISTANCE.targetYPos, 0);
         }
     }

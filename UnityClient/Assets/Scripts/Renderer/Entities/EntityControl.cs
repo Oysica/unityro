@@ -140,7 +140,9 @@ public class EntityControl : MonoBehaviour {
                 CursorRenderer.SetAction(CursorAction.PICK, false, 2);
 
                 OutPacket pickPacket = new CZ.ITEM_PICKUP2() { ID = (int) target.AID };
-                if (Vector3.Distance(transform.position, target.transform.position) > 2) {
+                // Compare on the ground plane: dropped items sit above the cell while their drop animation plays
+                var toItem = target.transform.position - transform.position;
+                if (new Vector2(toItem.x, toItem.z).magnitude > 2) {
                     Entity.AfterMoveAction = delegate {
                         pickPacket.Send();
                     };

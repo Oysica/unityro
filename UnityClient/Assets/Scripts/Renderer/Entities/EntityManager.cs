@@ -99,9 +99,15 @@ public class EntityManager : MonoBehaviour {
         bodyViewer.Entity = entity;
         bodyViewer.HeadDirection = 0;
 
-        entity.Init(spriteData, atlas);
+        // Register before loading visuals: a missing item sprite used to throw here and
+        // leave the drop with AID 0, so it could be neither picked up nor removed
         entity.AID = (uint) itemSpawnInfo.mapID;
         entityCache.Add(entity.AID, entity);
+        if (spriteData != null && atlas != null) {
+            entity.Init(spriteData, atlas);
+        } else {
+            Debug.LogWarning($"Missing item sprite: {itemPath}");
+        }
         entity.SetReady(true);
 
         return entity;

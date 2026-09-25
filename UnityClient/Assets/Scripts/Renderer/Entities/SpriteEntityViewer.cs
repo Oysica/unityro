@@ -90,6 +90,10 @@ public class SpriteEntityViewer : GameEntityViewer {
         }
 
         if (Entity.Type == EntityType.ITEM) {
+            if (Sprites == null) {
+                // Item sprite wasn't extracted (see EntityManager.SpawnItem)
+                return;
+            }
             MeshRenderer.material = SpriteMaterial;
             MeshRenderer.material.mainTexture = Sprites[0].texture;
         }
