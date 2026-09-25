@@ -19,8 +19,9 @@ public static class RawImageExtenions {
     public static void SetLoading(this RawImage image) {
         double index = Math.Floor(UnityEngine.Random.Range(0, 1.0f) * LOADING_SCREENS_LENGTH);
         string imageName = "loading" + (index < 10 ? "0" + $"{index}" : $"{index}") + ".png";
-        Texture2D texture = Addressables.LoadAssetAsync<Texture2D>($"{DBManager.INTERFACE_PATH}{imageName}").WaitForCompletion();
-        
+        // Loading screens weren't extracted; the editor reads them from the GRF
+        Texture2D texture = TextureAssetLoader.Load($"{DBManager.INTERFACE_PATH}{imageName}");
+
         if (!image.IsDestroyed()) {
             image.texture = texture;
         }

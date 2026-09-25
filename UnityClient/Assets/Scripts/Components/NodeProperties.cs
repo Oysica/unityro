@@ -25,19 +25,21 @@ public class NodeProperties : MonoBehaviour {
         LoadTexture();
     }
 
-    private async void LoadTexture() {
+    private void LoadTexture() {
         if (MeshRenderer.material.mainTexture != null)
             return;
 
         var nameWithoutExtension = Path.GetFileNameWithoutExtension(textureName);
         var directory = Path.GetDirectoryName(textureName);
         var path = Path.Combine("data", "texture", directory, $"{nameWithoutExtension}.png").SanitizeForAddressables();
-        var texture = await Addressables.LoadAssetAsync<Texture2D>(path).Task;
+        // Only prontera's model textures were extracted; elsewhere the editor reads them from the GRF
+        var grfPath = Path.Combine("data", "texture", textureName).Replace('\\', '/');
+        var texture = TextureAssetLoader.Load(path, grfPath);
 
         if (texture == null) {
             var filename = nameWithoutExtension.ToLowerInvariant();
             var newPath = Path.Combine("data", "texture", directory, $"{filename}.png").SanitizeForAddressables();
-            texture = await Addressables.LoadAssetAsync<Texture2D>(newPath).Task;
+            texture = TextureAssetLoader.Load(newPath, grfPath);
         }
 
         MeshRenderer.material.mainTexture = texture;

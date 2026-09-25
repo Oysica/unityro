@@ -60,7 +60,12 @@ public class Models {
             var tasks = new List<Task<GameObject>>();
             foreach (var model in models) {
                 var filenameWithoutExtension = model.rsm.filename.Substring(0, model.rsm.filename.IndexOf(".rsm"));
-                tasks.Add(Addressables.LoadAssetAsync<GameObject>(Path.Combine("data", "model", $"{filenameWithoutExtension}.prefab").SanitizeForAddressables()).Task);
+                var key = Path.Combine("data", "model", $"{filenameWithoutExtension}.prefab").SanitizeForAddressables();
+                // Models without an extracted prefab are built from the RSM below; checking first
+                // keeps each of them from logging an InvalidKeyException on every map load
+                tasks.Add(SpriteAssetLoader.HasAddressable(key)
+                    ? Addressables.LoadAssetAsync<GameObject>(key).Task
+                    : Task.FromResult<GameObject>(null));
             }
             var prefabs = await Task.WhenAll(tasks);
             for (int i = 0; i < prefabs.Length; i++) {

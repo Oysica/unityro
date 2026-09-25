@@ -55,7 +55,8 @@ public static class SpriteAssetLoader {
         }
 
 #if UNITY_EDITOR
-        if (GrfSprites.TryGetValue(path, out var cached)) {
+        // A null entry means the GRF doesn't have it; one whose textures were destroyed is decoded again
+        if (GrfSprites.TryGetValue(path, out var cached) && (cached == null || (cached.Atlas != null && cached.Palette != null && cached.Data != null))) {
             return cached;
         }
 
@@ -81,19 +82,23 @@ public static class SpriteAssetLoader {
         }
 
 #if UNITY_EDITOR
-        if (!GrfPalettes.TryGetValue(path, out var palette)) {
-            // .pal files are 256 RGBA entries, the same layout as the palette embedded in a .spr
-            var bytes = FileManager.ReadSync($"{path}.pal")?.ToArray();
-            if (bytes != null && bytes.Length >= 1024) {
-                palette = new Texture2D(256, 1, TextureFormat.RGBA32, false, true) {
-                    filterMode = FilterMode.Point,
-                    wrapMode = TextureWrapMode.Clamp
-                };
-                palette.LoadRawTextureData(bytes[..1024]);
-                palette.Apply();
-            }
-            GrfPalettes[path] = palette;
+        if (GrfPalettes.TryGetValue(path, out var palette) && ((object) palette == null || palette != null)) {
+            return palette;
         }
+
+        palette = null;
+        // .pal files are 256 RGBA entries, the same layout as the palette embedded in a .spr
+        var bytes = FileManager.ReadSync($"{path}.pal")?.ToArray();
+        if (bytes != null && bytes.Length >= 1024) {
+            palette = new Texture2D(256, 1, TextureFormat.RGBA32, false, true) {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+                hideFlags = HideFlags.DontUnloadUnusedAsset
+            };
+            palette.LoadRawTextureData(bytes[..1024]);
+            palette.Apply();
+        }
+        GrfPalettes[path] = palette;
         return palette;
 #else
         return null;
@@ -125,11 +130,16 @@ public static class SpriteAssetLoader {
         data.act = act;
         data.rects = loader.SpriteRects;
 
-        return new LoadedSprite {
+        // Only the cache references these, so leaving a scene would unload them otherwise
+        var sprite = new LoadedSprite {
             Data = data,
             Atlas = ToIndexAtlas(loader.Atlas),
             Palette = loader.Palette
         };
+        sprite.Data.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+        sprite.Atlas.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+        sprite.Palette.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+        return sprite;
     }
 
     /// <summary>
