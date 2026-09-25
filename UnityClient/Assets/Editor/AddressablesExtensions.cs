@@ -2,7 +2,6 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
@@ -11,12 +10,19 @@ using UnityEngine;
 
 internal static class AddressablesExtensions {
 
-    private static int GetPrefixLength(bool useResourcesPath = false) {
-        var isAddressablesInitialized = Directory.Exists(DataUtility.GENERATED_ADDRESSABLES_PATH);
-        return ((isAddressablesInitialized && !useResourcesPath) ? DataUtility.GENERATED_ADDRESSABLES_PATH : DataUtility.GENERATED_RESOURCES_PATH).Length + 1;
+    // Strip whichever generated root the asset actually lives under; the Create*AddressableAssets
+    // steps run while files are still under Resources even once AddressablesAssets exists.
+    private static string ToAddress(string assetPath) {
+        foreach (var root in new[] { DataUtility.GENERATED_RESOURCES_PATH, DataUtility.GENERATED_ADDRESSABLES_PATH }) {
+            var prefix = root.Replace('\\', '/') + "/";
+            if (assetPath.StartsWith(prefix)) {
+                return assetPath[prefix.Length..];
+            }
+        }
+        return assetPath;
     }
 
-    internal static void SetAddressableGroup(this UnityEngine.Object obj, string groupName, string labelName, bool useResourcesPath = false) {
+    internal static void SetAddressableGroup(this UnityEngine.Object obj, string groupName, string labelName) {
         var settings = AddressableAssetSettingsDefaultObject.Settings;
 
         if (settings) {
@@ -29,7 +35,7 @@ internal static class AddressablesExtensions {
             
 
             var e = settings.CreateOrMoveEntry(guid, group, false, false);
-            e.SetAddress(e.address[GetPrefixLength(useResourcesPath)..], false);
+            e.SetAddress(ToAddress(e.AssetPath), false);
             if (labelName != null) {
                 e.SetLabel(labelName, true, true, false);
             }
@@ -40,7 +46,7 @@ internal static class AddressablesExtensions {
         }
     }
 
-    internal static void SetAddressableGroup<T>(this List<T> objs, string groupName, string labelName, bool useResourcesPath = false) where T : UnityEngine.Object {
+    internal static void SetAddressableGroup<T>(this List<T> objs, string groupName, string labelName) where T : UnityEngine.Object {
         var settings = AddressableAssetSettingsDefaultObject.Settings;
 
         if (settings) {
@@ -65,7 +71,7 @@ internal static class AddressablesExtensions {
                     var guid = AssetDatabase.AssetPathToGUID(assetpath);
 
                     var e = settings.CreateOrMoveEntry(guid, group, false, false);
-                    e.SetAddress(e.address[GetPrefixLength(useResourcesPath)..], false);
+                    e.SetAddress(ToAddress(e.AssetPath), false);
                     if (labelName != null) {
                         e.SetLabel(labelName, true, true, false);
                     }

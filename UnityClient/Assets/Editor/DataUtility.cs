@@ -1183,7 +1183,7 @@ public class DataUtility {
         var sprites = Resources.LoadAll(Path.Join("data", "sprite"))
             .Where(it => it is Texture2D || it is SpriteData) // filter out the thousands of sprites we've created
             .ToList();
-        sprites.SetAddressableGroup("Sprites", "Sprites", true);
+        sprites.SetAddressableGroup("Sprites", "Sprites");
     }
 
     [MenuItem("UnityRO/3. Create Addressable Assets/5. Data Tables")]
@@ -1224,7 +1224,7 @@ public class DataUtility {
         var files = Resources.LoadAll(Path.Combine("data", "palette"))
             .Where(it => it is Texture2D)
             .ToList();
-        files.SetAddressableGroup("Palettes", "Palettes", true);
+        files.SetAddressableGroup("Palettes", "Palettes");
     }
 
     [MenuItem("UnityRO/4. Rename Generated Resources folder")]
