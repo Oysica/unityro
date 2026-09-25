@@ -183,6 +183,20 @@ public class GameManager : MonoBehaviour {
         return CurrentMap;
     }
 
+    /// <summary>
+    /// Drops the current map when leaving the map server, e.g. back to character select.
+    /// </summary>
+    public void UnloadMap() {
+        MapRenderer.Clear();
+        if (CurrentMap != null) {
+            Destroy(CurrentMap.gameObject);
+        }
+        CurrentMap = null;
+
+        AudioSource.Stop();
+        AudioSource.clip = null;
+    }
+
     public Task<bool> LoadScene(string sceneName, LoadSceneMode mode) {
         var t = new TaskCompletionSource<bool>();
 

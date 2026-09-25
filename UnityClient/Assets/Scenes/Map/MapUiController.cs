@@ -22,6 +22,8 @@ public class MapUiController : MonoBehaviour {
     [SerializeField] public PacketLogWindow PacketLogWindow;
 
     private NetworkClient NetworkClient;
+    private GameManager GameManager;
+    private EntityManager EntityManager;
 
     void Awake() {
         if (Instance == null) {
@@ -29,6 +31,8 @@ public class MapUiController : MonoBehaviour {
         }
 
         NetworkClient = FindObjectOfType<NetworkClient>();
+        GameManager = FindObjectOfType<GameManager>();
+        EntityManager = FindObjectOfType<EntityManager>();
 
         NetworkClient.HookPacket(ZC.SAY_DIALOG.HEADER, NpcBox.OnNpcMessage);
         NetworkClient.HookPacket(ZC.CLOSE_DIALOG.HEADER, NpcBox.AddCloseButton);
@@ -41,6 +45,7 @@ public class MapUiController : MonoBehaviour {
         NetworkClient.HookPacket(ZC.PC_PURCHASE_RESULT.HEADER, ShopController.OnPurchaseResult);
         NetworkClient.HookPacket(ZC.PC_SELL_RESULT.HEADER, ShopController.OnSellResult);
         NetworkClient.HookPacket(ZC.RESTART_ACK.HEADER, OnRestartAnswer);
+        NetworkClient.HookPacket(ZC.ACK_REQ_DISCONNECT.HEADER, OnDisconnectAnswer);
 
         NpcMenu.OnNpcMenuSelected = OnNpcMenuSelected;
 
@@ -147,19 +152,71 @@ public class MapUiController : MonoBehaviour {
                 ChatBox.DisplayMessage(502, ChatMessageType.ERROR);
             }
             else {
-                // @todo ?
-                // clear StatusIcons
-                // clear ChatBox
-                // clear ShortCut
-                // clear PartyFriends
-                // clear renderers
                 OnRestart();
             }
         }
     }
 
-    public void OnRestart() {
-        // @todo this keeps the entire UI on the screen
-        // SceneManager.LoadSceneAsync("CharSelectionScene");
+    /// <summary>
+    /// A return to character select that prevent_logout blocks (e.g. right after a fight)
+    /// is answered with this instead of ZC_RESTART_ACK.
+    /// </summary>
+    private void OnDisconnectAnswer(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.ACK_REQ_DISCONNECT pkt && pkt.Result != 0) {
+            ChatBox.DisplayMessage(502, ChatMessageType.ERROR);
+        }
+    }
+
+    /// <summary>
+    /// The map server has handed the login back to the char server (char_mapif.cpp
+    /// chmapif_parse_authok), which takes this client back with the session it logged in with.
+    /// </summary>
+    public async void OnRestart() {
+        // Nothing may reach the char server that only the map server understands
+        NetworkClient.StopHeartBeat();
+        var control = (Session.CurrentSession.Entity as Entity)?.GetComponent<EntityControl>();
+        if (control != null) {
+            control.enabled = false;
+        }
+        NetworkClient.Disconnect();
+
+        NetworkClient.HookPacket(HC.ACCEPT_ENTER.HEADER, OnCharServerEntered);
+        NetworkClient.HookPacket(HC.REFUSE_ENTER.HEADER, OnCharServerRefused);
+
+        var loginInfo = NetworkClient.State.LoginInfo;
+        var charServer = NetworkClient.State.CharServer;
+        var remoteConfig = GameManager.RemoteConfiguration;
+        var charIp = remoteConfig.useSameIpForEveryServer ? remoteConfig.loginServer : charServer.IP.ToString();
+
+        await NetworkClient.ChangeServer(charIp, charServer.Port);
+        NetworkClient.SkipBytes(4);
+        new CH.ENTER(loginInfo.AccountID, loginInfo.LoginID1, loginInfo.LoginID2, loginInfo.Sex).Send();
+    }
+
+    private void OnCharServerEntered(ushort cmd, int size, InPacket packet) {
+        if (packet is HC.ACCEPT_ENTER ACCEPT_ENTER) {
+            NetworkClient.State.CurrentCharactersInfo = ACCEPT_ENTER;
+            LeaveMap();
+            SceneManager.LoadScene("CharSelectionScene");
+        }
+    }
+
+    private void OnCharServerRefused(ushort cmd, int size, InPacket packet) {
+        NetworkClient.Disconnect();
+        LeaveMap();
+        SceneManager.LoadScene("LoginScene");
+        SystemMessageBox.Show(ROIO.Tables.MsgStringTable["9"] as string ?? "Rejected from server"); // MSI_ACCESS_DENIED
+    }
+
+    /// <summary>
+    /// Clears what outlives the map scene, so the next character starts from an empty world.
+    /// </summary>
+    private void LeaveMap() {
+        var player = Session.CurrentSession?.Entity as Entity;
+        if (player != null) {
+            Destroy(player.gameObject);
+        }
+        EntityManager.ClearEntities();
+        GameManager.UnloadMap();
     }
 }

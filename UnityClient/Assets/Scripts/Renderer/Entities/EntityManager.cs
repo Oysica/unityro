@@ -174,7 +174,10 @@ public class EntityManager : MonoBehaviour {
     }
 
     public void ClearEntities() {
-        entityCache.Values.ToList().ForEach(it => GameObject.Destroy(it));
+        // Entities of a map scene that was already unloaded are gone; the cache must not hand them out again
+        foreach (var entity in entityCache.Values.Where(it => it != null)) {
+            Destroy(entity.gameObject);
+        }
         entityCache.Clear();
     }
 }

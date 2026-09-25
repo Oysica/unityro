@@ -17,6 +17,11 @@ namespace Assets.Scripts.Effects {
         public Shader AdditiveShader;
 
         private void Awake() {
+            // The map scene holds one and is loaded again after going back to character select
+            if (Instance != this) {
+                Destroy(gameObject);
+                return;
+            }
             DontDestroyOnLoad(this);
         }
     }

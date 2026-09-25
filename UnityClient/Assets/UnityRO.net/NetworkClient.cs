@@ -29,6 +29,7 @@ public class NetworkClient : MonoBehaviour, IPacketHandler {
     private Dictionary<PacketHeader, OnPacketReceived> PacketHooks { get; set; } = new Dictionary<PacketHeader, OnPacketReceived>();
 
     private bool IsPaused = false;
+    private Coroutine HeartBeat;
 
     public NetworkClientState State;
     public Connection CurrentConnection;
@@ -71,7 +72,19 @@ public class NetworkClient : MonoBehaviour, IPacketHandler {
     }
 
     public void StartHeatBeat() {
-        StartCoroutine(ServerHeartBeat());
+        if (HeartBeat == null) {
+            HeartBeat = StartCoroutine(ServerHeartBeat());
+        }
+    }
+
+    /// <summary>
+    /// The heartbeat is a map server packet: the char server drops a client that sends it.
+    /// </summary>
+    public void StopHeartBeat() {
+        if (HeartBeat != null) {
+            StopCoroutine(HeartBeat);
+            HeartBeat = null;
+        }
     }
 
     public void Disconnect() {
@@ -121,7 +134,9 @@ public class NetworkClient : MonoBehaviour, IPacketHandler {
         // queue up many packets before Update() resumes draining it -
         // process the whole queue per call instead of one packet/frame so
         // that backlog doesn't lag behind the server's current state.
-        while (InPacketQueue.Count > 0) {
+        // A handler can pause mid-queue (entering a map): the rest must wait
+        // for the new scene, not reach hooks of the one being unloaded.
+        while (!IsPaused && InPacketQueue.Count > 0) {
             var packet = InPacketQueue.Dequeue();
             var isHandled = PacketHooks.TryGetValue(packet.Header, out var hook);
 
