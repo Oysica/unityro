@@ -112,6 +112,8 @@ public class Entity : MonoBehaviour, INetworkEntity {
         NetworkClient.HookPacket(ZC.ACK_TOUSESKILL.HEADER, OnUseSkillResult);
         NetworkClient.HookPacket(ZC.NOTIFY_SKILL2.HEADER, OnEntityUseSkillToAttack);
         NetworkClient.HookPacket(ZC.USESKILL_ACK2.HEADER, OnEntityCastSkill);
+        NetworkClient.HookPacket(ZC.USE_SKILL.HEADER, OnEntityUseSkill);
+        NetworkClient.HookPacket(ZC.RECOVERY.HEADER, OnRecovery);
         NetworkClient.HookPacket(ZC.ATTACK_FAILURE_FOR_DISTANCE.HEADER, OnAttackFailureForDistance);
         NetworkClient.HookPacket(ZC.AUTORUN_SKILL.HEADER, OnAutorunSkill);
     }
@@ -507,6 +509,105 @@ public class Entity : MonoBehaviour, INetworkEntity {
         ChangeMotion(new MotionRequest { Motion = SpriteMotion.Casting, delay = 0 });
     }
 
+    // Skills whose name isn't called out (roBrowser SkillNameDisplayExclude): hiding, jokes and the
+    // extra hits of some third job skills
+    private static readonly HashSet<int> SkillNameHidden = new HashSet<int> {
+        51, 135, 389, 2033, 2247, 2274, 2287, 2290, 3001, // TF_HIDING, AS_CLOAKING, ST_CHASEWALK, GC_CLOAKINGEXCEED, RA_CAMOUFLAGE, NC_STEALTHFIELD, SC_SHADOWFORM, SC_INVISIBILITY, KO_YAMIKUMO
+        318, 326, // BA_FROSTJOKER, DC_SCREAM
+        2519, 2520, // LG_OVERBRAND_BRANDISH, LG_OVERBRAND_PLUSATK
+        2218, 2219, 2220, 2221, 2225, 2226, 2227, 2228 // WL_TETRAVORTEX_*, WL_SUMMON_ATK_*
+    };
+
+    // ZC_USE_SKILL carries the amount healed instead of the level for these
+    private static readonly HashSet<int> HealSkills = new HashSet<int> {
+        28, 2043, 2051 // AL_HEAL, AB_CHEAL, AB_HIGHNESSHEAL
+    };
+
+    /// <summary>
+    /// "Skill name !!" over a player, or anything of theirs, using a skill; monsters don't call it out
+    /// </summary>
+    public void DisplaySkillName(int skillId) {
+        switch (Type) {
+            case EntityType.PC:
+            case EntityType.DISGUISED:
+            case EntityType.PET:
+            case EntityType.HOM:
+            case EntityType.MERC:
+            case EntityType.ELEM:
+                break;
+            default:
+                return;
+        }
+        if (skillId < 0 || SkillNameHidden.Contains(skillId)) {
+            return;
+        }
+
+        // skillinfolist names may end in a space
+        var name = SkillTable.Skills.TryGetValue((short) skillId, out var skill) ? skill.SkillName.Trim() : "Unknown Skill";
+        DisplayChatBubble(name + " !!");
+    }
+
+    /// <summary>
+    /// The pose of using a skill, then ready to fight (roBrowser SkillActionTable DEFAULT)
+    /// </summary>
+    public void PlaySkillMotion() {
+        if (EntityViewer == null || EntityViewer.State == SpriteState.Dead || EntityViewer.State == SpriteState.Sit) {
+            return;
+        }
+
+        var motion = Type == EntityType.PC ? SpriteMotion.Casting : SpriteMotion.Attack1;
+        var nextMotion = Type == EntityType.PC ? SpriteMotion.Standby : SpriteMotion.Idle;
+        // Still in the pose of casting it: the viewer ignores a motion it's already in, and would stay there
+        ChangeMotion(new MotionRequest { Motion = SpriteMotion.Idle, delay = 0 });
+        ChangeMotion(new MotionRequest { Motion = motion, delay = 0 }, new MotionRequest { Motion = nextMotion, delay = 0 });
+    }
+
+    /// <summary>
+    /// A skill that deals no damage (heals, buffs, ...) was used by anyone in sight
+    /// </summary>
+    private void OnEntityUseSkill(ushort cmd, int size, InPacket packet) {
+        if (!(packet is ZC.USE_SKILL USE_SKILL)) {
+            return;
+        }
+
+        // Item and script skills may have no source
+        var srcEntity = USE_SKILL.srcAID != 0 ? EntityManager.GetEntity((uint) USE_SKILL.srcAID) : null;
+        var dstEntity = USE_SKILL.targetAID != 0 ? EntityManager.GetEntity((uint) USE_SKILL.targetAID) : null;
+
+        if (srcEntity != null) {
+            srcEntity.DisplaySkillName(USE_SKILL.skillID);
+            srcEntity.PlaySkillMotion();
+
+            if (dstEntity != null && dstEntity != srcEntity) {
+                srcEntity.LookTo(dstEntity.transform.position);
+            }
+        }
+
+        if (dstEntity != null && HealSkills.Contains(USE_SKILL.skillID) && USE_SKILL.level > 0) {
+            dstEntity.Damage(USE_SKILL.level, GameManager.Tick, DamageType.HEAL);
+            dstEntity.PlayAudio("data/wav/_heal_effect.wav");
+        }
+    }
+
+    /// <summary>
+    /// What a potion or the like gave back: green for HP, blue for SP. The new values come in
+    /// ZC_PAR_CHANGE on their own.
+    /// </summary>
+    private void OnRecovery(ushort cmd, int size, InPacket packet) {
+        if (!(packet is ZC.RECOVERY RECOVERY) || RECOVERY.Amount <= 0) {
+            return;
+        }
+
+        switch ((EntityStatus) RECOVERY.Type) {
+            case EntityStatus.SP_HP:
+                Damage(RECOVERY.Amount, GameManager.Tick, DamageType.HEAL);
+                break;
+            case EntityStatus.SP_SP:
+                Damage(RECOVERY.Amount, GameManager.Tick, DamageType.HEAL | DamageType.SP);
+                break;
+        }
+    }
+
     public void PlayAudio(string path) {
         var clip = AudioAssetLoader.Load(path);
 
@@ -532,9 +633,8 @@ public class Entity : MonoBehaviour, INetworkEntity {
                 NOTIFY_SKILL2.attackMT = Math.Max(1, NOTIFY_SKILL2.attackMT);
                 srcEntity.SetAttackSpeed((ushort) NOTIFY_SKILL2.attackMT);
 
-                if (srcEntity.Type != EntityType.MOB) {
-                    // SET DIALOG BOX
-                    // srcEntity.dialog.set( ( (SkillInfo[pkt.SKID] && SkillInfo[pkt.SKID].SkillName ) || 'Unknown Skill' ) + ' !!' );
+                if (NOTIFY_SKILL2.level >= 0) {
+                    srcEntity.DisplaySkillName(NOTIFY_SKILL2.SKID);
                 }
 
                 srcEntity.ChangeMotion(

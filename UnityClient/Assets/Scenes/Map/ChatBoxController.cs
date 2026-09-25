@@ -36,7 +36,13 @@ public class ChatBoxController : MonoBehaviour {
             uiText.color = Color.green;
 
             textObject.transform.SetParent(LinearLayout.transform, false);
-            EntityManager.GetEntity(Session.CurrentSession.Entity.GetEntityGID()).DisplayChatBubble(pkt.Message);
+
+            // Only what we said ("name : message") goes over our head; the server's notices
+            // (channels, commands, ...) come in this packet too
+            var self = Session.CurrentSession.Entity as Entity;
+            if (self != null && pkt.Message.StartsWith(self.GetBaseStatus().name + " : ")) {
+                self.DisplayChatBubble(pkt.Message);
+            }
         } else if (packet is ZC.NOTIFY_CHAT) {
             var pkt = packet as ZC.NOTIFY_CHAT;
 
