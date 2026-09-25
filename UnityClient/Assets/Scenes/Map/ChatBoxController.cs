@@ -13,8 +13,11 @@ public class ChatBoxController : MonoBehaviour {
     [SerializeField] private GameObject TextLinePrefab;
     [SerializeField] private ToggleGroup tabLayout;
 
+    private static readonly Color WhisperColor = Color.yellow;
+
     private NetworkClient NetworkClient;
     private EntityManager EntityManager;
+    private string LastWhisperTarget;
 
     private void Awake() {
         NetworkClient = FindObjectOfType<NetworkClient>();
@@ -24,11 +27,57 @@ public class ChatBoxController : MonoBehaviour {
         NetworkClient.HookPacket(ZC.NOTIFY_CHAT.HEADER, OnMessageRecieved);
         NetworkClient.HookPacket(ZC.MSG.HEADER, OnMessageRecieved);
         NetworkClient.HookPacket(ZC.NPC_CHAT.HEADER, OnMessageRecieved);
+        NetworkClient.HookPacket(ZC.WHISPER02.HEADER, OnWhisper);
+        NetworkClient.HookPacket(ZC.ACK_WHISPER02.HEADER, OnWhisperAnswered);
 
         // A phone's keyboard has no Return key press to catch: it submits the input instead
         if (Application.isMobilePlatform) {
             MessageInput.onSubmit.AddListener(delegate { SendChatMessage(); });
         }
+
+        // The box left of the message is who it is whispered to
+        if (PMInput != null && PMInput.placeholder is TMP_Text hint) {
+            hint.text = "密語對象";
+        }
+    }
+
+    /// <summary>
+    /// What's typed next is whispered to them
+    /// </summary>
+    public void StartWhisper(string name) {
+        if (PMInput != null) {
+            PMInput.text = name;
+        }
+        MessageInput.ActivateInputField();
+        MessageInput.Select();
+    }
+
+    private void OnWhisper(ushort cmd, int size, InPacket packet) {
+        if (!(packet is ZC.WHISPER02 whisper)) {
+            return;
+        }
+        var line = DisplayText($"(來自 {whisper.Sender}) : {whisper.Message}", WhisperColor);
+        // Tapping it answers them
+        var sender = whisper.Sender;
+        var text = line.GetComponentInChildren<TextMeshProUGUI>();
+        text.raycastTarget = true;
+        var button = line.AddComponent<Button>();
+        button.transition = Selectable.Transition.None;
+        button.targetGraphic = text;
+        button.onClick.AddListener(() => StartWhisper(sender));
+    }
+
+    private void OnWhisperAnswered(ushort cmd, int size, InPacket packet) {
+        if (!(packet is ZC.ACK_WHISPER02 answer) || answer.Result == 0) {
+            return;
+        }
+        var name = LastWhisperTarget ?? "";
+        DisplayText(answer.Result switch {
+            1 => $"{name} 不在線上，或沒有這個角色。",
+            2 => $"{name} 拒絕了你的密語。",
+            3 => $"{name} 拒絕所有密語。",
+            _ => $"密語 {name} 失敗 ({answer.Result})。"
+        }, Color.red);
     }
 
     private void OnMessageRecieved(ushort cmd, int size, InPacket packet) {
@@ -90,6 +139,12 @@ public class ChatBoxController : MonoBehaviour {
         } else if (message.StartsWith("%") && message.Length > 1) {
             // "%message" goes to the party, as in the official client
             new CZ.REQUEST_CHAT_PARTY(message.Substring(1).TrimStart()).Send();
+        } else if (PMInput != null && !string.IsNullOrWhiteSpace(PMInput.text)) {
+            // A name in the box left of the message: it's whispered to them
+            var target = PMInput.text.Trim();
+            LastWhisperTarget = target;
+            new CZ.WHISPER(target, message).Send();
+            DisplayText($"(給 {target}) : {message}", WhisperColor);
         } else {
             new CZ.REQUEST_CHAT(message).Send();
         }
@@ -105,7 +160,7 @@ public class ChatBoxController : MonoBehaviour {
         DisplayText(text, GetTextColor(messageType));
     }
 
-    public void DisplayText(string text, Color color) {
+    public GameObject DisplayText(string text, Color color) {
         var prefab = Instantiate(TextLinePrefab);
         var uiText = prefab.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -113,6 +168,7 @@ public class ChatBoxController : MonoBehaviour {
         uiText.color = color;
 
         prefab.transform.SetParent(LinearLayout.transform, false);
+        return prefab;
     }
 
     public void DisplayMessage(int messageID, ChatMessageType messageType) {

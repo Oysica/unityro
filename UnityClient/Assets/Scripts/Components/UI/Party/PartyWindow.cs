@@ -26,6 +26,9 @@ public class PartyWindow : MonoBehaviour {
         public short BaseLevel;
         public int Hp = -1;
         public int MaxHp = -1;
+        // The cell they're on, when on our map
+        public int X = -1;
+        public int Y = -1;
     }
 
     private const float WIDTH = 480f;
@@ -90,7 +93,7 @@ public class PartyWindow : MonoBehaviour {
         network.HookPacket(ZC.ADD_MEMBER_TO_GROUP.HEADER, OnAddMember);
         network.HookPacket(ZC.DELETE_MEMBER_FROM_GROUP.HEADER, OnDeleteMember);
         network.HookPacket(ZC.NOTIFY_HP_TO_GROUPM.HEADER, OnMemberHp);
-        network.HookPacket(ZC.NOTIFY_POSITION_TO_GROUPM.HEADER, delegate { });
+        network.HookPacket(ZC.NOTIFY_POSITION_TO_GROUPM.HEADER, OnMemberPosition);
         network.HookPacket(ZC.PARTY_CONFIG.HEADER, OnPartyConfig);
         network.HookPacket(ZC.REQ_GROUPINFO_CHANGE_V2.HEADER, OnGroupInfo);
         network.HookPacket(ZC.ACK_MAKE_GROUP.HEADER, OnMakeGroup);
@@ -221,7 +224,9 @@ public class PartyWindow : MonoBehaviour {
                 BaseLevel = entry.BaseLevel,
                 IsDead = before != null && before.IsDead,
                 Hp = before != null ? before.Hp : -1,
-                MaxHp = before != null ? before.MaxHp : -1
+                MaxHp = before != null ? before.MaxHp : -1,
+                X = before != null ? before.X : -1,
+                Y = before != null ? before.Y : -1
             });
         }
         Changed();
@@ -251,7 +256,17 @@ public class PartyWindow : MonoBehaviour {
         member.IsOnline = add.IsOnline;
         member.Job = add.Job;
         member.BaseLevel = add.BaseLevel;
+        member.X = add.X;
+        member.Y = add.Y;
         Changed();
+    }
+
+    private void OnMemberPosition(ushort cmd, int size, InPacket packet) {
+        // Where members on our map are, for the minimap; nothing in the window changes
+        if (packet is ZC.NOTIFY_POSITION_TO_GROUPM position && FindMember(position.AID) is Member member) {
+            member.X = position.X;
+            member.Y = position.Y;
+        }
     }
 
     private void OnDeleteMember(ushort cmd, int size, InPacket packet) {
@@ -436,11 +451,16 @@ public class PartyWindow : MonoBehaviour {
     public void ShowPlayerMenu(Entity player) {
         var name = player.GetBaseStatus().name;
         var options = new List<KeyValuePair<string, int>> {
-            new KeyValuePair<string, int>(InParty ? "邀請加入隊伍" : "邀請加入隊伍 (要先建立隊伍)", 1)
+            new KeyValuePair<string, int>("密語", 2)
         };
+        if (FindMember(player.AID) == null) {
+            options.Add(new KeyValuePair<string, int>(InParty ? "邀請加入隊伍" : "邀請加入隊伍 (要先建立隊伍)", 1));
+        }
         AaWidgets.Pick(UI.transform as RectTransform, name, options, 0, false, choice => {
             if (choice == 1) {
                 Invite(name);
+            } else if (choice == 2 && UI.ChatBox != null) {
+                UI.ChatBox.StartWhisper(name);
             }
         });
     }

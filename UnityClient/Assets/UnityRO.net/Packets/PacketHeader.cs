@@ -1058,6 +1058,8 @@
     ZC_NOTIFY_HP_TO_GROUPM = 0x080E, // PACKET_ZC_NOTIFY_HP_TO_GROUPM, PACKETVER >= 20100119 non-ZERO branch, 14 bytes fixed (packets_struct.hpp:5316)
     ZC_NOTIFY_MEMBERINFO_TO_GROUPM = 0xabd, // party member alive/dead, job/level (clif.cpp clif_party_dead / clif_party_job_and_level)
     ZC_GROUP_ISALIVE = 0xab2, // party member alive/dead, job/level (clif.cpp clif_party_dead / clif_party_job_and_level)
+    ZC_WHISPER02 = 0x09DE, // PACKET_ZC_WHISPER, PACKETVER_MAIN_NUM >= 20131204, variable length (packets_struct.hpp, clif.cpp clif_wis_message)
+    ZC_ACK_WHISPER02 = 0x09DF, // PACKET_ZC_ACK_WHISPER, PACKETVER >= 20131223, 7 bytes fixed (packets.hpp, clif.cpp clif_wis_end)
     #endregion
 
     #region PANDAS_CUSTOM
