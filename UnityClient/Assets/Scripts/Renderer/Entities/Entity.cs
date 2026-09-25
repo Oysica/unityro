@@ -497,6 +497,24 @@ public class Entity : MonoBehaviour, INetworkEntity {
         EntityViewer.ChangeMotion(motion, nextMotion);
     }
 
+    /// <summary>
+    /// A party member's HP bar over its head, as the server sends it to members nearby
+    /// </summary>
+    public void ShowPartyHitPoints(int hp, int maxHp) {
+        Status.hp = hp;
+        Status.max_hp = maxHp;
+        if (Canvas != null) {
+            Canvas.ShowEntityHP();
+            Canvas.SetEntityHP(hp, maxHp);
+        }
+    }
+
+    public void HidePartyHitPoints() {
+        if (Canvas != null) {
+            Canvas.HideEntityHP();
+        }
+    }
+
     public void UpdateHitPoints(int hp, int maxHp) {
         Status.hp = hp;
         Status.max_hp = maxHp;

@@ -51,6 +51,17 @@ public class EntityManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Like GetEntity, for units that may well not be in sight (party members on other maps)
+    /// </summary>
+    public Entity FindEntity(uint AID) {
+        if (entityCache.TryGetValue(AID, out var entity) && entity != null) {
+            return entity;
+        }
+        var self = Session.CurrentSession?.Entity as Entity;
+        return self != null && (self.GetEntityGID() == AID || Session.CurrentSession.AccountID == AID) ? self : null;
+    }
+
     public Entity GetEntity(uint AID) {
         var hasFound = entityCache.TryGetValue(AID, out var entity);
         if (hasFound) {

@@ -28,7 +28,8 @@ public class EntityControl : MonoBehaviour {
 
     void Start() {
         GroundMask = LayerMask.GetMask("Ground");
-        EntityMask = LayerMask.GetMask("NPC", "Monsters", "Items");
+        // Characters: other players can be tapped (party invites, skills on them)
+        EntityMask = LayerMask.GetMask("NPC", "Monsters", "Items", "Characters");
     }
 
     // Update is called once per frame
@@ -59,7 +60,12 @@ public class EntityControl : MonoBehaviour {
     private void HandlePointer(Vector2 screenPosition, bool isActionRequested) {
         var ray = MainCamera.ScreenPointToRay(screenPosition);
         var didHitAnything = Physics.Raycast(ray, out var hit, 150, EntityMask | GroundMask);
-        var didHitAnyEntity = Physics.Raycast(ray, out var entityHit, 150, EntityMask);
+        var didHitAnyEntity = Physics.Raycast(ray, out var entityHit, 150, EntityMask) && !IsSelf(entityHit);
+
+        // Our own character is under the pointer a lot: what's meant then is the ground under it
+        if (didHitAnything && IsSelf(hit)) {
+            didHitAnything = Physics.Raycast(ray, out hit, 150, GroundMask);
+        }
 
         if (isActionRequested && CurrentPendingAction is PendingAction.TargetSelection && !didHitAnyEntity) {
             CurrentPendingAction = new PendingAction.None();
@@ -139,8 +145,24 @@ public class EntityControl : MonoBehaviour {
         }.Send();
     }
 
+    private bool IsSelf(RaycastHit hit) {
+        return hit.collider != null && hit.collider.TryGetComponent<SpriteEntityViewer>(out var viewer) && viewer.Entity == Entity;
+    }
+
     private void ProcessEntityClick(Entity target) {
         switch (target.Type) {
+            case EntityType.PC:
+                if (target == Entity) {
+                    break;
+                }
+                // A skill waiting for its target goes on them (Heal, Blessing, ...)
+                if (CurrentPendingAction is PendingAction.TargetSelection) {
+                    goto case EntityType.MOB;
+                }
+                if (PartyWindow.Instance != null) {
+                    PartyWindow.Instance.ShowPlayerMenu(target);
+                }
+                break;
             case EntityType.NPC:
                 new CZ.CONTACTNPC() {
                     NAID = target.AID,
@@ -173,7 +195,9 @@ public class EntityControl : MonoBehaviour {
             case EntityType.MOB:
                 // TODO render lock arrow
                 // What the attack button and attack skills go for on a touch screen
-                MobileControls.Target = target;
+                if (target.Type == EntityType.MOB) {
+                    MobileControls.Target = target;
+                }
 
                 List<PathNode> path;
                 OutPacket actionPacket;

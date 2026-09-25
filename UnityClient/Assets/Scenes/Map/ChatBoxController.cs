@@ -87,6 +87,9 @@ public class ChatBoxController : MonoBehaviour {
         // "/ho", "/!", ... show an emotion instead of being said
         if (message.StartsWith("/") && EmotionTable.TryGetCommand(message.Substring(1).Trim(), out var emotion)) {
             new CZ.SEND_EMOTE(emotion).Send();
+        } else if (message.StartsWith("%") && message.Length > 1) {
+            // "%message" goes to the party, as in the official client
+            new CZ.REQUEST_CHAT_PARTY(message.Substring(1).TrimStart()).Send();
         } else {
             new CZ.REQUEST_CHAT(message).Send();
         }
@@ -99,11 +102,15 @@ public class ChatBoxController : MonoBehaviour {
     }
 
     public void DisplayText(string text, ChatMessageType messageType) {
+        DisplayText(text, GetTextColor(messageType));
+    }
+
+    public void DisplayText(string text, Color color) {
         var prefab = Instantiate(TextLinePrefab);
         var uiText = prefab.GetComponentInChildren<TextMeshProUGUI>();
 
         uiText.text = text;
-        uiText.color = GetTextColor(messageType);
+        uiText.color = color;
 
         prefab.transform.SetParent(LinearLayout.transform, false);
     }

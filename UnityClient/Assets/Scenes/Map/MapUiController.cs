@@ -56,6 +56,7 @@ public class MapUiController : MonoBehaviour {
         Storage = StorageController.Create(InventoryWindow);
         MobileControlsController.Create(this);
         AutoAttackWindow.Create(this);
+        PartyWindow.Create(this);
     }
 
     public void DisplayItemDetails(ItemInfo itemInfo, Vector2 position) {
@@ -72,6 +73,11 @@ public class MapUiController : MonoBehaviour {
             if (selected == null || selected.GetComponent<TMPro.TMP_InputField>() == null) {
                 AutoAttackWindow.Instance.ToggleVisible();
             }
+        }
+
+        // Alt+Z opens the party window, as in the official client
+        if (Input.GetKeyDown(KeyCode.Z) && (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && PartyWindow.Instance != null) {
+            PartyWindow.Instance.ToggleVisible();
         }
 
         if (Event.current == null)

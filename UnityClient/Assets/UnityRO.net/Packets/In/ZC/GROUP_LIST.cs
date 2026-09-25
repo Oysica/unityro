@@ -1,24 +1,49 @@
-using ROIO.Utils;
+﻿using ROIO.Utils;
+using ROIO.Utils.Extensions;
+using System.Collections.Generic;
 
 public partial class ZC {
 
-    // Official ZC_GROUP_LIST / "partyinfo" (packets_struct.hpp:2086,
-    // clif.cpp:9009, PACKETVER >= 20171207 header value). Full party member
-    // roster (name, map, leader/offline flags). This client doesn't have a
-    // party window that consumes this, so it's a pure parse-and-discard
-    // registration - without it the packet stream desyncs (see
-    // PacketHeader.NEWER_PACKETVER region). SIZE <= 0 tells PacketSerializer
-    // to read the packet's own length field (int16 right after the header)
-    // and consume exactly that many bytes.
+    // The whole party (clif.cpp clif_party_info, PACKET_ZC_GROUP_LIST): at login, on joining and on
+    // changes. 0ae5 <len>.W <party name>.24B { <account id>.L <char id>.L <name>.24B <map>.16B
+    // <leader: 0 yes>.B <offline>.B <job>.W <base level>.W }*
     [PacketHandler(HEADER, "ZC_GROUP_LIST", SIZE)]
     public class GROUP_LIST : InPacket {
 
         public const PacketHeader HEADER = PacketHeader.ZC_GROUP_LIST;
         public const int SIZE = -1;
+        private const int MEMBER_SIZE = 54;
         public PacketHeader Header => HEADER;
 
+        public class Member {
+            public uint AID;
+            public uint GID;
+            public string Name;
+            public string Map;
+            public bool IsLeader;
+            public bool IsOnline;
+            public short Job;
+            public short BaseLevel;
+        }
+
+        public string PartyName;
+        public List<Member> Members = new List<Member>();
+
         public void Read(MemoryStreamReader br, int size) {
-            // Variable body (partyName + members[]); nothing to act on.
+            PartyName = br.ReadBinaryString(24).NetworkToText();
+            var count = (size - 24) / MEMBER_SIZE;
+            for (var i = 0; i < count; i++) {
+                Members.Add(new Member {
+                    AID = br.ReadUInt(),
+                    GID = br.ReadUInt(),
+                    Name = br.ReadBinaryString(24).NetworkToText(),
+                    Map = br.ReadBinaryString(16),
+                    IsLeader = br.ReadByte() == 0,
+                    IsOnline = br.ReadByte() == 0,
+                    Job = br.ReadShort(),
+                    BaseLevel = br.ReadShort()
+                });
+            }
         }
     }
 }

@@ -271,6 +271,38 @@ public static class AaWidgets {
     }
 
     /// <summary>
+    /// A text box (names and the like); the text is taken when editing ends
+    /// </summary>
+    public static TMP_InputField TextField(Transform parent, string value, string placeholder, int characterLimit, Action<string> onChange, float width = -1f) {
+        var background = NewImage("Input", parent, ControlColor);
+        Layout(background, width, CONTROL_HEIGHT, width < 0f ? 1f : 0f);
+        // Built inactive: the field sets its caret up when enabled, which needs its text in place
+        background.gameObject.SetActive(false);
+
+        var area = NewRect("Text Area", background.transform);
+        Stretch(area, 5f);
+        area.gameObject.AddComponent<RectMask2D>();
+        var hint = Text(area, placeholder, FONT_SIZE, DimTextColor);
+        hint.enableWordWrapping = false;
+        Stretch(hint.rectTransform);
+        var text = Text(area, "", FONT_SIZE);
+        text.enableWordWrapping = false;
+        Stretch(text.rectTransform);
+
+        var input = background.gameObject.AddComponent<TMP_InputField>();
+        input.targetGraphic = background;
+        input.textViewport = area;
+        input.textComponent = text;
+        input.placeholder = hint;
+        input.characterLimit = characterLimit;
+        input.text = value ?? "";
+        input.onEndEdit.AddListener(entered => onChange(entered.Trim()));
+
+        background.gameObject.SetActive(true);
+        return input;
+    }
+
+    /// <summary>
     /// A list that scrolls: vertical (the content) or horizontal (the tabs)
     /// </summary>
     public static RectTransform ScrollList(Transform parent, bool vertical, out ScrollRect scroll, float spacing = 6f, RectOffset padding = null) {

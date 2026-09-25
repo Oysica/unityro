@@ -1,13 +1,9 @@
-using ROIO.Utils;
+﻿using ROIO.Utils;
 
 public partial class ZC {
 
-    // Official ZC_NOTIFY_POSITION_TO_GROUPM (packets_struct.hpp:5298).
-    // Party member position update (for the minimap/party window). This
-    // client has no party UI that consumes this, so it's a pure
-    // parse-and-discard registration - without it the packet stream
-    // desyncs (see PacketHeader.NEWER_PACKETVER region). Wire size:
-    // int16(2) + AID(4) + xPos(2) + yPos(2) = 10 bytes total.
+    // Where a party member on the same map is, for the minimap (clif.cpp clif_party_xy)
+    // 0107 <account id>.L <x>.W <y>.W
     [PacketHandler(HEADER, "ZC_NOTIFY_POSITION_TO_GROUPM", SIZE)]
     public class NOTIFY_POSITION_TO_GROUPM : InPacket {
 
@@ -15,8 +11,14 @@ public partial class ZC {
         public const int SIZE = 10;
         public PacketHeader Header => HEADER;
 
+        public uint AID;
+        public short X;
+        public short Y;
+
         public void Read(MemoryStreamReader br, int size) {
-            // 8-byte body; nothing to act on.
+            AID = br.ReadUInt();
+            X = br.ReadShort();
+            Y = br.ReadShort();
         }
     }
 }
