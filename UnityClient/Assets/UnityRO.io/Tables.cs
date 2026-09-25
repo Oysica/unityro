@@ -32,10 +32,9 @@ namespace ROIO {
         // Unlike LuaInterface's synchronous .WaitForCompletion() calls, this
         // file was never actually blocking GameManager.Start().
         //
-        // Still worth guarding: msgstringtable.txt.txt does not exist in this
-        // client's GRF set at all (only msgstringtable.CSV does, a different
-        // format Tables.cs does not read) - so InitMsgStringTable() will keep
-        // faulting on every run, forever, not just until an extraction step.
+        // This client's GRF has no msgstringtable.txt, only MsgStringTable.csv;
+        // DataUtility.ExtractMsgStringTableFromCsv converts it into the format
+        // read below, so InitMsgStringTable faults until that step has run.
         private static void Guard(string what, Action action) {
             try {
                 action();

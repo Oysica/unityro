@@ -52,7 +52,7 @@ public class ChatBoxController : MonoBehaviour {
 
             var textObject = Instantiate(TextLinePrefab);
             var uiText = textObject.GetComponentInChildren<TextMeshProUGUI>();
-            uiText.text = (string) Tables.MsgStringTable[pkt.MessageID] ?? $"{pkt.MessageID}";
+            uiText.text = (string) Tables.MsgStringTable[$"{pkt.MessageID}"] ?? $"{pkt.MessageID}";
             uiText.color = Color.white;
 
             textObject.transform.SetParent(LinearLayout.transform, false);

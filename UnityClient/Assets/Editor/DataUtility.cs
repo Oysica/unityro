@@ -899,10 +899,60 @@ public class DataUtility {
                     Debug.LogError($"Couldnt load file {descriptor} {e}");
                 }
             }
+
+            ExtractMsgStringTableFromCsv();
         } finally {
             AssetDatabase.StopAssetEditing();
             AssetDatabase.Refresh();
         }
+    }
+
+    // CSV line index == MSI value is verified against clif.hpp through 4137; the CSV skips IDs after that.
+    private const int MaxVerifiedMsgStringId = 4137;
+
+    /// <summary>
+    /// Newer clients ship data/MsgStringTable.csv instead of data/msgstringtable.txt.
+    /// Converts it into the '#'-separated format Tables.InitMsgStringTable reads.
+    /// </summary>
+    [MenuItem("UnityRO/Utils/Extract/MsgStringTable (from CSV)")]
+    static void ExtractMsgStringTableFromCsv() {
+        var target = Path.Combine(GENERATED_RESOURCES_PATH, "txt", "data", "msgstringtable.txt.txt");
+        if (File.Exists(target)) {
+            return;
+        }
+
+        var csv = FileManager.ReadSync("data/MsgStringTable.csv");
+        if (csv == null) {
+            Debug.LogWarning("data/MsgStringTable.csv not found; msgstringtable left unextracted");
+            return;
+        }
+
+        Directory.CreateDirectory(Path.GetDirectoryName(target));
+        File.WriteAllText(target, ConvertMsgStringTableCsv(csv.ToArray()));
+    }
+
+    internal static string ConvertMsgStringTableCsv(byte[] csv) {
+        var messages = new List<string>();
+        foreach (var line in System.Text.Encoding.UTF8.GetString(csv).Replace("\r", "").Split('\n')) {
+            if (line.Length == 0) {
+                continue;
+            }
+            if (messages.Count > MaxVerifiedMsgStringId) {
+                break;
+            }
+
+            var encoded = line[(line.IndexOf(',') + 1)..];
+            var text = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encoded));
+
+            // '#' is the entry separator and a line starting with "//" is stripped as a comment by TableLoader.
+            text = text.Replace("#", "＃").Replace("\n//", "\n //");
+            if (text.StartsWith("//")) {
+                text = " " + text;
+            }
+            messages.Add(text);
+        }
+
+        return string.Join("#\n", messages) + "#\n";
     }
 
     [MenuItem("UnityRO/Utils/Extract/Effects")]
