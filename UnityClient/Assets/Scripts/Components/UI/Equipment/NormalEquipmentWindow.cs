@@ -14,17 +14,18 @@ public class NormalEquipmentWindow : MonoBehaviour {
         WindowEntity.SortingGroup.sortingOrder = 3;
         WindowEntity.SetReady(true, true);
 
+        slots.ForEach(slot => slot.SetItem(null));
+
         var inventory = entity.Inventory;
         if (inventory == null || inventory.IsEmpty) return;
 
-        Dictionary<EquipLocation, UIEquipSlot> slotDictionary = slots.ToDictionary(it => it.location);
-        Dictionary<int, ItemInfo> equippedItems = inventory.ItemList.Where(IsItemEquipped).ToDictionary(it => it.location);
-
-        slotDictionary.Values.ToList().ForEach(slot => slot.SetItem(null));
-        foreach (var itemKey in equippedItems.Keys) {
-            foreach(var slotKey in slotDictionary.Keys) {
-                if ((itemKey & (int)slotKey) > 0) { 
-                    slotDictionary[slotKey].SetItem(equippedItems[itemKey]);
+        // By where each item is worn (wearState), not everywhere it could go (location): two
+        // accessories share a location, which threw here and filled both slots with either one.
+        // Arrows count too, or every inventory change emptied the ammo slot
+        foreach (var item in inventory.ItemList.Where(IsItemEquipped)) {
+            foreach (var slot in slots) {
+                if ((item.wearState & (int)slot.location) > 0) {
+                    slot.SetItem(item);
                 }
             }
         }
@@ -32,7 +33,6 @@ public class NormalEquipmentWindow : MonoBehaviour {
 
     private bool IsItemEquipped(ItemInfo it) {
         return it.wearState > 0 &&
-            it.itemType != (int)ItemType.AMMO &&
             it.itemType != (int)ItemType.CARD;
     }
 

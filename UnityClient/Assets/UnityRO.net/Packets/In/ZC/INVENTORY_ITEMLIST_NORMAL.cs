@@ -30,7 +30,9 @@ public partial class ZC {
                 itemInfo.ItemID = (int)br.ReadUInt(); // 4
                 itemInfo.itemType = br.ReadByte(); // 1
                 itemInfo.amount = br.ReadShort(); // 2
-                itemInfo.wearState = (int)br.ReadUInt(); // 4
+                // Where the item can be worn (clif.cpp clif_item_normal: id->equip), not whether it
+                // is: arrows always read as worn. Equipped ammo comes as ZC_EQUIP_ARROW
+                itemInfo.location = (int)br.ReadUInt(); // 4
                 itemInfo.slot = new ItemInfo.Slot() { // 8
                     card1 = (int)br.ReadUInt(),
                     card2 = (int)br.ReadUInt(),
