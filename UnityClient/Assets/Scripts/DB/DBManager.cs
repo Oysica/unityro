@@ -31,7 +31,25 @@ public class DBManager {
     }
 
     public static Item GetItem(int gID) {
-        ItemDB.TryGetValue(gID, out Item item);
+        if (ItemDB.TryGetValue(gID, out Item item)) {
+            return item;
+        }
+
+        // Items the server has but this client's iteminfo doesn't (e.g. custom ones) used to be
+        // dropped from the inventory, leaving the client's item indexes out of step with the
+        // server's (sell lists, drops and pickups then failed). Show them as an unknown item
+        // with the apple's look instead, like the official client does.
+        ItemDB.TryGetValue(512, out var apple);
+        item = new Item {
+            id = gID,
+            identifiedDisplayName = $"Unknown Item ({gID})",
+            unidentifiedDisplayName = $"Unknown Item ({gID})",
+            identifiedResourceName = apple?.identifiedResourceName ?? "»ç°ú",
+            unidentifiedResourceName = apple?.identifiedResourceName ?? "»ç°ú",
+            identifiedDescriptionName = "",
+            unidentifiedDescriptionName = ""
+        };
+        ItemDB[gID] = item;
 
         return item;
     }
