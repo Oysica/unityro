@@ -50,6 +50,7 @@ public class MapUiController : MonoBehaviour {
         NpcMenu.OnNpcMenuSelected = OnNpcMenuSelected;
 
         PacketLogWindow.Hide();
+        StatusIconsController.Create(transform);
     }
 
     public void DisplayItemDetails(ItemInfo itemInfo, Vector2 position) {
@@ -115,8 +116,8 @@ public class MapUiController : MonoBehaviour {
         InventoryWindow.UpdateEquipment();
     }
 
-    public void DisplayTooltip(string text, Vector3 position) {
-        Tooltip.SetText(text, position);
+    public void DisplayTooltip(string text, Vector3 position, Vector2? pivot = null) {
+        Tooltip.SetText(text, position, pivot);
     }
 
     public void HideTooltip() {

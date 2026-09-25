@@ -11,9 +11,11 @@ public class Tooltip : MonoBehaviour {
     private void Start() {
         tooltipText.autoSizeTextContainer = true;
     }
-    public void SetText(string text, Vector3 position) {
+    /// <param name="pivot">The corner of the tooltip placed at <paramref name="position"/>, bottom left by default</param>
+    public void SetText(string text, Vector3 position, Vector2? pivot = null) {
         if (!gameObject.activeInHierarchy && text != null && text != tooltipText.text) {
             gameObject.SetActive(true);
+            (gameObject.transform as RectTransform).pivot = pivot ?? Vector2.zero;
             gameObject.transform.position = position;
             Vector2 textSize = tooltipText.GetPreferredValues(text);
             tooltipText.text = text;

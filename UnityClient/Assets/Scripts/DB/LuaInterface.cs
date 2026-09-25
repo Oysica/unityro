@@ -18,6 +18,7 @@ public class LuaInterface {
         LoadSkillInfoZ();
         LoadJobInfo();
         LoadAccessoryInfo();
+        LoadStateIconInfo();
 
         // Same bring-up stub as Run() below: these read the globals the .lub
         // files were supposed to define, so with compiled bytecode they get
@@ -100,6 +101,12 @@ public class LuaInterface {
         Environment.Globals["pcJobTbl2"] = JTtbl;
 
         Run("lua/data/luafiles514/lua files/datainfo/pcjobnamegender.lub.txt");
+    }
+
+    private void LoadStateIconInfo() {
+        Run("lua/data/luafiles514/lua files/stateicon/efstids.lub.txt");
+        Run("lua/data/luafiles514/lua files/stateicon/stateiconimginfo.lub.txt");
+        Run("lua/data/luafiles514/lua files/stateicon/stateiconinfo.lub.txt");
     }
 
     private void LoadAccessoryInfo() {
