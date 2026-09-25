@@ -17,20 +17,26 @@ public class Minimap : MonoBehaviour {
     private int CurrentZoom = 1;
 
     // Start is called before the first frame update
-    async void Start() {
+    void Start() {
         MapThumb = GetComponent<RawImage>();
 
-        PlayerIndicatorTexture = await Addressables.LoadAssetAsync<Texture2D>($"{DBManager.INTERFACE_PATH}map/map_arrow.png").Task;
+        PlayerIndicatorTexture = TextureAssetLoader.Load($"{DBManager.INTERFACE_PATH}map/map_arrow.png");
         Session.OnMapChanged += OnMapChanged;
+
+        // The first map is set before the map scene (and this component) exists
+        var currentMap = Session.CurrentSession?.CurrentMap;
+        if (!string.IsNullOrEmpty(currentMap)) {
+            OnMapChanged(currentMap);
+        }
     }
 
     private void OnDestroy() {
         Session.OnMapChanged -= OnMapChanged;
     }
 
-    private async void OnMapChanged(string mapName) {
+    private void OnMapChanged(string mapName) {
         CurrentMap = Path.GetFileNameWithoutExtension(mapName);
-        MapThumbTexture = await Addressables.LoadAssetAsync<Texture2D>($"{DBManager.INTERFACE_PATH}map/{CurrentMap}.png").Task;
+        MapThumbTexture = TextureAssetLoader.Load($"{DBManager.INTERFACE_PATH}map/{CurrentMap}.png");
 
         if (MapThumbTexture == null) {
             return;

@@ -23,16 +23,12 @@ public class CartItem : MonoBehaviour {
 
     private Item Item;
 
-    public async void SetItemShopInfo(ItemNPCShopInfo itemShopInfo, int quantity) {
+    public void SetItemShopInfo(ItemNPCShopInfo itemShopInfo, int quantity) {
         ItemShopInfo = itemShopInfo;
         Quantity = quantity;
 
         Item = DBManager.GetItem(itemShopInfo.itemID);
-        try {
-            ItemImage.texture = await Addressables.LoadAssetAsync<Texture2D>(DBManager.GetItemResPath(itemShopInfo.itemID, true)).Task;
-        } catch {
-
-        }
+        ItemImage.texture = TextureAssetLoader.Load(DBManager.GetItemResPath(itemShopInfo.itemID, true));
         SetInfo();
     }
 

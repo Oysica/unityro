@@ -68,8 +68,8 @@ public class EntityManager : MonoBehaviour {
         Item item = DBManager.GetItem(itemSpawnInfo.AID);
         string itemPath = DBManager.GetItemPath(itemSpawnInfo.AID, itemSpawnInfo.IsIdentified);
 
-        SpriteData spriteData = Addressables.LoadAssetAsync<SpriteData>($"{itemPath}.asset".SanitizeForAddressables()).WaitForCompletion();
-        Texture2D atlas = Addressables.LoadAssetAsync<Texture2D>($"{itemPath}.png".SanitizeForAddressables()).WaitForCompletion();
+        // Falls back to decoding the sprite from the GRF in the editor when it wasn't extracted
+        var sprite = SpriteAssetLoader.Load(itemPath, itemPath.SanitizeForAddressables());
 
         var itemGO = new GameObject(item.identifiedDisplayName);
         itemGO.layer = LayerMask.NameToLayer("Items");
@@ -103,10 +103,9 @@ public class EntityManager : MonoBehaviour {
         // leave the drop with AID 0, so it could be neither picked up nor removed
         entity.AID = (uint) itemSpawnInfo.mapID;
         entityCache.Add(entity.AID, entity);
-        if (spriteData != null && atlas != null) {
-            entity.Init(spriteData, atlas);
-        } else {
-            Debug.LogWarning($"Missing item sprite: {itemPath}");
+        if (sprite != null) {
+            bodyViewer.SetPalette(sprite.Palette);
+            entity.Init(sprite.Data, sprite.Atlas);
         }
         entity.SetReady(true);
 

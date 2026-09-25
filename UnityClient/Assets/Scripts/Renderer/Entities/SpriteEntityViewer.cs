@@ -65,6 +65,13 @@ public class SpriteEntityViewer : GameEntityViewer {
         };
     }
 
+    /// <summary>
+    /// Palette for sprites handed in through <see cref="Init(SpriteData, Texture2D)"/> (ground items).
+    /// </summary>
+    public void SetPalette(Texture2D palette) {
+        PaletteTexture = palette;
+    }
+
     public override void Init(SpriteData spriteData, Texture2D atlas) {
         CurrentACT = spriteData.act;
         Sprites = spriteData.GetSprites(atlas);
@@ -96,6 +103,10 @@ public class SpriteEntityViewer : GameEntityViewer {
             }
             MeshRenderer.material = SpriteMaterial;
             MeshRenderer.material.mainTexture = Sprites[0].texture;
+            // The atlas holds palette indices; without its palette the item draws blank
+            if (PaletteTexture != null) {
+                MeshRenderer.material.SetTexture("_PaletteTex", PaletteTexture);
+            }
         }
 
         if (Sprites == null || reloadSprites) {
@@ -146,12 +157,15 @@ public class SpriteEntityViewer : GameEntityViewer {
                 return;
             }
 
-            try {
-                var spriteData = Addressables.LoadAssetAsync<SpriteData>(path + ".asset").WaitForCompletion();
-                var atlas = Addressables.LoadAssetAsync<Texture2D>(path + ".png").WaitForCompletion();
+            // Falls back to decoding the sprite from the GRF in the editor when it wasn't extracted
+            var loaded = SpriteAssetLoader.Load(path);
+            if (loaded == null) {
+                CurrentACT = null;
+            } else try {
+                var atlas = loaded.Atlas;
 
-                Sprites = spriteData.GetSprites(atlas);
-                CurrentACT = spriteData.act;
+                Sprites = loaded.Data.GetSprites(atlas);
+                CurrentACT = loaded.Data.act;
 
                 FramePaceCalculator.Init(Entity, ViewerType, CurrentACT);
 
@@ -167,15 +181,13 @@ public class SpriteEntityViewer : GameEntityViewer {
                     palettePath = path + "_pal";
                 }
 
-                var palette = Addressables.LoadAssetAsync<Texture2D>(palettePath + ".png").WaitForCompletion();
-                if (palette != null) {
-                    MeshRenderer.material.SetTexture("_PaletteTex", palette);
-                } else {
-                    // selected palette doesn't exist, fallback to original
+                // A selected palette (clothes/hair color) that doesn't exist falls back to the sprite's own
+                var palette = palettePath == path + "_pal" ? loaded.Palette : SpriteAssetLoader.LoadPalette(palettePath);
+                if (palette == null) {
                     palettePath = path + "_pal";
-                    palette = Addressables.LoadAssetAsync<Texture2D>(palettePath + ".png").WaitForCompletion();
-                    MeshRenderer.material.SetTexture("_PaletteTex", palette);
+                    palette = loaded.Palette;
                 }
+                MeshRenderer.material.SetTexture("_PaletteTex", palette);
             } catch (Exception e) {
                 Debug.LogError($"Could not load sprites for: {path}");
                 Debug.LogException(e);

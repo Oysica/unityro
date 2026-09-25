@@ -32,17 +32,12 @@ public class ShopItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         Canvas = Canvas.FindMainCanvas();
     }
 
-    public async void SetItemShopInfo(ItemNPCShopInfo itemShopInfo, NpcShopType shopType) {
+    public void SetItemShopInfo(ItemNPCShopInfo itemShopInfo, NpcShopType shopType) {
         ItemShopInfo = itemShopInfo;
 
         if (shopType == NpcShopType.BUY) {
             Item = DBManager.GetItem(itemShopInfo.itemID);
-            try {
-                ItemImage.texture = await Addressables.LoadAssetAsync<Texture2D>(DBManager.GetItemResPath(itemShopInfo.itemID, true)).Task;
-            } catch {
-                Debug.LogError($"Could not load texture of item {itemShopInfo.itemID}");
-                return;
-            }
+            ItemImage.texture = TextureAssetLoader.Load(DBManager.GetItemResPath(itemShopInfo.itemID, true));
         } else if (shopType == NpcShopType.SELL) {
             var itemInfo = (Session.CurrentSession.Entity as Entity).Inventory.GetItem(itemShopInfo.inventoryIndex);
 
@@ -53,12 +48,7 @@ public class ShopItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
             itemShopInfo.itemID = itemInfo.ItemID;
             itemShopInfo.type = itemInfo.itemType;
-            try {
-                ItemImage.texture = await Addressables.LoadAssetAsync<Texture2D>(DBManager.GetItemResPath(itemInfo.ItemID, true)).Task;
-            } catch {
-                Debug.LogError($"Could not load texture of item {itemInfo.ItemID}");
-                return;
-            }
+            ItemImage.texture = TextureAssetLoader.Load(DBManager.GetItemResPath(itemInfo.ItemID, true));
 
             Item = itemInfo.item;
             Quantity = itemInfo.amount;

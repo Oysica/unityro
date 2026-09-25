@@ -44,20 +44,17 @@ public class UISkill : MonoBehaviour,
         Canvas = Canvas.FindMainCanvas();
     }
 
-    internal async void SetSkill(Skill skill) {
+    internal void SetSkill(Skill skill) {
         Skill = skill;
 
         if (skill != null) {
-            try {
-                var texture = await Addressables.LoadAssetAsync<Texture2D>($"{DBManager.INTERFACE_PATH}item/{skill.SkillTag.ToLower()}.png").Task;
-                skillImage.texture = texture;
-                skillImage.material = unownedSkillShader;
-            } catch { }
+            skillImage.texture = TextureAssetLoader.Load($"{DBManager.INTERFACE_PATH}item/{skill.SkillTag.ToLower()}.png");
+            skillImage.material = unownedSkillShader;
 
             skillName.text = skill.SkillName;
         } else {
             if (NO_SKILL_TEXTURE == null)
-                NO_SKILL_TEXTURE = await Addressables.LoadAssetAsync<Texture2D>(DBManager.INTERFACE_PATH + NO_SKILL_IMAGE).Task;
+                NO_SKILL_TEXTURE = TextureAssetLoader.Load(DBManager.INTERFACE_PATH + NO_SKILL_IMAGE);
 
             skillImage.texture = NO_SKILL_TEXTURE;
             skillImage.material = unownedSkillShader;
