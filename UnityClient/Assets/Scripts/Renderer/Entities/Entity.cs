@@ -495,7 +495,7 @@ public class Entity : MonoBehaviour, INetworkEntity {
     }
 
     public void PlayAudio(string path) {
-        var clip = Addressables.LoadAssetAsync<AudioClip>(path.SanitizeForAddressables()).WaitForCompletion();
+        var clip = AudioAssetLoader.Load(path);
 
         if (clip != null && AudioSource != null) {
             AudioSource.clip = clip;

@@ -40,12 +40,10 @@ public class Sounds
             _parent = new GameObject("_sounds");
             _parent.transform.parent = MapRenderer.mapParent.transform;
         }
-        var clip = Addressables.LoadAssetAsync<AudioClip>(sound.file.SanitizeForAddressables()).WaitForCompletion();
+        // Unextracted ambient sounds are read from the GRF in the editor
+        var clip = AudioAssetLoader.Load(sound.file);
 
-        // TEMPORARY BRING-UP GUARD: ambient map sound-emitter .wav files
-        // were never extracted in this data set (only textures/sprites
-        // were pulled this session), so clip comes back null here without
-        // throwing. Skip registering a Playing entry for it instead of
+        // Skip registering a Playing entry for a sound that exists nowhere instead of
         // letting Update() call PlayOneShot(null) every cycle.
         if (clip == null) {
             Debug.LogWarning($"[bring-up] Sounds.Add: no clip for '{sound.file}', skipping");

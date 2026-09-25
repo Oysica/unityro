@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour {
         MainCamera = Camera.main;
     }
 
-    public void PlayBgm(string name) {
+    public async void PlayBgm(string name) {
         // TEMPORARY BRING-UP STUB: Tables.MapTable is populated from the same
         // .lub/msgstringtable-dependent load that's guarded/empty elsewhere
         // in this data set (see Tables.cs), so a map's .mp3 field can come
@@ -142,8 +142,13 @@ public class GameManager : MonoBehaviour {
         }
 
         try {
-            var bgm = Addressables.LoadAssetAsync<AudioClip>(Path.Combine("bgm", name).SanitizeForAddressables()).WaitForCompletion();
+            // Not extracted in this data set: the editor reads it from the client's BGM folder
+            var bgm = await AudioAssetLoader.LoadBgmAsync(name);
+            if (bgm == null || AudioSource.clip == bgm) {
+                return;
+            }
             AudioSource.clip = bgm;
+            AudioSource.loop = true;
             AudioSource.Play();
         } catch (Exception e) {
             Debug.LogWarning($"[bring-up] PlayBgm: failed to load '{name}': {e.Message}");
