@@ -57,9 +57,11 @@ public class GenericUIItem : MonoBehaviour,
         }
 
         switch ((ItemType) itemInfo.itemType) {
-            // Usable item
+            // Usable item; USABLE_SKILL is the server's IT_DELAYCONSUME (Fly Wing, Butterfly Wing,
+            // scrolls), used the same way
             case ItemType.HEALING:
             case ItemType.USABLE:
+            case ItemType.USABLE_SKILL:
             case ItemType.USABLE_UNK:
                 (Session.CurrentSession.Entity as Entity).Inventory.OnUseItem(itemInfo.index);
                 break;
@@ -69,16 +71,14 @@ public class GenericUIItem : MonoBehaviour,
                 //Inventory.onUseCard(item.index);
                 break;
 
-            case ItemType.USABLE_SKILL:
-                break;
-
             // Equip item
             case ItemType.WEAPON:
             case ItemType.EQUIP:
             case ItemType.PETEQUIP:
             case ItemType.AMMO:
+                // Arrows used to be always put on: the inventory list made every stack of them look worn
                 if (itemInfo.IsIdentified && !itemInfo.IsDamaged) {
-                    if (itemInfo.wearState <= 0 || itemInfo.itemType == (int) ItemType.AMMO) {//wear
+                    if (itemInfo.wearState <= 0) {//wear
                         (Session.CurrentSession.Entity as Entity).Inventory.OnEquipItem(itemInfo.index, itemInfo.location);
                     } else {//takeoff
                         (Session.CurrentSession.Entity as Entity).Inventory.OnTakeOffItem(itemInfo.index);

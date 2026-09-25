@@ -113,6 +113,18 @@ public class Entity : MonoBehaviour, INetworkEntity {
         NetworkClient.HookPacket(ZC.NOTIFY_SKILL2.HEADER, OnEntityUseSkillToAttack);
         NetworkClient.HookPacket(ZC.USESKILL_ACK2.HEADER, OnEntityCastSkill);
         NetworkClient.HookPacket(ZC.ATTACK_FAILURE_FOR_DISTANCE.HEADER, OnAttackFailureForDistance);
+        NetworkClient.HookPacket(ZC.AUTORUN_SKILL.HEADER, OnAutorunSkill);
+    }
+
+    /// <summary>
+    /// An item's skill (e.g. a Fly Wing's Teleport) is cast like one picked from the skill list;
+    /// the server uses the item up only then.
+    /// </summary>
+    private void OnAutorunSkill(ushort cmd, int size, InPacket packet) {
+        var control = GetComponent<EntityControl>();
+        if (packet is ZC.AUTORUN_SKILL AUTORUN_SKILL && control != null) {
+            control.UseSkill(AUTORUN_SKILL.SkillInfo, AUTORUN_SKILL.SkillInfo.Level);
+        }
     }
 
     public void Init(SpriteData spriteData, Texture2D atlas) {

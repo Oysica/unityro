@@ -159,14 +159,21 @@ public class MapController : MonoBehaviour {
     private async void OnEntityMoved(ushort cmd, int size, InPacket packet) {
         if (packet is ZC.NPCACK_MAPMOVE) {
             var pkt = packet as ZC.NPCACK_MAPMOVE;
+            var mapname = Path.GetFileNameWithoutExtension(pkt.MapName);
+            // A teleport within the map (e.g. a Fly Wing) keeps the map and shows no loading screen
+            var changesMap = mapname != Session.CurrentSession.CurrentMap;
 
-            await GameManager.LoadScene("LoadingScene", LoadSceneMode.Additive);
+            if (changesMap) {
+                await GameManager.LoadScene("LoadingScene", LoadSceneMode.Additive);
+            }
             var entity = Session.CurrentSession.Entity as Entity;
             entity.StopMoving();
 
-            if (Path.GetFileNameWithoutExtension(pkt.MapName) != Session.CurrentSession.CurrentMap) {
-                var mapname = Path.GetFileNameWithoutExtension(pkt.MapName);
+            // What was around the old position is gone; the server sends what is around the new
+            // one once it gets NOTIFY_ACTORINIT, as the official client expects
+            EntityManager.ClearEntities();
 
+            if (changesMap) {
                 GameMap map = await GameManager.BeginMapLoading(mapname);
                 PathFinding = map.GetPathFinder();
 
@@ -176,7 +183,9 @@ public class MapController : MonoBehaviour {
 
             entity.transform.position = new Vector3(pkt.PosX, PathFinding.GetCellHeight(pkt.PosX, pkt.PosY), pkt.PosY);
             new CZ.NOTIFY_ACTORINIT().Send();
-            await GameManager.UnloadScene("LoadingScene");
+            if (changesMap) {
+                await GameManager.UnloadScene("LoadingScene");
+            }
         }
     }
 
