@@ -46,6 +46,7 @@ public static class DirectionExtensions {
             case NpcDirection.NorthWest:
                 return Direction.NorthWest;
             case NpcDirection.North:
+            case NpcDirection.None: // the server sends north as 0 (DIR_NORTH)
                 return Direction.North;
             case NpcDirection.NorthEast:
                 return Direction.NorthEast;
@@ -53,7 +54,6 @@ public static class DirectionExtensions {
                 return Direction.East;
             case NpcDirection.SouthEast:
                 return Direction.SouthEast;
-            case NpcDirection.None:
             default:
                 return Direction.South;
         }

@@ -46,6 +46,7 @@ public class MapController : MonoBehaviour {
         NetworkClient.HookPacket(ZC.NOTIFY_EFFECT2.HEADER, OnEffect);
         NetworkClient.HookPacket(ZC.RESURRECTION.HEADER, OnEntityResurrected);
         NetworkClient.HookPacket(ZC.SPRITE_CHANGE2.HEADER, OnSpriteChanged);
+        NetworkClient.HookPacket(ZC.CHANGE_DIRECTION.HEADER, OnEntityDirectionChanged);
         NetworkClient.HookPacket(ZC.ACTION_FAILURE.HEADER, OnActionFailure);
         NetworkClient.HookPacket(ZC.NOTIFY_TIME.HEADER, delegate{ });
 
@@ -103,6 +104,14 @@ public class MapController : MonoBehaviour {
             var entity = EntityManager.GetEntity(SPRITE_CHANGE.GID);
             if (entity == null) return;
             entity.OnSpriteChange(SPRITE_CHANGE.type, SPRITE_CHANGE.value, SPRITE_CHANGE.value2);
+        }
+    }
+
+    private void OnEntityDirectionChanged(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.CHANGE_DIRECTION CHANGE_DIRECTION) {
+            var entity = EntityManager.GetEntity(CHANGE_DIRECTION.GID);
+            if (entity == null) return;
+            entity.Direction = ((NpcDirection) CHANGE_DIRECTION.Dir).ToDirection();
         }
     }
 
