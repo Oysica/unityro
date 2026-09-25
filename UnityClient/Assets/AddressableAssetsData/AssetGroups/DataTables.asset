@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d5be21b7e23ab0a4cabc6f0d29cd090f
   m_SerializeEntries:
+  - m_GUID: adc4e2c4e5ed67641a19440885880a24
+    m_Address: RemoteConfigs.json.txt
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b1407dc21fea3f147afbc69df4994ada
     m_Address: ClassTable
     m_ReadOnly: 0

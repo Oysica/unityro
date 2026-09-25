@@ -1,0 +1,5 @@
+{
+    "loginServer": "127.0.0.1",
+    "loginPort": "6900",
+    "useSameIpForEveryServer": true
+}

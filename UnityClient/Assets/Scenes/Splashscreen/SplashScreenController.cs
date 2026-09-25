@@ -118,8 +118,21 @@ public class SplashScreenController : MonoBehaviour {
         yield return remoteRequest.SendWebRequest();
         Debug.Log($"[bring-up] FetchConfigs: UnityWebRequest done, result={remoteRequest.result}, error={remoteRequest.error}, text={remoteRequest.downloadHandler?.text}");
 
-        var remoteConfig = JObject.Parse(remoteRequest.downloadHandler.text);
-        var remoteConfiguration = JsonConvert.DeserializeObject<RemoteConfiguration>(remoteConfig.ToString());
+        RemoteConfiguration remoteConfiguration;
+        if (remoteRequest.result == UnityWebRequest.Result.Success) {
+            var remoteConfig = JObject.Parse(remoteRequest.downloadHandler.text);
+            remoteConfiguration = JsonConvert.DeserializeObject<RemoteConfiguration>(remoteConfig.ToString());
+        } else {
+            // No local config server running (e.g. RemoteConfigs.json.txt's
+            // HTTP host at localConfiguration.remoteConfigLocation isn't up).
+            // Fall back to the bundled copy instead of crashing every time
+            // that manual server wasn't started this session.
+            Debug.LogWarning($"[bring-up] FetchConfigs: remote fetch failed ({remoteRequest.error}), falling back to bundled RemoteConfigs.json.txt");
+            var fallbackRequest = Addressables.LoadAssetAsync<TextAsset>("RemoteConfigs.json.txt");
+            yield return fallbackRequest;
+            var fallbackConfig = JObject.Parse(fallbackRequest.Result.text);
+            remoteConfiguration = JsonConvert.DeserializeObject<RemoteConfiguration>(fallbackConfig.ToString());
+        }
 
         FindObjectOfType<GameManager>().SetConfigurations(remoteConfiguration, localConfiguration);
         Debug.Log("[bring-up] FetchConfigs: loading LoginScene");
