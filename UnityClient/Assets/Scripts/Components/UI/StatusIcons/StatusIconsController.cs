@@ -28,6 +28,10 @@ public class StatusIconsController : MonoBehaviour {
     private readonly Dictionary<int, StatusIcon> Icons = new Dictionary<int, StatusIcon>();
     private int NextOrder;
 
+    // The icon under the mouse, whose tooltip counts down while it stays there
+    private int HoveredEfst = -1;
+    private int ShownSeconds;
+
     /// <summary>
     /// Built at runtime: the map UI prefab has no place for it.
     /// </summary>
@@ -104,7 +108,10 @@ public class StatusIconsController : MonoBehaviour {
         if (Icons.TryGetValue(efst, out var icon)) {
             Destroy(icon.Image.gameObject);
             Icons.Remove(efst);
-            MapUiController.Instance.HideTooltip();
+            if (HoveredEfst == efst) {
+                HoveredEfst = -1;
+                MapUiController.Instance.HideTooltip();
+            }
         }
     }
 
@@ -114,8 +121,14 @@ public class StatusIconsController : MonoBehaviour {
         image.rectTransform.sizeDelta = new Vector2(ICON_SIZE, ICON_SIZE);
 
         var trigger = image.gameObject.AddComponent<EventTrigger>();
-        AddTrigger(trigger, EventTriggerType.PointerEnter, () => ShowTooltip(efst));
-        AddTrigger(trigger, EventTriggerType.PointerExit, () => MapUiController.Instance.HideTooltip());
+        AddTrigger(trigger, EventTriggerType.PointerEnter, () => {
+            HoveredEfst = efst;
+            ShowTooltip(efst);
+        });
+        AddTrigger(trigger, EventTriggerType.PointerExit, () => {
+            HoveredEfst = -1;
+            MapUiController.Instance.HideTooltip();
+        });
         return image;
     }
 
@@ -130,6 +143,7 @@ public class StatusIconsController : MonoBehaviour {
             return;
         }
 
+        ShownSeconds = Mathf.CeilToInt(icon.RemainSeconds);
         var text = StatusIconTable.GetDescription(efst, icon.RemainSeconds);
         if (string.IsNullOrEmpty(text)) {
             return;
@@ -157,6 +171,12 @@ public class StatusIconsController : MonoBehaviour {
                 alpha = 0.35f + 0.65f * Mathf.Abs(Mathf.Cos(Time.realtimeSinceStartup * Mathf.PI));
             }
             icon.Image.color = new Color(1f, 1f, 1f, alpha);
+        }
+
+        // Count the tooltip down while the mouse stays on its icon
+        if (HoveredEfst >= 0 && Icons.TryGetValue(HoveredEfst, out var hovered) && hovered.HasTimeLimit
+            && Mathf.CeilToInt(hovered.RemainSeconds) != ShownSeconds) {
+            ShowTooltip(HoveredEfst);
         }
     }
 }
