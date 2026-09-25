@@ -1,4 +1,5 @@
 ﻿using MoonSharp.Interpreter;
+using ROIO.Utils.Extensions;
 using ROIO;
 using ROIO.Loaders;
 using System;
@@ -355,14 +356,16 @@ public class ItemTable {
                     identifiedDescriptionName.Add(desc.ToString());
                 }
 
+                // Names and descriptions are shown to the player, so decode them; resource names
+                // stay raw because sprite/texture paths are built from them
                 var item = new Item() {
                     id = int.Parse(key.ToString()),
-                    unidentifiedDisplayName = it["unidentifiedDisplayName"].ToString(),
+                    unidentifiedDisplayName = it["unidentifiedDisplayName"].ToString().LuaToText(),
                     unidentifiedResourceName = it["unidentifiedResourceName"].ToString(),
-                    unidentifiedDescriptionName = string.Join("\n", unidentifiedDescriptionName),
-                    identifiedDisplayName = it["identifiedDisplayName"].ToString(),
+                    unidentifiedDescriptionName = string.Join("\n", unidentifiedDescriptionName).LuaToText(),
+                    identifiedDisplayName = it["identifiedDisplayName"].ToString().LuaToText(),
                     identifiedResourceName = it["identifiedResourceName"].ToString(),
-                    identifiedDescriptionName = string.Join("\n", identifiedDescriptionName),
+                    identifiedDescriptionName = string.Join("\n", identifiedDescriptionName).LuaToText(),
                     slotCount = int.Parse(it["slotCount"].ToString()),
                     ClassNum = int.Parse(it["ClassNum"].ToString()),
                     costume = bool.Parse(it["costume"].ToString())

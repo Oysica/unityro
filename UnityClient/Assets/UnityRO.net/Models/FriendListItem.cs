@@ -1,4 +1,5 @@
 ﻿using ROIO.Utils;
+using ROIO.Utils.Extensions;
 
 public class FriendListItem {
 
@@ -12,6 +13,6 @@ public class FriendListItem {
 
         AID = br.ReadUInt();
         CID = br.ReadUInt();
-        Name = br.ReadBinaryString(24);
+        Name = br.ReadBinaryString(24).NetworkToText();
     }
 }

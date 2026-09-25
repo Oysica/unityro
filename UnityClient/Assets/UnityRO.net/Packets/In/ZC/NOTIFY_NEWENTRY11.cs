@@ -1,4 +1,5 @@
 ﻿using ROIO.Utils;
+using ROIO.Utils.Extensions;
 
 public partial class ZC {
 
@@ -46,7 +47,7 @@ public partial class ZC {
             entityData.HP = br.ReadInt();
             entityData.isBoss = (byte)br.ReadByte();
             entityData.body = br.ReadUShort();
-            entityData.name = br.ReadBinaryString(24);
+            entityData.name = br.ReadBinaryString(24).NetworkToText();
         }
     }
 }

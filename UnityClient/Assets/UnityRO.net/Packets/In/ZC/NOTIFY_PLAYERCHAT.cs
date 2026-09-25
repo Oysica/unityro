@@ -1,5 +1,6 @@
 ﻿
 using ROIO.Utils;
+using ROIO.Utils.Extensions;
 
 public partial class ZC {
 
@@ -13,7 +14,7 @@ public partial class ZC {
         public PacketHeader GetHeader() => HEADER;
 
         public void Read(MemoryStreamReader br, int size) {
-            Message = br.ReadBinaryString(size);
+            Message = br.ReadBinaryString(size).NetworkToText();
         }
     }
 }

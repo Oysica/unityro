@@ -11,7 +11,8 @@
         }
 
         public override void Send() {
-            Write(message, message.Length);
+            // Whole encoded message: message.Length counts chars, which cut Chinese text short
+            Write(message);
 
             base.Send();
         }

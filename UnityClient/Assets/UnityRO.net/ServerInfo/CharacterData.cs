@@ -1,4 +1,5 @@
 ﻿using ROIO.Utils;
+using ROIO.Utils.Extensions;
 using System.IO;
 
 public class CharacterData {
@@ -92,7 +93,7 @@ public class CharacterData {
         cd.HeadPalette = br.ReadShort();
         cd.BodyPalette = br.ReadShort();
 
-        cd.Name = br.ReadBinaryString(24);
+        cd.Name = br.ReadBinaryString(24).NetworkToText();
 
         cd.Str = (byte)br.ReadByte();
         cd.Agi = (byte)br.ReadByte();

@@ -1,4 +1,5 @@
 ﻿using ROIO.Utils;
+using ROIO.Utils.Extensions;
 using System.IO;
 using System.Net;
 
@@ -48,7 +49,7 @@ public partial class AC {
                 CharServerInfo csi = new CharServerInfo();
                 csi.IP = new IPAddress(br.ReadUInt());
                 csi.Port = br.ReadUShort();
-                csi.Name = br.ReadBinaryString(20);
+                csi.Name = br.ReadBinaryString(20).NetworkToText();
                 csi.UserCount = br.ReadUShort();
                 csi.State = br.ReadShort();
                 csi.Property = br.ReadUShort();

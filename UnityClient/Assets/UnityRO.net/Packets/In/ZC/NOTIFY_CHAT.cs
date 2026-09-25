@@ -1,4 +1,5 @@
 ﻿using ROIO.Utils;
+using ROIO.Utils.Extensions;
 
 public partial class ZC {
 
@@ -13,7 +14,7 @@ public partial class ZC {
 
         public void Read(MemoryStreamReader br, int size) {
             GID = br.ReadUInt();
-            Message = br.ReadBinaryString((int)(br.Length - br.Position));
+            Message = br.ReadBinaryString((int)(br.Length - br.Position)).NetworkToText();
         }
     }
 }

@@ -42,15 +42,12 @@ public abstract class OutPacket : NetworkPacket {
     public void Write(ushort value) => buffer = buffer.Concat(BitConverter.GetBytes(value));
     public void Write(ulong value) => buffer = buffer.Concat(BitConverter.GetBytes(value));
     public void Write(uint value) => buffer = buffer.Concat(BitConverter.GetBytes(value));
-    public void Write(string value) => buffer = buffer.Concat(Encoding.ASCII.GetBytes(value));
+    // Text goes out in the server's encoding (Big5); names come in decoded, see StringExtensions.NetworkToText
+    public void Write(string value) => buffer = buffer.Concat(ROIO.Utils.Extensions.StringExtensions.ClientEncoding.GetBytes(value));
     public void Write(string value, int size) {
+        var bytes = ROIO.Utils.Extensions.StringExtensions.ClientEncoding.GetBytes(value);
         byte[] chunk = new byte[size];
-        for (int i = 0; i < size; i++) {
-            if (i < value.Length)
-                chunk[i] = (byte)value[i];
-            else
-                chunk[i] = 0;
-        }
+        Array.Copy(bytes, chunk, Math.Min(bytes.Length, size));
 
         buffer = buffer.Concat(chunk);
     }

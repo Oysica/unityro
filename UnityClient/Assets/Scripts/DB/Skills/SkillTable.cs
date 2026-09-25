@@ -1,4 +1,5 @@
 ﻿using MoonSharp.Interpreter;
+using ROIO.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ public class SkillTable {
             var skill = new Skill {
                 SkillId = skid,
                 SkillTag = tree.Last().Value.ToString().Replace("\"",""),
-                SkillName = dict["SkillName"].ToString(),
+                SkillName = dict["SkillName"].ToString().LuaToText(),
                 MaxLv = int.Parse(dict["MaxLv"].ToString()),
                 SpAmount = (dict["SpAmount"] as Table).Pairs.Select(t => int.Parse(t.Value.ToString())).ToList(),
                 CanSelectLevel = dict["bSeperateLv"] != null ? bool.Parse(dict["bSeperateLv"].ToString()) : true,
