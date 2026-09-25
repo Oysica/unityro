@@ -66,7 +66,8 @@ public class ItemManager : MonoBehaviour {
                 (Session.CurrentSession.Entity as Entity).Inventory.EquipItem(ACK_WEAR_EQUIP_V5.index, ACK_WEAR_EQUIP_V5.equipLocation);
                 MapUiController.Instance.UpdateEquipment();
             } else {
-                MapController.Instance.UIController.ChatBox.DisplayMessage(372, 0);
+                // 1 = the character's level is too low (clif.hpp ITEM_EQUIP_ACK_FAILLEVEL), 2 = any other refusal
+                MapController.Instance.UIController.ChatBox.DisplayMessage(ACK_WEAR_EQUIP_V5.result == 1 ? 1774 : 372, 0);
             }
         }
     }
