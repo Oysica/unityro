@@ -92,10 +92,18 @@ public class InventoryWindowController : DraggableUIWindow, IDropHandler {
     }
 
     public void OnDrop(PointerEventData eventData) {
-        var item = eventData.pointerDrag?.GetComponent<GenericUIItem>();
-        if (item != null && item.ItemInfo != null) {
-            OnItemDropped?.Invoke(item.ItemInfo);
+        var item = eventData.pointerDrag != null ? eventData.pointerDrag.GetComponent<GenericUIItem>() : null;
+        if (item == null || item.ItemInfo == null) {
+            return;
         }
+
+        // Dragged off the equipment window onto the inventory: take it off
+        if (ItemSource == null && item is UIEquipSlot && item.ItemInfo.wearState > 0) {
+            (Session.CurrentSession.Entity as Entity).Inventory.OnTakeOffItem(item.ItemInfo.index);
+            return;
+        }
+
+        OnItemDropped?.Invoke(item.ItemInfo);
     }
 
     public void ChangeCurrentTab(int newTab) {

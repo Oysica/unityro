@@ -136,6 +136,11 @@ public class GenericUIItem : MonoBehaviour,
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
+        // An empty cell or equipment slot has nothing to drag
+        if (itemInfo == null) {
+            return;
+        }
+
         var ItemDragImage = new GameObject("ShopItemDrag");
         ItemDragImage.transform.SetParent(Canvas.transform, false);
         ItemDragImage.transform.SetAsLastSibling();
@@ -158,10 +163,15 @@ public class GenericUIItem : MonoBehaviour,
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        Destroy(ItemDragImageTransform.gameObject);
+        if (ItemDragImageTransform != null) {
+            Destroy(ItemDragImageTransform.gameObject);
+            ItemDragImageTransform = null;
+        }
     }
 
     public void OnDrag(PointerEventData eventData) {
-        ItemDragImageTransform.anchoredPosition += eventData.delta / Canvas.scaleFactor;
+        if (ItemDragImageTransform != null) {
+            ItemDragImageTransform.anchoredPosition += eventData.delta / Canvas.scaleFactor;
+        }
     }
 }
