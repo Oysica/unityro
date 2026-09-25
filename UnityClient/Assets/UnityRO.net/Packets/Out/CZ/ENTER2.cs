@@ -3,7 +3,7 @@
     public class ENTER2 : OutPacket {
 
         public const PacketHeader HEADER = PacketHeader.CZ_ENTER2;
-        public const int SIZE = 19;
+        public const int SIZE = 23; // what Send writes; the server reads 23 (clif_parse_WantToConnection)
 
         private int AccountId, CharacterId, LoginId1;
         private long clienttime;

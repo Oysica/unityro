@@ -2,7 +2,9 @@ public partial class CH {
 
     public class MAKE_CHAR2 : OutPacket {
 
-        public const PacketHeader HEADER = PacketHeader.CH_MAKE_CHAR2;
+        // The 36 byte layout below is what the char server reads from 20151001 on, whose id is
+        // 0x0a39; it takes 0x0970 too but checks only 31 bytes before reading 36 (char_clif.cpp)
+        public const PacketHeader HEADER = PacketHeader.CH_MAKE_CHAR3;
         public const int SIZE = 36;
 
         public string Name;

@@ -27,6 +27,7 @@
     CH_SELECT_CHAR = 0x66,
     CH_MAKE_CHAR = 0x67,
     CH_MAKE_CHAR2 = 0x970,
+    CH_MAKE_CHAR3 = 0xa39,
     CH_DELETE_CHAR = 0x68,
     #endregion
 
