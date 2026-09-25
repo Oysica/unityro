@@ -23,6 +23,7 @@ public class ChatBoxController : MonoBehaviour {
         NetworkClient.HookPacket(ZC.NOTIFY_PLAYERCHAT.HEADER, OnMessageRecieved);
         NetworkClient.HookPacket(ZC.NOTIFY_CHAT.HEADER, OnMessageRecieved);
         NetworkClient.HookPacket(ZC.MSG.HEADER, OnMessageRecieved);
+        NetworkClient.HookPacket(ZC.NPC_CHAT.HEADER, OnMessageRecieved);
     }
 
     private void OnMessageRecieved(ushort cmd, int size, InPacket packet) {
@@ -54,6 +55,14 @@ public class ChatBoxController : MonoBehaviour {
             var uiText = textObject.GetComponentInChildren<TextMeshProUGUI>();
             uiText.text = (string) Tables.MsgStringTable[$"{pkt.MessageID}"] ?? $"{pkt.MessageID}";
             uiText.color = Color.white;
+
+            textObject.transform.SetParent(LinearLayout.transform, false);
+        } else if (packet is ZC.NPC_CHAT NPC_CHAT) {
+            var textObject = Instantiate(TextLinePrefab);
+            var uiText = textObject.GetComponentInChildren<TextMeshProUGUI>();
+            uiText.text = NPC_CHAT.Message;
+            // 0x00BBGGRR
+            uiText.color = new Color32((byte) NPC_CHAT.Color, (byte) (NPC_CHAT.Color >> 8), (byte) (NPC_CHAT.Color >> 16), 255);
 
             textObject.transform.SetParent(LinearLayout.transform, false);
         }
