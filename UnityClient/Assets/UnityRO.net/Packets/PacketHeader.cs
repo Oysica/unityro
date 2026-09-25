@@ -170,6 +170,8 @@
     ZC_STATUS = 0xbd,
     ZC_STATUS_CHANGE = 0xbe,
     ZC_EMOTION = 0xc0,
+    CZ_SEND_EMOTE = 0xbe9, // this server reads no CZ_REQ_EMOTION (0xbf); emotions go through the emote packs
+    ZC_RECEIVE_EMOTE = 0xbea,
     ZC_INVENTORY_ITEMLIST_EQUIP = 0xb39,
     ZC_INVENTORY_ITEMLIST_NORMAL = 0xb09,
     ZC_INVENTORY_SWITCH = 0xa9b,

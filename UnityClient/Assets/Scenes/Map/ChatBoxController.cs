@@ -73,7 +73,12 @@ public class ChatBoxController : MonoBehaviour {
         if (message.Length == 0)
             return;
 
-        new CZ.REQUEST_CHAT(message).Send();
+        // "/ho", "/!", ... show an emotion instead of being said
+        if (message.StartsWith("/") && EmotionTable.TryGetCommand(message.Substring(1).Trim(), out var emotion)) {
+            new CZ.SEND_EMOTE(emotion).Send();
+        } else {
+            new CZ.REQUEST_CHAT(message).Send();
+        }
         MessageInput.text = "";
         MessageInput.ActivateInputField();
         MessageInput.Select();

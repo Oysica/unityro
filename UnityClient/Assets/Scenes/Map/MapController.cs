@@ -48,6 +48,8 @@ public class MapController : MonoBehaviour {
         NetworkClient.HookPacket(ZC.SPRITE_CHANGE2.HEADER, OnSpriteChanged);
         NetworkClient.HookPacket(ZC.CHANGE_DIRECTION.HEADER, OnEntityDirectionChanged);
         NetworkClient.HookPacket(ZC.ACTION_FAILURE.HEADER, OnActionFailure);
+        NetworkClient.HookPacket(ZC.EMOTION.HEADER, OnEmotion);
+        NetworkClient.HookPacket(ZC.RECEIVE_EMOTE.HEADER, OnEmotion);
         NetworkClient.HookPacket(ZC.NOTIFY_TIME.HEADER, delegate{ });
 
         GameManager.InitCamera();
@@ -73,6 +75,16 @@ public class MapController : MonoBehaviour {
         charCam.SetTarget(entity.EntityViewer.transform);
 
         entity.SetReady(true);
+    }
+
+    private void OnEmotion(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.EMOTION EMOTION) {
+            // NPCs, monsters and scripts
+            EmotionRenderer.Show(EntityManager.GetEntity(EMOTION.GID), EMOTION.type);
+        } else if (packet is ZC.RECEIVE_EMOTE RECEIVE_EMOTE && RECEIVE_EMOTE.PackId == 0) {
+            // Characters; emote shop packs (other pack ids) have sprites of their own
+            EmotionRenderer.Show(EntityManager.GetEntity(RECEIVE_EMOTE.AID), RECEIVE_EMOTE.EmotionId);
+        }
     }
 
     private void OnActionFailure(ushort cmd, int size, InPacket packet) {
