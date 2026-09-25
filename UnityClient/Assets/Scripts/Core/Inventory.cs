@@ -14,13 +14,23 @@ public class Inventory {
         return item;
     }
 
+    /// <summary>
+    /// Adds what was picked up, bought or taken out of storage to a stack already held.
+    /// </summary>
     public void AddItem(ItemInfo item) {
         Items.TryGetValue(item.index, out var it);
         if (it != null) {
-            it.amount++;
+            it.amount += item.amount;
         } else {
             Items.Add(item.index, item);
         }
+    }
+
+    /// <summary>
+    /// Puts an item from the full inventory list, replacing what was at its index.
+    /// </summary>
+    public void SetItem(ItemInfo item) {
+        Items[item.index] = item;
     }
 
     public void RemoveItem(ItemInfo item) {
@@ -44,10 +54,9 @@ public class Inventory {
         Items.TryGetValue(index, out var it);
 
         if (it != null) {
-
-            if (it.amount > 1) {
-                it.amount -= count;
-            } else {
+            // A stack emptied this way (stored, traded, dropped) must not linger at 0
+            it.amount -= count;
+            if (it.amount <= 0) {
                 RemoveItem(it);
             }
 
