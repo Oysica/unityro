@@ -1,10 +1,12 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryWindowController : DraggableUIWindow {
+public class InventoryWindowController : DraggableUIWindow, IDropHandler {
 
     [SerializeField]
     private GridLayoutGroup GridLayout;
@@ -28,6 +30,16 @@ public class InventoryWindowController : DraggableUIWindow {
     public const int MAX_WINDOW_COLUMNS = 8;
     public const int MIN_WINDOW_ROWS = 6;
 
+    /// <summary>
+    /// What the window lists; the character's inventory when unset. The storage window reuses this one.
+    /// </summary>
+    public Func<IEnumerable<ItemInfo>> ItemSource;
+
+    /// <summary>
+    /// An item dragged in from another window (e.g. between the inventory and the storage).
+    /// </summary>
+    public Action<ItemInfo> OnItemDropped;
+
     private List<InventoryCell> Cells = new List<InventoryCell>();
     private int CURRENT_WINDOW_COLUMNS = MAX_WINDOW_COLUMNS;
 
@@ -38,10 +50,19 @@ public class InventoryWindowController : DraggableUIWindow {
     }
 
     private void InitGrid() {
-        for (int i = 0; i < CURRENT_WINDOW_COLUMNS * CURRENT_WINDOW_COLUMNS; i++) {
-            var cell = Instantiate<InventoryCell>(GridCellPrefab);
-            cell.transform.SetParent(GridLayout.transform, false);
-            Cells.Add(cell);
+        EnsureCells(CURRENT_WINDOW_COLUMNS * CURRENT_WINDOW_COLUMNS);
+    }
+
+    /// <summary>
+    /// Adds rows until the grid holds <paramref name="count"/> items (storage holds hundreds).
+    /// </summary>
+    private void EnsureCells(int count) {
+        while (Cells.Count < count) {
+            for (int i = 0; i < CURRENT_WINDOW_COLUMNS; i++) {
+                var cell = Instantiate<InventoryCell>(GridCellPrefab);
+                cell.transform.SetParent(GridLayout.transform, false);
+                Cells.Add(cell);
+            }
         }
     }
 
@@ -50,16 +71,30 @@ public class InventoryWindowController : DraggableUIWindow {
             InitGrid();
         }
 
-        var inventory = (Session.CurrentSession.Entity as Entity).Inventory;
-        if (inventory == null || inventory.IsEmpty) return;
-
-        var filteredInventory = inventory.ItemList.Where(it => (it.wearState <= 0 || it.itemType == (int)ItemType.AMMO) && it.tab == CurrentTab).ToList();
+        var items = ItemSource != null ? ItemSource() : GetInventoryItems();
+        var filteredInventory = items.Where(it => it.tab == CurrentTab).ToList();
+        EnsureCells(filteredInventory.Count);
         for (int i = 0; i < Cells.Count; i++) {
             if (i < filteredInventory.Count) {
                 Cells[i].SetItem(filteredInventory[i]);
             } else {
                 Cells[i].SetItem(null);
             }
+        }
+    }
+
+    private static IEnumerable<ItemInfo> GetInventoryItems() {
+        var inventory = (Session.CurrentSession.Entity as Entity).Inventory;
+        if (inventory == null) {
+            return Enumerable.Empty<ItemInfo>();
+        }
+        return inventory.ItemList.Where(it => it.wearState <= 0 || it.itemType == (int)ItemType.AMMO);
+    }
+
+    public void OnDrop(PointerEventData eventData) {
+        var item = eventData.pointerDrag?.GetComponent<GenericUIItem>();
+        if (item != null && item.ItemInfo != null) {
+            OnItemDropped?.Invoke(item.ItemInfo);
         }
     }
 

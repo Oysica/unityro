@@ -40,7 +40,9 @@ public class ItemManager : MonoBehaviour {
     private void OnInventoryRemoveItem(ushort cmd, int size, InPacket packet) {
         if (packet is ZC.DELETE_ITEM_FROM_BODY DELETE_ITEM_FROM_BODY) {
             var item = (Session.CurrentSession.Entity as Entity).Inventory.RemoveItem((short) DELETE_ITEM_FROM_BODY.Index, (short) DELETE_ITEM_FROM_BODY.Count);
-            if (item.amount <= 1) {
+            // Only the equipped arrows running out empty the ammo slot; any other item is
+            // also deleted this way (stored, traded, used by a script)
+            if (item != null && item.itemType == (int) ItemType.AMMO && item.wearState > 0 && item.amount <= 0) {
                 MapUiController.Instance.EquipmentWindow.UnequipAmmo();
             }
             MapUiController.Instance.UpdateEquipment();
@@ -78,37 +80,55 @@ public class ItemManager : MonoBehaviour {
     }
 
     private void OnInventoryUpdate(ushort cmd, int size, InPacket packet) {
-        var list = new List<ItemInfo>();
-        // The same packets carry cart and storage contents; only the character's inventory
-        // belongs here (opening Kafra storage used to merge the storage into it)
-        if (packet is ZC.INVENTORY_ITEMLIST_EQUIP equipList && equipList.InvType == 0) {
+        List<ItemInfo> list;
+        byte invType;
+        if (packet is ZC.INVENTORY_ITEMLIST_EQUIP equipList) {
             list = equipList.Inventory;
-        } else if (packet is ZC.INVENTORY_ITEMLIST_NORMAL normalList && normalList.InvType == 0) {
+            invType = equipList.InvType;
+        } else if (packet is ZC.INVENTORY_ITEMLIST_NORMAL normalList) {
             list = normalList.Inventory;
+            invType = normalList.InvType;
+        } else {
+            return;
         }
 
-        if (list.IsEmpty())
+        // The same packets carry cart and storage contents; only the character's inventory
+        // belongs here (opening Kafra storage used to merge the storage into it)
+        if (invType == StorageController.INVTYPE_STORAGE) {
+            MapUiController.Instance.Storage.AddItems(list);
+            return;
+        }
+        if (invType != 0 || list.IsEmpty())
             return;
 
-        // TODO apply a diff here
         // TODO find out how favorite tab works
         foreach (var itemInfo in list) {
-            var item = DBManager.GetItem(itemInfo.ItemID);
-            if (item == null)
-                continue;
-            var res = TextureAssetLoader.Load(DBManager.GetItemResPath(item, itemInfo.IsIdentified));
-            var collection = TextureAssetLoader.Load(DBManager.GetItemCollectionPath(item, itemInfo.IsIdentified));
-
-            itemInfo.item = item;
-            itemInfo.res = res;
-            itemInfo.collection = collection;
-            itemInfo.tab = FindItemTab(itemInfo);
-            (Session.CurrentSession.Entity as Entity).Inventory.AddItem(itemInfo);
+            if (PrepareItem(itemInfo)) {
+                // The full list: what it says replaces what was held at that index
+                (Session.CurrentSession.Entity as Entity).Inventory.SetItem(itemInfo);
+            }
         }
         MapController.Instance.UIController.UpdateEquipment();
     }
 
-    private InventoryType FindItemTab(ItemInfo item) {
+    /// <summary>
+    /// Fills in what the packets leave out: the item's data, its icons and its inventory tab.
+    /// </summary>
+    /// <returns>false when the item is unknown</returns>
+    public static bool PrepareItem(ItemInfo itemInfo) {
+        var item = DBManager.GetItem(itemInfo.ItemID);
+        if (item == null) {
+            return false;
+        }
+
+        itemInfo.item = item;
+        itemInfo.res = TextureAssetLoader.Load(DBManager.GetItemResPath(item, itemInfo.IsIdentified));
+        itemInfo.collection = TextureAssetLoader.Load(DBManager.GetItemCollectionPath(item, itemInfo.IsIdentified));
+        itemInfo.tab = FindItemTab(itemInfo);
+        return true;
+    }
+
+    private static InventoryType FindItemTab(ItemInfo item) {
         switch ((ItemType) item.itemType) {
             case ItemType.HEALING:
             case ItemType.USABLE:
@@ -147,14 +167,8 @@ public class ItemManager : MonoBehaviour {
             }
 
             var itemInfo = ITEM_PICKUP_ACK7.itemInfo;
-
-            Item item = DBManager.GetItem(itemInfo.ItemID);
-            itemInfo.item = item;
-
-            Texture2D itemRes = TextureAssetLoader.Load(DBManager.GetItemResPath(item, itemInfo.IsIdentified));
-            itemInfo.res = itemRes;
-
-            itemInfo.tab = FindItemTab(itemInfo);
+            PrepareItem(itemInfo);
+            var item = itemInfo.item;
 
             (Session.CurrentSession.Entity as Entity).Inventory.AddItem(itemInfo);
             MapController.Instance.UIController.UpdateEquipment();

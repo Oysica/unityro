@@ -21,6 +21,8 @@ public class MapUiController : MonoBehaviour {
     [SerializeField] public MenuController Menu;
     [SerializeField] public PacketLogWindow PacketLogWindow;
 
+    public StorageController Storage { get; private set; }
+
     private NetworkClient NetworkClient;
     private GameManager GameManager;
     private EntityManager EntityManager;
@@ -51,6 +53,7 @@ public class MapUiController : MonoBehaviour {
 
         PacketLogWindow.Hide();
         StatusIconsController.Create(transform);
+        Storage = StorageController.Create(InventoryWindow);
     }
 
     public void DisplayItemDetails(ItemInfo itemInfo, Vector2 position) {

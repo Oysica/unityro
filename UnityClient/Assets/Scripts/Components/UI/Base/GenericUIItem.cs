@@ -22,6 +22,12 @@ public class GenericUIItem : MonoBehaviour,
 
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Right) {
+            // Alt + right click moves the item between the inventory and an open storage
+            var storage = MapUiController.Instance.Storage;
+            if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && storage != null && storage.IsOpen) {
+                storage.MoveItem(itemInfo);
+                return;
+            }
             DisplayItemDetails(eventData.position);
         }
 
@@ -45,6 +51,11 @@ public class GenericUIItem : MonoBehaviour,
     /// What a double click does to an item: use it, or put it on or take it off.
     /// </summary>
     public static void UseItem(ItemInfo itemInfo) {
+        // A storage item is not in the inventory: its index means something else to the server
+        if (MapUiController.Instance.Storage?.Contains(itemInfo) == true) {
+            return;
+        }
+
         switch ((ItemType) itemInfo.itemType) {
             // Usable item
             case ItemType.HEALING:
