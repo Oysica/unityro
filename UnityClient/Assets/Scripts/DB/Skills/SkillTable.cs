@@ -73,10 +73,12 @@ public class SkillTable {
         foreach(var key in skillTree.Keys) {
             var job = short.Parse(key.ToString());
             var dict = skillTree[key] as Table;
+            // The tree view can list skills the client's SKILL_INFO_LIST has no entry for; leave those slots empty.
             var tree = dict
                 .Pairs
                 .ToList()
                 .Select(TablePairToKeyValueTransform)
+                .Where(it => Skills.ContainsKey((short)it.Value))
                 .ToDictionary(it => it.Key, it => Skills[(short)it.Value]);
             SkillTree.Add(job, tree);
         }

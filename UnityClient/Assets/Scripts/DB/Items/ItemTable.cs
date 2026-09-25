@@ -339,7 +339,7 @@ public class ItemTable {
 
         var itemInfoText = Addressables.LoadAssetAsync<TextAsset>("lua/itemInfo_true.lub.txt").WaitForCompletion();
         script.DoString(itemInfoText.text);
-        Table table = (Table)script.Globals["tbl"];
+        Table table = script.Globals["tbl"] as Table ?? LoadSplitItemInfo(script, itemInfoText.text);
 
         foreach (var key in table.Keys) {
             try {
@@ -373,6 +373,34 @@ public class ItemTable {
                 Debug.LogError($"Could not load item {key} - {e}");
             }
         }
+    }
+
+    /// <summary>
+    /// Some clients ship itemInfo_true.lub as a loader whose main() dofile()s the
+    /// system/iteminfo_*.lub files it lists and merges them through CheckItem.
+    /// Replays that merge (first file wins, later files fill missing/empty fields).
+    /// </summary>
+    private static Table LoadSplitItemInfo(Script script, string loaderSource) {
+        script.DoString(@"
+            _TempItems = {}
+            function CheckItem(ItemID, DESC)
+                if not DESC.costume then DESC.costume = false end
+                local existing = _TempItems[ItemID]
+                if not existing then
+                    _TempItems[ItemID] = DESC
+                else
+                    for k, v in pairs(DESC) do
+                        if not existing[k] or existing[k] == '' then existing[k] = v end
+                    end
+                end
+            end");
+
+        foreach (System.Text.RegularExpressions.Match file in System.Text.RegularExpressions.Regex.Matches(loaderSource, "\"(system/[^\"]+\\.lub)\"")) {
+            var key = $"lua/{System.IO.Path.GetFileName(file.Groups[1].Value)}.txt";
+            script.DoString(LuaInterface.EscapeStrayBackslashes(Addressables.LoadAssetAsync<TextAsset>(key).WaitForCompletion().text));
+        }
+
+        return (Table) script.Globals["_TempItems"];
     }
 
     public static string GetAccessoryResName(int accessoryId) {

@@ -776,6 +776,10 @@ public class DataUtility {
             "PrivateAirplane_true.lub",
             "CheckAttendance.lub",
             "itemInfo_true.lub",
+            // Split item data that some clients' itemInfo_true.lub main() dofile()s (see ItemTable.LoadItemDb).
+            "iteminfo_v1.lub",
+            "iteminfo_v2.lub",
+            "iteminfo_v3.lub",
             "tipbox.lub",
             "data/luafiles514/lua files/datainfo/changedirectorylist.lub",
             "data/luafiles514/lua files/msgstring_kr.lub",

@@ -59,9 +59,19 @@ public class LuaInterface {
     ///   - decompile with unluac/luadec as an offline build step
     ///   - swap MoonSharp for a Lua 5.1 VM that loads bytecode (NLua/KeraLua)
     /// </summary>
+    /// <summary>
+    /// Big5 text whose trail byte is 0x5C leaves a "\" before the next character.
+    /// The client's Lua 5.1 tolerated that as an unknown escape, MoonSharp (5.2 rules)
+    /// rejects it, so double such backslashes to keep the original bytes.
+    /// </summary>
+    internal static string EscapeStrayBackslashes(string source) {
+        return System.Text.RegularExpressions.Regex.Replace(source, @"\\(\\|[^abfnrtvxz0-9""'\\\r\n])",
+            m => m.Groups[1].Value == "\\" ? m.Value : "\\" + m.Value);
+    }
+
     private void Run(string key) {
         try {
-            Environment.DoString(LoadTable(key));
+            Environment.DoString(EscapeStrayBackslashes(LoadTable(key)));
         } catch (System.Exception e) {
             Debug.LogWarning($"[bring-up] skipped lua table '{key}': {e.Message}");
         }
