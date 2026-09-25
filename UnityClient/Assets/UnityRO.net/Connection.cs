@@ -38,9 +38,8 @@ public class Connection {
     }
 
     public void Start() {
-        TcpClient
-            .Client
-            .BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, out var err, OnReceivedCallback, null);
+        var socket = TcpClient.Client;
+        socket.BeginReceive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, out var err, OnReceivedCallback, socket);
     }
 
     public void SkipBytes(int bytesToSkip) {
@@ -48,19 +47,34 @@ public class Connection {
     }
 
     private void OnReceivedCallback(IAsyncResult ar) {
+        // Each receive carries its own socket, so a late callback from a server we
+        // already left can't re-arm a second receive loop on the current one
+        var socket = (Socket) ar.AsyncState;
         int size = 0;
         SocketError err;
         try {
-            size = TcpClient.Client.EndReceive(ar, out err);
+            size = socket.EndReceive(ar, out err);
         } catch {
             return;
         }
 
-        if(err != SocketError.Success) {
+        if (socket != TcpClient.Client) {
+            return;
+        }
+
+        if (err != SocketError.Success || size == 0) {
+            // size 0 means the server closed the connection; receiving again would spin
             Disconnect();
             OnDisconnect?.Invoke();
-        } else {
+            return;
+        }
+
+        try {
             PacketSerializer.EnqueueBytes(receiveBuffer, size);
+        } catch (Exception e) {
+            // Uncaught, this ends the receive loop silently on the thread pool
+            UnityEngine.Debug.LogException(e);
+            PacketSerializer.Reset();
         }
 
         Start();

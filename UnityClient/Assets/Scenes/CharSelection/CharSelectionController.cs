@@ -87,8 +87,9 @@ public class CharSelectionController : MonoBehaviour {
                 mapIp = currentMapInfo.IP.ToString();
             }
 
+            // Connect() already starts the receive loop; a second Start() here ran two
+            // concurrent receives into the same buffer and corrupted the packet stream.
             await NetworkClient.ChangeServer(mapIp, currentMapInfo.Port);
-            NetworkClient.CurrentConnection.Start();
 
             var entity = EntityManager.SpawnPlayer(NetworkClient.State.SelectedCharacter);
             Session.StartSession(new Session(entity, NetworkClient.State.LoginInfo.AccountID));

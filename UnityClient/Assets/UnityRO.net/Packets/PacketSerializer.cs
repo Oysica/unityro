@@ -24,6 +24,9 @@ public class PacketSerializer {
 
     public static Dictionary<ushort, PacketInfo> RegisteredPackets;
 
+    // Unhandled packets already reported, so each is logged once
+    private static readonly HashSet<ushort> SkippedPackets = new HashSet<ushort>();
+
     private IPacketHandler PacketHandler;
 
     static PacketSerializer() {
@@ -58,24 +61,53 @@ public class PacketSerializer {
 
     private void ReadPacket() {
         if (BytesToSkip > 0) {
-            int skipped = Math.Min(BytesToSkip, (int) Memory.Length);
+            int skipped = (int) Math.Min(BytesToSkip, Memory.Length - Memory.Position);
             Memory.Position += skipped;
             BytesToSkip -= skipped;
         }
 
-        while (Memory.Length - Memory.Position > 2) {
+        while (Memory.Length - Memory.Position >= 2) {
             // Commands are always the first two bytes
             // Followed by either the packet data in case the packet
             // has its size fixed, or the packet length
+            long start = Memory.Position;
             var tmp = new byte[2];
             Memory.Read(tmp, 0, 2);
             ushort cmd = BitConverter.ToUInt16(tmp, 0);
 
             if (!RegisteredPackets.ContainsKey(cmd)) {
-                // We gotta break because we don't know the size of the packet
-                Debug.LogWarning($"Received Unknown Command: {string.Format("0x{0:x4}", cmd)}\nProbably: {(PacketHeader) cmd}");
+                if (KnownPacketSizes.Sizes.TryGetValue(cmd, out var skipSize)) {
+                    // A real server packet this client doesn't handle yet: step over it and keep parsing the batch
+                    bool variable = skipSize < 0;
+                    if (variable) {
+                        if (Memory.Length - Memory.Position < 2) {
+                            Memory.Position = start;
+                            break;
+                        }
+                        Memory.Read(tmp, 0, 2);
+                        skipSize = BitConverter.ToUInt16(tmp, 0);
+                    }
+
+                    if (skipSize >= (variable ? 4 : 2)) {
+                        if (Memory.Length - start < skipSize) {
+                            Memory.Position = start;
+                            break;
+                        }
+                        Memory.Position = start + skipSize;
+                        if (SkippedPackets.Add(cmd)) {
+                            Debug.Log($"Skipped unhandled packet {string.Format("0x{0:x4}", cmd)} ({(PacketHeader) cmd}, {skipSize}b)");
+                        }
+                        continue;
+                    }
+                }
+
+                // We don't know the size of the packet, so nothing after it in this batch can be parsed either
+                // The bytes just before the bad header show which registered packet had the wrong size
+                long from = Math.Max(0, start - 16);
+                var around = BitConverter.ToString(Memory.GetBuffer(), (int) from, (int) Math.Min(Memory.Length - from, start - from + 32));
+                Debug.LogWarning($"Received Unknown Command: {string.Format("0x{0:x4}", cmd)}\nProbably: {(PacketHeader) cmd}\nBytes (from -{start - from}): {around}");
                 DumpReceivedPacket(cmd, -1, Memory.Length - Memory.Position);
-                Memory.Position -= 2;
+                Memory.Position = Memory.Length;
                 break;
             } else {
                 int size = RegisteredPackets[cmd].Size;
@@ -84,14 +116,25 @@ public class PacketSerializer {
                 if (size <= 0) {
                     isFixed = false;
 
-                    if (Memory.Length - Memory.Position >= 2) {
-                        Memory.Read(tmp, 0, 2);
-                        size = BitConverter.ToUInt16(tmp, 0);
-                    } else {
-                        Debug.LogWarning($"Received {(PacketHeader) cmd} ({Memory.Length - Memory.Position}b left) but remaining bytes does not match expected length");
-                        Memory.Position -= 4;
+                    if (Memory.Length - Memory.Position < 2) {
+                        // Length field not received yet
+                        Memory.Position = start;
                         break;
                     }
+                    Memory.Read(tmp, 0, 2);
+                    size = BitConverter.ToUInt16(tmp, 0);
+
+                    if (size < 4) {
+                        Debug.LogWarning($"Received {(PacketHeader) cmd} with invalid length {size}");
+                        Memory.Position = Memory.Length;
+                        break;
+                    }
+                }
+
+                // A packet split across TCP reads: wait for the rest instead of parsing a truncated one
+                if (Memory.Length - start < size) {
+                    Memory.Position = start;
+                    break;
                 }
 
                 // Read skipping command and length
@@ -112,13 +155,13 @@ public class PacketSerializer {
             }
         }
 
-        if (Memory.Length - Memory.Position > 0) {
-            MemoryStream ms = new MemoryStream();
-            ms.Write(Memory.GetBuffer(), (int) Memory.Position, (int) Memory.Length - (int) Memory.Position);
-            Memory.Dispose();
+        // Keep only the unread tail, positioned at its start so the next EnqueueBytes resumes from it
+        MemoryStream ms = new MemoryStream();
+        ms.Write(Memory.GetBuffer(), (int) Memory.Position, (int) (Memory.Length - Memory.Position));
+        ms.Position = 0;
+        Memory.Dispose();
 
-            Memory = ms;
-        }
+        Memory = ms;
     }
 
     private static void DumpReceivedPacket(ushort cmd, int size, long remainingSize, InPacket packet = null) {
