@@ -44,6 +44,8 @@ public class MobileControlsController : MonoBehaviour {
     private const float UTILITY_SIZE = 62f;
     private const float UTILITY_ROW_Y = 392f;
     private static readonly float[] UtilityColumnsX = { -75f, -145f, -215f, -285f, -355f };
+    // Share of a utility button its picture takes up
+    private const float ICON_FILL = 0.56f;
     private const float CHAT_MAX_WIDTH = 440f;
     private const float CHAT_MIN_WIDTH = 300f;
     private const float CHAT_SIDE_MARGIN = 350f;
@@ -216,22 +218,34 @@ public class MobileControlsController : MonoBehaviour {
             SkillButtons.Add(button.gameObject);
         }
 
-        CreateButton("Target", new Vector2(UtilityColumnsX[0], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "目標", OnNextTarget, "small_button");
-        var autoLock = CreateButton("Auto Lock", new Vector2(UtilityColumnsX[1], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "自動\n鎖定", OnAutoLock, "small_button");
+        CreateButton("Target", new Vector2(UtilityColumnsX[0], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "目標", OnNextTarget, "small_button", "icon_target");
+        var autoLock = CreateButton("Auto Lock", new Vector2(UtilityColumnsX[1], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "自動\n鎖定", OnAutoLock, "small_button", "icon_autolock");
         AutoLockButton = autoLock.targetGraphic as Image;
         RefreshAutoLockButton();
-        CreateButton("Pick Up", new Vector2(UtilityColumnsX[2], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "撿取", OnPickUp, "small_button");
-        CreateButton("Sit", new Vector2(UtilityColumnsX[3], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "坐下", OnSitStand, "small_button");
-        var autoAttack = CreateButton("Auto Attack", new Vector2(UtilityColumnsX[4], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "內掛", OnAutoAttack, "small_button");
+        CreateButton("Pick Up", new Vector2(UtilityColumnsX[2], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "撿取", OnPickUp, "small_button", "icon_pickup");
+        CreateButton("Sit", new Vector2(UtilityColumnsX[3], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "坐下", OnSitStand, "small_button", "icon_sit");
+        var autoAttack = CreateButton("Auto Attack", new Vector2(UtilityColumnsX[4], UTILITY_ROW_Y), UTILITY_SIZE, ButtonColor, "內掛", OnAutoAttack, "small_button", "icon_autoattack");
         AutoAttackButton = autoAttack.targetGraphic as Image;
     }
 
-    private Button CreateButton(string name, Vector2 position, float size, Color color, string label, UnityAction onClick, string art = null) {
+    private Button CreateButton(string name, Vector2 position, float size, Color color, string label, UnityAction onClick, string art = null, string icon = null) {
         var image = CreateCircle(transform, name, BottomRight, position, size, color, art);
         var button = image.gameObject.AddComponent<Button>();
         button.targetGraphic = image;
         if (onClick != null) {
             button.onClick.AddListener(onClick);
+        }
+
+        // A picture in place of the words; the words only if the picture is missing
+        var iconSprite = icon != null ? LoadArt(icon) : null;
+        if (iconSprite != null) {
+            var picture = new GameObject("Icon", typeof(RectTransform)).AddComponent<Image>();
+            picture.transform.SetParent(image.transform, false);
+            picture.sprite = iconSprite;
+            picture.preserveAspect = true;
+            picture.raycastTarget = false;
+            picture.rectTransform.sizeDelta = new Vector2(size * ICON_FILL, size * ICON_FILL);
+            label = null;
         }
 
         if (label != null) {
