@@ -5,17 +5,32 @@ using System.Linq;
 using ROIO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// The party (組隊) window, laid out as the official client's (renewalparty textures): each
-/// member's job, level, name and map, whether they're online, and the HP of those we can see.
-/// Its toolbar makes a party, invites, sets it up and leaves; tapping a member whispers, hands
-/// the lead over or expels. It also answers invites, shows party chat and puts party members'
-/// HP bars over their heads.
+/// The party (組隊) and friends (朋友) window, laid out as the official client's (renewalparty
+/// textures), the two lists switched at its bottom. The party: each member's job, level, name
+/// and map, whether they're online, and the HP of those we can see; its toolbar makes a party,
+/// invites, sets it up and leaves, and tapping a member whispers, hands the lead over or expels.
+/// The friends: who's online; adding, whispering, inviting to the party and removing. It also
+/// answers party and friend requests, shows party chat and puts party members' HP bars over
+/// their heads.
 /// </summary>
 public class PartyWindow : MonoBehaviour {
+
+    public enum Tab {
+        Party,
+        Friends
+    }
+
+    public class Friend {
+        public uint AID;
+        public uint CID;
+        public string Name;
+        public bool IsOnline;
+    }
 
     public class Member {
         public uint AID;
@@ -35,22 +50,30 @@ public class PartyWindow : MonoBehaviour {
     }
 
     public const int MAX_MEMBERS = 12;
+    public const int MAX_FRIENDS = 40;
     private const float WIDTH = 290f;
-    private const float HEIGHT = 300f;
+    private const float HEIGHT = 320f;
     private const float TITLE_HEIGHT = 17f;
     private const float TOOLBAR_HEIGHT = 28f;
+    // 朋友 / 隊伍 under the toolbar
+    private const float TAB_HEIGHT = 20f;
     private const float ROW_HEIGHT = 36f;
+    private const float FRIEND_ROW_HEIGHT = 26f;
+    // Friends logging in are announced, but not the ones online when we do
+    private const float FRIEND_NOTICE_DELAY = 3f;
     private const float HP_BAR_WIDTH = 60f;
+    // The invite, settings, ... windows beside it
+    private const float SIDE_WIDTH = 160f;
     private const float REFRESH_SECONDS = 0.3f;
     private static readonly Color PartyChatColor = new Color32(255, 214, 140, 255);
-    private static readonly Color ConfirmColor = new Color(0.6f, 0.18f, 0.18f, 1f);
+    private static readonly Color SettingsColor = new Color32(255, 255, 0, 255);
+    private static readonly Color FriendChatColor = new Color32(160, 255, 160, 255);
     // The official window's colours
     private static readonly Color OnlineColor = new Color32(8, 49, 123, 255);
     private static readonly Color SelfColor = new Color32(0, 123, 123, 255);
     private static readonly Color OfflineColor = new Color32(132, 140, 165, 255);
     private const string LevelColor = "#31394A";
     private static readonly Color ToolbarColor = new Color32(247, 247, 247, 255);
-    private static readonly Color LineColor = new Color32(198, 198, 206, 255);
     private static readonly Color PointedRowColor = new Color32(222, 231, 247, 255);
 
     public static PartyWindow Instance { get; private set; }
@@ -58,6 +81,8 @@ public class PartyWindow : MonoBehaviour {
     public string PartyName { get; private set; }
     public bool InParty => PartyName != null;
     public readonly List<Member> Members = new List<Member>();
+    public readonly List<Friend> Friends = new List<Friend>();
+    public Tab CurrentTab { get; private set; } = Tab.Party;
 
     // 0 each keeps their own, 1 shared, 2 can't be shared (levels too far apart)
     private int ExpOption;
@@ -71,13 +96,20 @@ public class PartyWindow : MonoBehaviour {
     private RectTransform Content;
     private ScrollRect ContentScroll;
     private RectTransform Toolbar;
-    private GameObject Empty;
+    private GameObject EmptyParty;
+    private GameObject EmptyFriends;
     private TextMeshProUGUI Title;
+    private Toggle FriendsTab;
+    private Toggle PartyTab;
+    private TextMeshProUGUI MemberCount;
     private GameObject InvitePopup;
+    private GameObject FriendRequestPopup;
     private GameObject Dialog;
+    private float FriendNoticesFrom;
 
     private string NewPartyName = "";
     private string InviteName = "";
+    private string NewFriendName = "";
     private bool NewSharePickup;
     private bool NewShareLoot;
     private bool Dirty;
@@ -87,7 +119,7 @@ public class PartyWindow : MonoBehaviour {
 
     public static PartyWindow Create(MapUiController ui) {
         var root = AaWidgets.NewImage("Party Window", ui.transform, Color.white);
-        root.gameObject.AddComponent<Outline>().effectColor = LineColor;
+        root.gameObject.AddComponent<Outline>().effectColor = RoWidgets.LineColor;
         var window = root.gameObject.AddComponent<PartyWindow>();
         window.UI = ui;
         window.Root = root.rectTransform;
@@ -120,6 +152,11 @@ public class PartyWindow : MonoBehaviour {
         network.HookPacket(ZC.CHANGE_GROUP_MASTER.HEADER, OnLeaderChanged);
         network.HookPacket(ZC.GROUP_ISALIVE.HEADER, OnMemberAlive);
         network.HookPacket(ZC.NOTIFY_MEMBERINFO_TO_GROUPM.HEADER, OnMemberInfo);
+        network.HookPacket(ZC.FRIENDS_LIST.HEADER, OnFriendsList);
+        network.HookPacket(ZC.FRIENDS_STATE.HEADER, OnFriendState);
+        network.HookPacket(ZC.REQ_ADD_FRIENDS.HEADER, OnFriendRequest);
+        network.HookPacket(ZC.ADD_FRIENDS_LIST.HEADER, OnFriendAdded);
+        network.HookPacket(ZC.DELETE_FRIENDS.HEADER, OnFriendDeleted);
     }
 
     private void OnDestroy() {
@@ -155,6 +192,7 @@ public class PartyWindow : MonoBehaviour {
     }
 
     public void Hide() {
+        CloseDialog();
         gameObject.SetActive(false);
     }
 
@@ -163,6 +201,31 @@ public class PartyWindow : MonoBehaviour {
             Hide();
         } else {
             Show();
+        }
+    }
+
+    /// <summary>
+    /// Alt+Z (party) and Alt+H (friends): opens on that list, closes when it's already showing it
+    /// </summary>
+    public void ToggleTab(Tab tab) {
+        if (gameObject.activeSelf && CurrentTab == tab) {
+            Hide();
+            return;
+        }
+        SwitchTab(tab);
+        if (!gameObject.activeSelf) {
+            Show();
+        }
+    }
+
+    private void SwitchTab(Tab tab) {
+        if (CurrentTab == tab) {
+            return;
+        }
+        CurrentTab = tab;
+        CloseDialog();
+        if (gameObject.activeInHierarchy) {
+            Refresh(keepScroll: false);
         }
     }
 
@@ -181,13 +244,19 @@ public class PartyWindow : MonoBehaviour {
 
     private Member FindMember(uint accountId) => Members.FirstOrDefault(member => member.AID == accountId);
 
+    private Friend FindFriend(uint accountId) => Friends.FirstOrDefault(friend => friend.AID == accountId);
+
     private void Changed() {
         Dirty = true;
     }
 
     private void Say(string text) {
+        Say(text, PartyChatColor);
+    }
+
+    private void Say(string text, Color color) {
         if (UI != null && UI.ChatBox != null) {
-            UI.ChatBox.DisplayText(text, PartyChatColor);
+            UI.ChatBox.DisplayText(text, color);
         }
     }
 
@@ -346,6 +415,12 @@ public class PartyWindow : MonoBehaviour {
             ExpOption = info.ExpOption;
             SharePickup = info.SharePickup;
             ShareLoot = info.ShareLoot;
+            // In the chat as the official client does, each time the server sends them (logging in,
+            // making or joining a party, a change)
+            var exp = ExpOption == 0 ? "各自取得" : ExpOption == 1 ? "均等分配" : "無法均等分配 (等級差距過大)";
+            Say($"隊伍設定 - 經驗值分配方式 : {exp}", SettingsColor);
+            Say($"隊伍設定 - 道具蒐集方式 : {(SharePickup ? "隊伍隊員全體共有" : "各自取得")}", SettingsColor);
+            Say($"隊伍設定 - 物品分配方式 : {(ShareLoot ? "均等分配" : "各自取得")}", SettingsColor);
             Changed();
         }
     }
@@ -434,6 +509,76 @@ public class PartyWindow : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Sent on logging in: all of them offline, the ones online told right after
+    /// </summary>
+    private void OnFriendsList(ushort cmd, int size, InPacket packet) {
+        if (!(packet is ZC.FRIENDS_LIST list)) {
+            return;
+        }
+        Friends.Clear();
+        foreach (var entry in list.FriendList) {
+            Friends.Add(new Friend { AID = entry.AID, CID = entry.CID, Name = entry.Name });
+        }
+        FriendNoticesFrom = Time.unscaledTime + FRIEND_NOTICE_DELAY;
+        Changed();
+    }
+
+    private void OnFriendState(ushort cmd, int size, InPacket packet) {
+        if (!(packet is ZC.FRIENDS_STATE state) || !(FindFriend(state.AID) is Friend friend)) {
+            return;
+        }
+        var changed = friend.IsOnline != state.IsOnline;
+        friend.IsOnline = state.IsOnline;
+        if (!string.IsNullOrEmpty(state.Name)) {
+            friend.Name = state.Name;
+        }
+        if (changed && Time.unscaledTime >= FriendNoticesFrom) {
+            Say(friend.IsOnline ? $"好友 {friend.Name} 上線了。" : $"好友 {friend.Name} 離線了。", FriendChatColor);
+        }
+        Changed();
+    }
+
+    private void OnFriendRequest(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.REQ_ADD_FRIENDS request) {
+            ShowFriendRequest(request.AID, request.CID, request.Name);
+        }
+    }
+
+    private void OnFriendAdded(ushort cmd, int size, InPacket packet) {
+        if (!(packet is ZC.ADD_FRIENDS_LIST added)) {
+            return;
+        }
+        var name = added.Name;
+        switch (added.Result) {
+            case 0:
+                if (FindFriend(added.AID) == null) {
+                    // Friends only when both were online for it
+                    Friends.Add(new Friend { AID = added.AID, CID = added.CID, Name = name, IsOnline = true });
+                }
+                Say($"你和 {name} 成為了好友。", FriendChatColor);
+                break;
+            case 1:
+                Say($"{name} 拒絕了你的好友邀請。", FriendChatColor);
+                break;
+            case 2:
+                Say("你的好友名單已滿。", FriendChatColor);
+                break;
+            default:
+                Say($"{name} 的好友名單已滿。", FriendChatColor);
+                break;
+        }
+        Changed();
+    }
+
+    private void OnFriendDeleted(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.DELETE_FRIENDS deleted && FindFriend(deleted.AID) is Friend friend) {
+            Friends.Remove(friend);
+            Say($"{friend.Name} 已從好友名單移除。", FriendChatColor);
+            Changed();
+        }
+    }
+
     #endregion
 
     #region Requests
@@ -477,13 +622,83 @@ public class PartyWindow : MonoBehaviour {
         if (FindMember(player.AID) == null) {
             options.Add(new KeyValuePair<string, int>(InParty ? "邀請加入隊伍" : "邀請加入隊伍 (要先建立隊伍)", 1));
         }
+        if (FindFriend(player.AID) == null) {
+            options.Add(new KeyValuePair<string, int>("加為好友", 3));
+        }
         AaWidgets.Pick(UI.transform as RectTransform, name, options, 0, false, choice => {
             if (choice == 1) {
                 Invite(name);
             } else if (choice == 2 && UI.ChatBox != null) {
                 UI.ChatBox.StartWhisper(name);
+            } else if (choice == 3) {
+                AddFriend(name);
             }
         });
+    }
+
+    public bool AddFriend(string name) {
+        if (string.IsNullOrWhiteSpace(name)) {
+            Say("請先輸入角色名稱。", FriendChatColor);
+            return false;
+        }
+        if (Friends.Count >= MAX_FRIENDS) {
+            Say("你的好友名單已滿。", FriendChatColor);
+            return false;
+        }
+        // They're asked; ZC_ADD_FRIENDS_LIST says what came of it
+        new CZ.ADD_FRIENDS(name).Send();
+        Say($"已向 {name} 送出好友邀請。", FriendChatColor);
+        return true;
+    }
+
+    /// <summary>
+    /// A friend of the list tapped: whisper, invite to the party, remove
+    /// </summary>
+    private void ShowFriendMenu(Friend friend) {
+        var options = new List<KeyValuePair<string, int>> {
+            new KeyValuePair<string, int>("密語", 1)
+        };
+        if (friend.IsOnline && InParty && FindMember(friend.AID) == null) {
+            options.Add(new KeyValuePair<string, int>("邀請加入隊伍", 2));
+        }
+        options.Add(new KeyValuePair<string, int>("刪除好友", 3));
+        AaWidgets.Pick(UI.transform as RectTransform, friend.Name, options, 0, false, choice => {
+            switch (choice) {
+                case 1:
+                    if (UI.ChatBox != null) {
+                        UI.ChatBox.StartWhisper(friend.Name);
+                    }
+                    break;
+                case 2:
+                    Invite(friend.Name);
+                    break;
+                case 3:
+                    Confirm("刪除好友", $"要把 {friend.Name} 從好友名單刪除嗎?", () => new CZ.DELETE_FRIENDS(friend.AID, friend.CID).Send());
+                    break;
+            }
+        });
+    }
+
+    private void ShowFriendRequest(uint accountId, uint charId, string name) {
+        if (FriendRequestPopup != null) {
+            Destroy(FriendRequestPopup);
+        }
+        // The X refuses, as 拒絕
+        var window = RoWidgets.Window(UI.transform, "Friend Request", "好友邀請", new Vector2(220f, 80f), () => AnswerFriendRequest(accountId, charId, false));
+        FriendRequestPopup = window.gameObject;
+        FitHeight(window, Message(window, $"{name} 想要加你為好友。", -24f));
+        var buttons = RoWidgets.ButtonRow(window);
+        RoWidgets.Button(buttons, "接受", () => AnswerFriendRequest(accountId, charId, true));
+        RoWidgets.Button(buttons, "拒絕", () => AnswerFriendRequest(accountId, charId, false));
+        window.SetAsLastSibling();
+    }
+
+    private void AnswerFriendRequest(uint accountId, uint charId, bool accept) {
+        new CZ.ACK_REQ_ADD_FRIENDS(accountId, charId, accept).Send();
+        if (FriendRequestPopup != null) {
+            Destroy(FriendRequestPopup);
+            FriendRequestPopup = null;
+        }
     }
 
     /// <summary>
@@ -511,10 +726,10 @@ public class PartyWindow : MonoBehaviour {
                     }
                     break;
                 case 2:
-                    Confirm($"要把隊長交給 {member.Name} 嗎?", "委任", () => new CZ.CHANGE_GROUP_MASTER(member.AID).Send());
+                    Confirm("委任隊長", $"要把隊長交給 {member.Name} 嗎?", () => new CZ.CHANGE_GROUP_MASTER(member.AID).Send());
                     break;
                 case 3:
-                    Confirm($"要把 {member.Name} 踢出隊伍嗎?", "踢出", () => new CZ.REQ_EXPEL_GROUP_MEMBER(member.AID, member.Name).Send());
+                    Confirm("踢出隊伍", $"要把 {member.Name} 踢出隊伍嗎?", () => new CZ.REQ_EXPEL_GROUP_MEMBER(member.AID, member.Name).Send());
                     break;
                 case 4:
                     ConfirmLeave();
@@ -527,12 +742,14 @@ public class PartyWindow : MonoBehaviour {
         if (InvitePopup != null) {
             Destroy(InvitePopup);
         }
-        // Answered one way or the other: the server keeps the invite until then
-        var panel = OpenDialog("隊伍邀請", false, out InvitePopup);
-        AaWidgets.Label(panel, $"「{partyName}」邀請你加入隊伍。");
-        var buttons = AaWidgets.Row(panel, 40f);
-        AaWidgets.Button(buttons, "加入", () => AnswerInvite(partyId, true), -1f, AaWidgets.SelectedColor);
-        AaWidgets.Button(buttons, "拒絕", () => AnswerInvite(partyId, false));
+        // Answered one way or the other (the X declines): the server keeps the invite until then
+        var window = RoWidgets.Window(UI.transform, "Party Invite", "隊伍邀請", new Vector2(220f, 80f), () => AnswerInvite(partyId, false));
+        InvitePopup = window.gameObject;
+        FitHeight(window, Message(window, $"「{partyName}」邀請你加入隊伍。", -24f));
+        var buttons = RoWidgets.ButtonRow(window);
+        RoWidgets.Button(buttons, "加入", () => AnswerInvite(partyId, true));
+        RoWidgets.Button(buttons, "拒絕", () => AnswerInvite(partyId, false));
+        window.SetAsLastSibling();
     }
 
     private void AnswerInvite(uint partyId, bool accept) {
@@ -548,40 +765,19 @@ public class PartyWindow : MonoBehaviour {
     #region Dialogs
 
     /// <summary>
-    /// A dialog over the screen, like the auto attack window's pickers; tapping outside closes it
-    /// when <paramref name="dismissable"/>
+    /// A window of its own docked to the party window, right of it (left when the screen ends
+    /// first), as the official client opens invite and settings; it goes with the party window
     /// </summary>
-    private RectTransform OpenDialog(string title, bool dismissable, out GameObject overlayObject) {
-        var overlay = AaWidgets.NewImage("Party Dialog", UI.transform, new Color(0f, 0f, 0f, 0.35f));
-        AaWidgets.Stretch(overlay.rectTransform);
-        var created = overlay.gameObject;
-        overlayObject = created;
-        if (dismissable) {
-            overlay.gameObject.AddComponent<Button>().onClick.AddListener(() => Destroy(created));
-        }
-
-        var panel = AaWidgets.NewImage("Panel", overlay.transform, AaWidgets.PanelColor);
-        // Taps on the panel stay on it
-        panel.gameObject.AddComponent<Button>().transition = Selectable.Transition.None;
-        panel.rectTransform.sizeDelta = new Vector2(Mathf.Min(380f, (UI.transform as RectTransform).rect.width - 32f), 0f);
-        var layout = panel.gameObject.AddComponent<VerticalLayoutGroup>();
-        layout.padding = new RectOffset(18, 18, 14, 14);
-        layout.spacing = 8f;
-        layout.childControlWidth = layout.childControlHeight = true;
-        layout.childForceExpandWidth = true;
-        layout.childForceExpandHeight = false;
-        panel.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-        AaWidgets.Header(panel.transform, title);
-        overlay.transform.SetAsLastSibling();
-        return panel.rectTransform;
-    }
-
-    private RectTransform OpenDialog(string title) {
+    private RectTransform OpenSideWindow(string title) {
         CloseDialog();
-        var panel = OpenDialog(title, true, out var overlay);
-        Dialog = overlay;
-        return panel;
+        var window = RoWidgets.Window(Root, "Party Dialog", title, new Vector2(SIDE_WIDTH, 100f), CloseDialog);
+        Dialog = window.gameObject;
+        var canvasHalfWidth = (UI.transform as RectTransform).rect.width / 2f;
+        var right = Root.anchoredPosition.x + Root.rect.width / 2f + 2f + SIDE_WIDTH <= canvasHalfWidth;
+        window.anchorMin = window.anchorMax = new Vector2(right ? 1f : 0f, 1f);
+        window.pivot = new Vector2(right ? 0f : 1f, 1f);
+        window.anchoredPosition = new Vector2(right ? 2f : -2f, 0f);
+        return window;
     }
 
     private void CloseDialog() {
@@ -591,69 +787,160 @@ public class PartyWindow : MonoBehaviour {
         }
     }
 
-    private void Confirm(string message, string action, Action onConfirm) {
-        var panel = OpenDialog("確認");
-        AaWidgets.Label(panel, message);
-        var buttons = AaWidgets.Row(panel, 40f);
-        AaWidgets.Button(buttons, action, () => {
+    /// <summary>
+    /// A line of text, wrapped, from <paramref name="y"/> down; returns where the next thing goes
+    /// </summary>
+    private static float Message(RectTransform window, string message, float y) {
+        var width = window.sizeDelta.x - 16f;
+        var text = RoWidgets.Text(window, message, 12f, RoWidgets.TextColor, new Vector2(8f, y), new Vector2(width, 16f));
+        text.enableWordWrapping = true;
+        text.overflowMode = TextOverflowModes.Overflow;
+        var height = Mathf.Max(16f, text.GetPreferredValues(message, width, 0f).y);
+        text.rectTransform.sizeDelta = new Vector2(width, height);
+        return y - height - 6f;
+    }
+
+    /// <summary>
+    /// A heading and its two choices, as the official settings window; returns the second one
+    /// (on: shared, refused, ...)
+    /// </summary>
+    private static Toggle Choice(RectTransform window, string heading, string first, string second, bool secondOn, bool interactable, ref float y) {
+        RoWidgets.Text(window, heading, 12f, RoWidgets.TextColor, new Vector2(8f, y), new Vector2(SIDE_WIDTH - 16f, 16f));
+        y -= 18f;
+        var group = new GameObject(heading, typeof(RectTransform)).AddComponent<ToggleGroup>();
+        group.transform.SetParent(window, false);
+        group.allowSwitchOff = false;
+        RoWidgets.Radio(window, first, !secondOn, group, new Vector2(12f, y), SIDE_WIDTH - 20f, interactable);
+        y -= 17f;
+        var toggle = RoWidgets.Radio(window, second, secondOn, group, new Vector2(12f, y), SIDE_WIDTH - 20f, interactable);
+        y -= 23f;
+        return toggle;
+    }
+
+    /// <summary>
+    /// The window as tall as what's in it down to <paramref name="y"/>, with the buttons under
+    /// </summary>
+    private static void FitHeight(RectTransform window, float y) {
+        window.sizeDelta = new Vector2(window.sizeDelta.x, -y + RoWidgets.BUTTON_HEIGHT + 12f);
+    }
+
+    private void Confirm(string title, string message, Action onConfirm) {
+        var window = OpenSideWindow(title);
+        FitHeight(window, Message(window, message, -24f));
+        var buttons = RoWidgets.ButtonRow(window);
+        RoWidgets.Button(buttons, "確認", () => {
             CloseDialog();
             onConfirm();
-        }, -1f, ConfirmColor);
-        AaWidgets.Button(buttons, "取消", CloseDialog);
+        });
+        RoWidgets.Button(buttons, "取消", CloseDialog);
     }
 
     private void ConfirmLeave() {
-        Confirm("確定要離開隊伍嗎?", "離開", () => new CZ.REQ_LEAVE_GROUP().Send());
+        Confirm("離開隊伍", "確定要離開隊伍嗎?", () => new CZ.REQ_LEAVE_GROUP().Send());
     }
 
     private void OpenCreateDialog() {
-        var panel = OpenDialog("建立隊伍");
-        var row = AaWidgets.Row(panel);
-        var field = AaWidgets.TextField(row, NewPartyName, "隊伍名稱", 23, v => NewPartyName = v);
-        AaWidgets.Toggle(panel, "撿到的道具由隊伍分配", NewSharePickup, v => NewSharePickup = v);
-        AaWidgets.Toggle(panel, "道具平均分給隊員", NewShareLoot, v => NewShareLoot = v);
-        var buttons = AaWidgets.Row(panel, 40f);
-        AaWidgets.Button(buttons, "建立", () => {
+        var window = OpenSideWindow("建立隊伍");
+        var y = -22f;
+        RoWidgets.Text(window, "隊伍名稱", 12f, RoWidgets.TextColor, new Vector2(8f, y), new Vector2(SIDE_WIDTH - 16f, 16f));
+        y -= 18f;
+        var field = RoWidgets.InputField(window, NewPartyName, 23, new Vector2(8f, y), new Vector2(SIDE_WIDTH - 16f, 18f));
+        y -= 26f;
+        var pickup = Choice(window, "道具蒐集方式", "各自取得", "隊伍隊員全體共有", NewSharePickup, true, ref y);
+        var loot = Choice(window, "物品分配方式", "各自取得", "均等分配", NewShareLoot, true, ref y);
+        FitHeight(window, y);
+
+        UnityAction create = () => {
             // The typed name even when the field hasn't been left yet
             NewPartyName = field.text.Trim();
+            NewSharePickup = pickup.isOn;
+            NewShareLoot = loot.isOn;
             if (CreateParty()) {
                 CloseDialog();
             }
-        }, -1f, AaWidgets.SelectedColor);
-        AaWidgets.Button(buttons, "取消", CloseDialog);
+        };
+        field.onSubmit.AddListener(_ => create());
+        var buttons = RoWidgets.ButtonRow(window);
+        RoWidgets.Button(buttons, "確認", create);
+        RoWidgets.Button(buttons, "取消", CloseDialog);
+        field.ActivateInputField();
     }
 
     private void OpenInviteDialog() {
-        var panel = OpenDialog("邀請加入隊伍");
-        var row = AaWidgets.Row(panel);
-        var field = AaWidgets.TextField(row, InviteName, "角色名稱", 23, v => InviteName = v);
-        AaWidgets.Label(panel, "也可以直接點地圖上的玩家來邀請。", AaWidgets.SMALL_FONT_SIZE, AaWidgets.DimTextColor);
-        var buttons = AaWidgets.Row(panel, 40f);
-        AaWidgets.Button(buttons, "邀請", () => {
+        var window = OpenSideWindow("邀請加入隊伍");
+        var y = -22f;
+        RoWidgets.Text(window, "被邀請之角色名稱", 12f, RoWidgets.TextColor, new Vector2(8f, y), new Vector2(SIDE_WIDTH - 16f, 16f));
+        y -= 18f;
+        var field = RoWidgets.InputField(window, InviteName, 23, new Vector2(8f, y), new Vector2(SIDE_WIDTH - 16f, 18f));
+        y -= 26f;
+        FitHeight(window, y);
+
+        UnityAction invite = () => {
             InviteName = field.text.Trim();
             if (Invite(InviteName)) {
                 CloseDialog();
             }
-        }, -1f, AaWidgets.SelectedColor);
-        AaWidgets.Button(buttons, "取消", CloseDialog);
+        };
+        field.onSubmit.AddListener(_ => invite());
+        var buttons = RoWidgets.ButtonRow(window);
+        RoWidgets.Button(buttons, "確認", invite);
+        RoWidgets.Button(buttons, "取消", CloseDialog);
+        field.ActivateInputField();
     }
 
+    private void OpenAddFriendDialog() {
+        var window = OpenSideWindow("新增好友");
+        var y = -22f;
+        RoWidgets.Text(window, "要加為好友的角色名稱", 12f, RoWidgets.TextColor, new Vector2(8f, y), new Vector2(SIDE_WIDTH - 16f, 16f));
+        y -= 18f;
+        var field = RoWidgets.InputField(window, NewFriendName, 23, new Vector2(8f, y), new Vector2(SIDE_WIDTH - 16f, 18f));
+        y -= 26f;
+        FitHeight(window, y);
+
+        UnityAction add = () => {
+            NewFriendName = field.text.Trim();
+            if (AddFriend(NewFriendName)) {
+                NewFriendName = "";
+                CloseDialog();
+            }
+        };
+        field.onSubmit.AddListener(_ => add());
+        var buttons = RoWidgets.ButtonRow(window);
+        RoWidgets.Button(buttons, "確認", add);
+        RoWidgets.Button(buttons, "取消", CloseDialog);
+        field.ActivateInputField();
+    }
+
+    /// <summary>
+    /// The leader's three ways of sharing (the others see them greyed) and whether invites are
+    /// taken; nothing is sent until 確認
+    /// </summary>
     private void OpenSettingsDialog() {
-        var panel = OpenDialog("隊伍設定");
+        var window = OpenSideWindow("隊伍設定");
+        var y = -22f;
+        Toggle exp = null;
+        Toggle pickup = null;
+        Toggle loot = null;
         if (InParty) {
             var leader = IAmLeader;
-            if (!leader) {
-                AaWidgets.Label(panel, "只有隊長可以修改分配方式。", AaWidgets.SMALL_FONT_SIZE, AaWidgets.DimTextColor);
-            }
-            var expLabel = ExpOption == 2 ? "經驗值平均分配 (等級差距太大，無法平均)" : "經驗值平均分配";
-            AaWidgets.Toggle(panel, expLabel, ExpOption == 1, v => SendSettings(v, SharePickup, ShareLoot), leader && ExpOption != 2);
-            AaWidgets.Toggle(panel, "撿到的道具由隊伍分配", SharePickup, v => SendSettings(ExpOption == 1, v, ShareLoot), leader);
-            AaWidgets.Toggle(panel, "道具平均分給隊員", ShareLoot, v => SendSettings(ExpOption == 1, SharePickup, v), leader);
+            exp = Choice(window, "經驗值分配方式", "各自取得", ExpOption == 2 ? "均等分配 (等級差距過大)" : "均等分配", ExpOption != 0, leader, ref y);
+            pickup = Choice(window, "道具蒐集方式", "各自取得", "隊伍隊員全體共有", SharePickup, leader, ref y);
+            loot = Choice(window, "物品分配方式", "各自取得", "均等分配", ShareLoot, leader, ref y);
         }
-        AaWidgets.Toggle(panel, "拒絕別人的隊伍邀請", RefuseInvites, v => new CZ.PARTY_CONFIG(v).Send());
-        AaWidgets.Label(panel, "隊伍聊天：在訊息前面加 % 送出，例如「%大家好」。", AaWidgets.SMALL_FONT_SIZE, AaWidgets.DimTextColor);
-        var buttons = AaWidgets.Row(panel, 40f);
-        AaWidgets.Button(buttons, "關閉", CloseDialog);
+        var refuse = Choice(window, "隊伍邀請", "接受", "拒絕", RefuseInvites, true, ref y);
+        FitHeight(window, y);
+
+        var buttons = RoWidgets.ButtonRow(window);
+        RoWidgets.Button(buttons, "確認", () => {
+            if (exp != null && IAmLeader && (exp.isOn != (ExpOption != 0) || pickup.isOn != SharePickup || loot.isOn != ShareLoot)) {
+                SendSettings(exp.isOn, pickup.isOn, loot.isOn);
+            }
+            if (refuse.isOn != RefuseInvites) {
+                new CZ.PARTY_CONFIG(refuse.isOn).Send();
+            }
+            CloseDialog();
+        });
+        RoWidgets.Button(buttons, "取消", CloseDialog);
     }
 
     #endregion
@@ -677,34 +964,38 @@ public class PartyWindow : MonoBehaviour {
         Content = AaWidgets.ScrollList(Root, true, out ContentScroll, 0f, new RectOffset(0, 0, 2, 2));
         var listRect = ContentScroll.transform as RectTransform;
         AaWidgets.Stretch(listRect);
-        listRect.offsetMin = new Vector2(1f, TOOLBAR_HEIGHT);
+        listRect.offsetMin = new Vector2(1f, TOOLBAR_HEIGHT + TAB_HEIGHT);
         listRect.offsetMax = new Vector2(-1f, -TITLE_HEIGHT);
 
-        // No party: the friends window's picture
-        var empty = AaWidgets.NewRect("Empty", Root);
-        AaWidgets.Stretch(empty);
-        empty.offsetMin = listRect.offsetMin;
-        empty.offsetMax = listRect.offsetMax;
-        Empty = empty.gameObject;
-        var picture = RoWidgets.Texture("renewalparty/img_friend2.bmp");
-        var image = new GameObject("Picture", typeof(RectTransform)).AddComponent<RawImage>();
-        image.transform.SetParent(empty, false);
-        image.texture = picture;
-        image.color = picture != null ? Color.white : Color.clear;
-        image.raycastTarget = false;
-        image.rectTransform.anchoredPosition = new Vector2(0f, 14f);
-        image.rectTransform.sizeDelta = new Vector2(172f, 74f);
-        var hint = AaWidgets.Text(empty, "目前沒有加入隊伍", 12f, OfflineColor, TextAlignmentOptions.Center);
-        hint.rectTransform.anchoredPosition = new Vector2(0f, -40f);
+        // No party: a line saying so
+        var emptyParty = AaWidgets.NewRect("No Party", Root);
+        AaWidgets.Stretch(emptyParty);
+        emptyParty.offsetMin = listRect.offsetMin;
+        emptyParty.offsetMax = listRect.offsetMax;
+        EmptyParty = emptyParty.gameObject;
+        var hint = AaWidgets.Text(emptyParty, "目前沒有加入隊伍", 12f, OfflineColor, TextAlignmentOptions.Center);
         hint.rectTransform.sizeDelta = new Vector2(260f, 20f);
+
+        // No friends: the official window's porings, the angels at the top right and three at the bottom
+        var emptyFriends = AaWidgets.NewRect("No Friends", Root);
+        AaWidgets.Stretch(emptyFriends);
+        emptyFriends.offsetMin = listRect.offsetMin;
+        emptyFriends.offsetMax = listRect.offsetMax;
+        EmptyFriends = emptyFriends.gameObject;
+        var angels = RoWidgets.Picture(emptyFriends, "Angels", RoWidgets.Texture("renewalparty/img_friend1.bmp"), new Vector2(-6f, -8f), new Vector2(112f, 130f));
+        angels.rectTransform.anchorMin = angels.rectTransform.anchorMax = angels.rectTransform.pivot = Vector2.one;
+        var porings = RoWidgets.Picture(emptyFriends, "Porings", RoWidgets.Texture("renewalparty/img_friend2.bmp"), new Vector2(-4f, 4f), new Vector2(172f, 74f));
+        porings.rectTransform.anchorMin = porings.rectTransform.anchorMax = porings.rectTransform.pivot = new Vector2(1f, 0f);
+
+        BuildTabBar();
 
         Toolbar = AaWidgets.NewImage("Toolbar", Root, ToolbarColor).rectTransform;
         Toolbar.anchorMin = Vector2.zero;
         Toolbar.anchorMax = new Vector2(1f, 0f);
         Toolbar.pivot = new Vector2(0.5f, 0f);
-        Toolbar.anchoredPosition = Vector2.zero;
+        Toolbar.anchoredPosition = new Vector2(0f, TAB_HEIGHT);
         Toolbar.sizeDelta = new Vector2(0f, TOOLBAR_HEIGHT);
-        var line = AaWidgets.NewImage("Line", Toolbar, LineColor);
+        var line = AaWidgets.NewImage("Line", Toolbar, RoWidgets.LineColor);
         line.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
         line.rectTransform.anchorMin = new Vector2(0f, 1f);
         line.rectTransform.anchorMax = Vector2.one;
@@ -725,17 +1016,24 @@ public class PartyWindow : MonoBehaviour {
             return;
         }
 
-        Title.text = InParty ? $"隊伍({PartyName})" : "隊伍";
-        Empty.SetActive(!InParty);
-        ContentScroll.gameObject.SetActive(InParty);
+        var party = CurrentTab == Tab.Party;
+        Title.text = party ? (InParty ? $"隊伍({PartyName})" : "隊伍") : $"朋友({Friends.Count}/{MAX_FRIENDS})";
+        EmptyParty.SetActive(party && !InParty);
+        EmptyFriends.SetActive(!party && Friends.Count == 0);
+        ContentScroll.gameObject.SetActive(party ? InParty : Friends.Count > 0);
         var scroll = ContentScroll.verticalNormalizedPosition;
         AaWidgets.Clear(Content);
-        if (InParty) {
+        if (party && InParty) {
             foreach (var member in Members.OrderByDescending(m => m.IsLeader).ThenByDescending(m => m.IsOnline)) {
                 MemberRow(member);
             }
+        } else if (!party) {
+            foreach (var friend in Friends.OrderByDescending(f => f.IsOnline)) {
+                FriendRow(friend);
+            }
         }
         BuildToolbar();
+        UpdateTabBar();
         Canvas.ForceUpdateCanvases();
         ContentScroll.verticalNormalizedPosition = keepScroll ? scroll : 1f;
     }
@@ -748,7 +1046,9 @@ public class PartyWindow : MonoBehaviour {
                 Destroy(child);
             }
         }
-        if (InParty) {
+        if (CurrentTab == Tab.Friends) {
+            RoWidgets.Button(Toolbar, "新增", OpenAddFriendDialog);
+        } else if (InParty) {
             RoWidgets.Button(Toolbar, "邀請", OpenInviteDialog);
             RoWidgets.Button(Toolbar, "設定", OpenSettingsDialog);
             RoWidgets.Button(Toolbar, "離開", ConfirmLeave);
@@ -756,11 +1056,68 @@ public class PartyWindow : MonoBehaviour {
             RoWidgets.Button(Toolbar, "建立隊伍", OpenCreateDialog);
             RoWidgets.Button(Toolbar, "設定", OpenSettingsDialog);
         }
-        AaWidgets.Layout(AaWidgets.NewRect("Spacer", Toolbar), flexibleWidth: 1f);
-        if (InParty) {
-            var count = AaWidgets.Text(Toolbar, $"隊員 {Members.Count}/{MAX_MEMBERS}", 12f, RoWidgets.TextColor, TextAlignmentOptions.MidlineRight);
-            AaWidgets.Layout(count, 72f);
-        }
+    }
+
+    /// <summary>
+    /// ○朋友 ◉隊伍 at the bottom, with the party's head count on its tab
+    /// </summary>
+    private void BuildTabBar() {
+        var bar = AaWidgets.NewImage("Tabs", Root, ToolbarColor).rectTransform;
+        bar.anchorMin = Vector2.zero;
+        bar.anchorMax = new Vector2(1f, 0f);
+        bar.pivot = new Vector2(0.5f, 0f);
+        bar.anchoredPosition = Vector2.zero;
+        bar.sizeDelta = new Vector2(0f, TAB_HEIGHT);
+        var line = AaWidgets.NewImage("Line", bar, RoWidgets.LineColor);
+        line.rectTransform.anchorMin = new Vector2(0f, 1f);
+        line.rectTransform.anchorMax = Vector2.one;
+        line.rectTransform.pivot = new Vector2(0.5f, 1f);
+        line.rectTransform.sizeDelta = new Vector2(0f, 1f);
+
+        var group = bar.gameObject.AddComponent<ToggleGroup>();
+        group.allowSwitchOff = false;
+        FriendsTab = RoWidgets.Radio(bar, "朋友", CurrentTab == Tab.Friends, group, new Vector2(4f, -2f), 54f);
+        PartyTab = RoWidgets.Radio(bar, "隊伍", CurrentTab == Tab.Party, group, new Vector2(62f, -2f), 54f);
+        FriendsTab.onValueChanged.AddListener(on => {
+            if (on) {
+                SwitchTab(Tab.Friends);
+            }
+        });
+        PartyTab.onValueChanged.AddListener(on => {
+            if (on) {
+                SwitchTab(Tab.Party);
+            }
+        });
+
+        MemberCount = RoWidgets.Text(bar, "", 12f, RoWidgets.TextColor, new Vector2(-8f, -2f), new Vector2(100f, 16f), TextAlignmentOptions.TopRight);
+        MemberCount.rectTransform.anchorMin = MemberCount.rectTransform.anchorMax = MemberCount.rectTransform.pivot = Vector2.one;
+    }
+
+    private void UpdateTabBar() {
+        FriendsTab.SetIsOnWithoutNotify(CurrentTab == Tab.Friends);
+        PartyTab.SetIsOnWithoutNotify(CurrentTab == Tab.Party);
+        MemberCount.text = CurrentTab == Tab.Party && InParty ? $"隊員 {Members.Count}/{MAX_MEMBERS}" : "";
+    }
+
+    /// <summary>
+    /// A friend's name and whether they're online (ON, OFF); the list has neither job nor level
+    /// </summary>
+    private void FriendRow(Friend friend) {
+        var row = AaWidgets.NewImage("Friend", Content, Color.white);
+        AaWidgets.Layout(row, height: FRIEND_ROW_HEIGHT);
+        var button = row.gameObject.AddComponent<Button>();
+        var colors = button.colors;
+        colors.normalColor = Color.white;
+        colors.highlightedColor = colors.pressedColor = colors.selectedColor = PointedRowColor;
+        button.colors = colors;
+        button.targetGraphic = row;
+        button.onClick.AddListener(() => ShowFriendMenu(friend));
+
+        RoWidgets.Text(row.transform, $"<noparse>{friend.Name}</noparse>", 12f, friend.IsOnline ? OnlineColor : OfflineColor, new Vector2(10f, -5f), new Vector2(WIDTH - 60f, 16f));
+        var state = friend.IsOnline ? "icon_party_on" : "icon_party_off";
+        var badge = RoWidgets.Picture(row.transform, "State", RoWidgets.Texture($"renewalparty/{state}.bmp"), Vector2.zero, new Vector2(26f, 11f));
+        badge.rectTransform.anchorMin = badge.rectTransform.anchorMax = badge.rectTransform.pivot = Vector2.one;
+        badge.rectTransform.anchoredPosition = new Vector2(-8f, -7f);
     }
 
     /// <summary>

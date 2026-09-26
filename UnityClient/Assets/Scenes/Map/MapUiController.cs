@@ -79,9 +79,14 @@ public class MapUiController : MonoBehaviour {
             }
         }
 
-        // Alt+Z opens the party window, as in the official client
-        if (Input.GetKeyDown(KeyCode.Z) && (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && PartyWindow.Instance != null) {
-            PartyWindow.Instance.ToggleVisible();
+        // Alt+Z the party, Alt+H the friends, as in the official client: the same window, on that list
+        var alt = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+        if (alt && PartyWindow.Instance != null) {
+            if (Input.GetKeyDown(KeyCode.Z)) {
+                PartyWindow.Instance.ToggleTab(PartyWindow.Tab.Party);
+            } else if (Input.GetKeyDown(KeyCode.H)) {
+                PartyWindow.Instance.ToggleTab(PartyWindow.Tab.Friends);
+            }
         }
 
         if (Event.current == null)
