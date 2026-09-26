@@ -20,13 +20,17 @@ public class EscapeWindow : DraggableUIWindow, IEscapeWindowController {
     private EntityControl EntityControl;
     private Toggle CurrentToggle;
     private bool IsPlayerDead;
+    private bool Built;
 
     private void Awake() {
         EntityControl = FindObjectOfType<EntityControl>();
     }
 
     void Start() {
-        BuildButtons();
+        // Dying first opens the window: its buttons are already there, and they're the dead's
+        if (!Built) {
+            BuildButtons();
+        }
     }
     
     public void Show() {
@@ -38,17 +42,22 @@ public class EscapeWindow : DraggableUIWindow, IEscapeWindowController {
     }
 
     public void BuildButtons(bool isPlayerDead = false) {
+        Built = true;
         IsPlayerDead = isPlayerDead;
         foreach (Transform child in Body.transform) {
             Destroy(child.gameObject);
         }
 
+        // Dead: back to the save point, or stay down here (waiting to be revived), as in the
+        // official client's window
         if (isPlayerDead) {
-            BuildButton("Return to Save Point", () => {
+            BuildButton("移動到儲存場所", () => {
                 new CZ.RESTART(CZ.RESTART.TYPE_SAVE_POINT).Send();
                 BuildButtons();
                 Hide();
             });
+            BuildButton("繼續遊戲", () => Hide());
+            return;
         }
 
         BuildButton("Character select", () => new CZ.RESTART(CZ.RESTART.TYPE_CHAR_SELECT).Send());

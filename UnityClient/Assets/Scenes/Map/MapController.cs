@@ -135,8 +135,11 @@ public class MapController : MonoBehaviour {
             }
             entity.ChangeMotion(new MotionRequest { Motion = SpriteMotion.Idle });
             
-            // If it's our main character update Escape ui
-            if (entity.AID == Session.CurrentSession.AccountID) {
+            // If it's our main character update Escape ui. By the packet's id: our own entity
+            // has no AID of its own (0), so it never matched
+            if (RESURRECTION.GID == Session.CurrentSession.AccountID) {
+                // Alive again: the full menu, not the two choices of the dead
+                UIController.EscapeWindow.BuildButtons();
                 UIController.EscapeWindow.Hide();
             }
         }
