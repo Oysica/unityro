@@ -218,6 +218,20 @@ public class ChatBoxController : MonoBehaviour {
             scroll.offsetMax = new Vector2(scroll.offsetMax.x, -(TAB_HEIGHT + 2f));
         }
 
+        // The whisper box's name and 密語對象 as the message's: the same size, on the middle of the
+        // line (they sat at its top once the phone's taller input row came)
+        if (PMInput != null) {
+            PMInput.pointSize = MessageInput.pointSize;
+        }
+        foreach (var input in new[] { PMInput, MessageInput }) {
+            if (input == null) {
+                continue;
+            }
+            foreach (var text in input.GetComponentsInChildren<TMP_Text>(true)) {
+                text.alignment = TextAlignmentOptions.MidlineLeft;
+            }
+        }
+
         var panel = transform.Find("Panel") as RectTransform;
         var message = MessageInput.transform as RectTransform;
         if (panel == null || ChannelButton == null) {
