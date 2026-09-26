@@ -178,6 +178,11 @@ public class SpriteEntityViewer : GameEntityViewer {
                 Sprites = loaded.Data.GetSprites(atlas);
                 CurrentACT = loaded.Data.act;
 
+                // Asked for before Start (a look change sent with the unit coming in sight): the
+                // calculator isn't made yet
+                if (FramePaceCalculator == null) {
+                    InitFramePaceCalculator();
+                }
                 FramePaceCalculator.Init(Entity, ViewerType, CurrentACT);
 
                 if (SpriteMaterial == null) {
@@ -203,6 +208,9 @@ public class SpriteEntityViewer : GameEntityViewer {
                 Debug.LogError($"Could not load sprites for: {path}");
                 Debug.LogException(e);
                 CurrentACT = null;
+                // Half done: loaded again next time, not taken as done (the body stayed invisible,
+                // only the head drawn)
+                Sprites = null;
             }
         }
 
