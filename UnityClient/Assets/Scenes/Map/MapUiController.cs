@@ -54,6 +54,10 @@ public class MapUiController : MonoBehaviour {
         PacketLogWindow.Hide();
         StatusIconsController.Create(transform);
         Storage = StorageController.Create(InventoryWindow);
+        // An X on the title bar, as in the official client (the storage has its own, made from the prefab)
+        WindowCloseButton.Add(StatsWindow.transform, () => StatsWindow.gameObject.SetActive(false));
+        WindowCloseButton.Add(EquipmentWindow.transform, () => EquipmentWindow.gameObject.SetActive(false));
+        WindowCloseButton.Add(InventoryWindow.transform, () => InventoryWindow.gameObject.SetActive(false));
         MobileControlsController.Create(this);
         AutoAttackWindow.Create(this);
         PartyWindow.Create(this);

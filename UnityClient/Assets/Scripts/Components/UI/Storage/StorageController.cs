@@ -63,17 +63,10 @@ public class StorageController : MonoBehaviour {
     }
 
     /// <summary>
-    /// The inventory window has no close button; the storage needs one to tell the server.
+    /// The storage's X tells the server, rather than only hiding the window.
     /// </summary>
     private void AddCloseButton() {
-        var titleBar = Title != null ? Title.transform.parent : transform;
-        var close = new GameObject("Close", typeof(RectTransform)).AddComponent<RawImage>();
-        close.transform.SetParent(titleBar, false);
-        close.texture = TextureAssetLoader.Load($"{DBManager.INTERFACE_PATH}basic_interface/sys_close_off.png");
-        close.rectTransform.anchorMin = close.rectTransform.anchorMax = close.rectTransform.pivot = new Vector2(1f, 0.5f);
-        close.rectTransform.anchoredPosition = new Vector2(-3f, 0f);
-        close.rectTransform.sizeDelta = new Vector2(12f, 12f);
-        close.gameObject.AddComponent<Button>().onClick.AddListener(RequestClose);
+        WindowCloseButton.Add(Window.transform, RequestClose);
     }
 
     public bool Contains(ItemInfo item) {
