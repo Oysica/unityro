@@ -70,6 +70,7 @@ public class ChatBoxController : MonoBehaviour {
 
     private const float TAB_HEIGHT = 17f;
     private const int MAX_TABS = 6;
+    private const int MAX_LINES = 200;
     // Every kind, those added later too
     private const int ALL_CATEGORIES = ~0;
     private const string TABS_PREF = "chat_tabs";
@@ -722,6 +723,15 @@ public class ChatBoxController : MonoBehaviour {
         line.AddComponent<Line>().Category = category;
         // Not on the tab shown: kept for when its tab is
         line.SetActive(Shows(category));
+
+        // The oldest go: a long session (the auto attack's kills, two lines of experience each)
+        // would otherwise pile up lines to lay out for good
+        var lines = LinearLayout.transform;
+        for (var excess = lines.childCount - MAX_LINES; excess > 0; excess--) {
+            var oldest = lines.GetChild(lines.childCount - MAX_LINES - excess).gameObject;
+            oldest.SetActive(false);
+            Destroy(oldest);
+        }
         return line;
     }
 

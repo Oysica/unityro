@@ -764,19 +764,22 @@ public class Entity : MonoBehaviour, INetworkEntity {
         }
     }
 
+    /// <summary>
+    /// Experience gained, for the chat (取得%d經驗值, 取得%d職業經驗值). The totals aren't added up
+    /// here: the server sends them whole just before (ZC_LONGPAR_CHANGE), so they'd count twice.
+    /// </summary>
     private void OnExpReceived(ushort cmd, int size, InPacket packet) {
-        if (packet is ZC.NOTIFY_EXP2 NOTIFY_EXP2) {
-            switch ((EntityStatus) NOTIFY_EXP2.expType) {
-                case EntityStatus.SP_JOBEXP:
-                    Status.job_exp += NOTIFY_EXP2.exp;
-                    break;
-                case EntityStatus.SP_BASEEXP:
-                    Status.base_exp += NOTIFY_EXP2.exp;
-                    break;
-            }
+        if (!(packet is ZC.NOTIFY_EXP2 NOTIFY_EXP2) || NOTIFY_EXP2.exp <= 0) {
+            return;
         }
-
-        OnParameterUpdated?.Invoke();
+        var chat = MapUiController.Instance != null ? MapUiController.Instance.ChatBox : null;
+        if (chat == null) {
+            return;
+        }
+        var job = (EntityStatus) NOTIFY_EXP2.expType == EntityStatus.SP_JOBEXP;
+        // Quest experience shows in yellow
+        chat.DisplayMessage(job ? 488 : 487, NOTIFY_EXP2.questExp != 0 ? ChatMessageType.INFO : ChatMessageType.BLUE, ChatBoxController.Category.Exp,
+            new KeyValuePair<string, string>("%d", NOTIFY_EXP2.exp.ToString()));
     }
 
     private void OnStatsWindowData(ushort cmd, int size, InPacket packet) {
@@ -1042,6 +1045,52 @@ public class Entity : MonoBehaviour, INetworkEntity {
             if (TOUSESKILL.Flag > 0) {
                 return;
             }
+
+            // Why it failed, in the chat under 顯示技能使用失敗訊息
+            var message = SkillFailMessage(TOUSESKILL.SkillId, TOUSESKILL.Type, TOUSESKILL.Cause);
+            var chat = MapUiController.Instance != null ? MapUiController.Instance.ChatBox : null;
+            if (message > 0 && chat != null) {
+                chat.DisplayMessage(message, ChatMessageType.ERROR, ChatBoxController.Category.SkillFail);
+            }
+        }
+    }
+
+    private const short NV_BASIC = 1;
+
+    /// <summary>
+    /// The msgstringtable line for a skill that failed (clif.hpp useskill_fail_cause); 0 for none,
+    /// as for the delay after a skill
+    /// </summary>
+    private static int SkillFailMessage(short skillId, int btype, byte cause) {
+        switch (cause) {
+            case 0:
+                // Basic skill too low for trading, emotions, sitting, chat rooms, parties, ...
+                return skillId == NV_BASIC && btype >= 1 && btype <= 7 ? 158 + btype : 204;
+            case 1: return 202; // SP不足
+            case 2: return 203; // HP不足
+            case 3: return 219; // 技能使用量不足
+            case 4: return 0;   // the delay after a skill: nothing said
+            case 5: return 233; // 金錢不足
+            case 6: return 239; // 用這武器無法使用此技能
+            case 7: return 246; // 需要紅色魔力礦石
+            case 8: return 247; // 需要藍色魔力礦石
+            case 9: return 580; // 重量超過90%
+            case 11: case 12: case 13: case 14: case 15: case 16:
+                return 1396 + (cause - 11); // 對象, 神秘水晶, 聖水, 距離內不可重複, 需要其他技能
+            case 17: case 18: case 19: case 20: case 21: case 22: case 23:
+                return 1411 + (cause - 17); // 一人不可使用, 特定方向, 召喚, 模仿技能, 不可重複, 狀態
+            case 24: return 1425; // 需要塗料筆
+            case 26: return 1427; // 在制定之位不能使用技能
+            case 27: return 1428; // 補助人員的SP不足
+            case 28: return 1929; // 限於牆壁或物體附近使用
+            case 29: return 1932; // 需要 1%的經驗值
+            case 30: return 1937; // 合唱技能的隊員SP不足
+            case 31: return 1433; // 只能與武器抵禦搭配
+            case 32: return 1434; // 需要塗毒的武器
+            case 33: return 1435; // 只能在搭乘魔導戰甲時使用
+            case 35: return 1952; // 該技能限玩家使用
+            case 37: return 1439; // 請裝填加農砲彈
+            default: return 204;  // 使用技能失敗
         }
     }
 
