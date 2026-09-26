@@ -146,6 +146,8 @@ public class MapUiController : MonoBehaviour {
     }
 
     public void DisplayTooltip(string text, Vector3 position, Vector2? pivot = null) {
+        // Over the windows, which come to the front when pressed
+        Tooltip.transform.SetAsLastSibling();
         Tooltip.SetText(text, position, pivot);
     }
 

@@ -689,10 +689,16 @@ public class DataUtility {
         importer.SaveAndReimport();
     }
 
+    /// <summary>
+    /// Window art shown pixel for pixel. Imported as plain textures, the interface pictures were
+    /// squeezed to a power of two (the 280 wide windows to 256) with mipmaps, then stretched back
+    /// by the windows, blurred. The folder's name was mangled here, so this used to find nothing
+    /// </summary>
     [MenuItem("UnityRO/Utils/Fix interface textures")]
     static void FixInterfaceTextures() {
-        var paths = GetFilesFromDir(Path.Combine("Assets", "_Generated", "AddressablesAssets", "data", "texture", "�����������̽�"))
+        var paths = GetFilesFromDir(Path.Combine(GENERATED_ADDRESSABLES_PATH, DBManager.INTERFACE_PATH))
             .Where(it => Path.GetExtension(it) == ".png")
+            .Select(it => it.Replace('\\', '/'))
             .ToList();
         Debug.Log(paths.Count);
         AssetDatabase.StartAssetEditing();
@@ -708,18 +714,15 @@ public class DataUtility {
 
                 TextureImporter importer = AssetImporter.GetAtPath(texturePath) as TextureImporter;
 
-                if (importer == null) {
+                // Already right: no need to import it again
+                if (importer == null || (importer.npotScale == TextureImporterNPOTScale.None && !importer.mipmapEnabled)) {
                     continue;
                 }
 
-                importer.textureType = TextureImporterType.Sprite;
-                importer.spriteImportMode = SpriteImportMode.Single;
-                var textureSettings = new TextureImporterSettings();
-                importer.ReadTextureSettings(textureSettings);
-                textureSettings.spriteMeshType = SpriteMeshType.FullRect;
-                textureSettings.spritePixelsPerUnit = SPR.PIXELS_PER_UNIT;
-
-                importer.SetTextureSettings(textureSettings);
+                // Still plain textures, as the windows load them (RawImage, AssetReferenceTexture2D)
+                importer.npotScale = TextureImporterNPOTScale.None;
+                importer.mipmapEnabled = false;
+                importer.wrapMode = TextureWrapMode.Clamp;
                 importer.SaveAndReimport();
 
             } catch (Exception ex) {
