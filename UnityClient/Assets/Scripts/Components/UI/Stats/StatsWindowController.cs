@@ -38,6 +38,7 @@ public class StatsWindowController : DraggableUIWindow {
     // The last full status, kept up to date by the single values the server sends afterwards
     private ZC.STATUS Stats;
     private readonly Dictionary<EntityStatus, Button> IncreaseButtons = new Dictionary<EntityStatus, Button>();
+    private readonly Dictionary<EntityStatus, RawImage> Arrows = new Dictionary<EntityStatus, RawImage>();
 
     private void Awake() {
         // Each stat row holds its value label and its increase button
@@ -47,9 +48,53 @@ public class StatsWindowController : DraggableUIWindow {
             var button = values[i].transform.parent.GetComponentInChildren<Button>(true);
             button.onClick.AddListener(() => new CZ.STATUS_CHANGE(status).Send());
             IncreaseButtons[status] = button;
+            Arrows[status] = AddArrow(button);
         }
 
         UpdateIncreaseButtons();
+    }
+
+    /// <summary>
+    /// The official ▷ (basic_interface/arw_right, arw_right_on while pointed at) in place of the
+    /// button's plain box; shown only while the stat can be raised
+    /// </summary>
+    private static RawImage AddArrow(Button button) {
+        // Still what takes the taps, but not drawn
+        if (button.targetGraphic != null) {
+            button.targetGraphic.color = Color.clear;
+        }
+        button.transition = Selectable.Transition.None;
+
+        var arrow = new GameObject("Arrow", typeof(RectTransform)).AddComponent<RawImage>();
+        arrow.transform.SetParent(button.transform, false);
+        arrow.raycastTarget = false;
+        arrow.texture = RoWidgets.Texture("basic_interface/arw_right.bmp");
+        arrow.rectTransform.anchorMin = arrow.rectTransform.anchorMax = arrow.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        arrow.rectTransform.anchoredPosition = Vector2.zero;
+        arrow.rectTransform.sizeDelta = new Vector2(11f, 11f);
+        // Until the stats come
+        arrow.enabled = false;
+        button.gameObject.AddComponent<ArrowHover>().Arrow = arrow;
+        return arrow;
+    }
+
+    // Lights the arrow while pointed at
+    private class ArrowHover : MonoBehaviour, UnityEngine.EventSystems.IPointerEnterHandler, UnityEngine.EventSystems.IPointerExitHandler {
+        public RawImage Arrow;
+
+        public void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData) {
+            Arrow.texture = RoWidgets.Texture("basic_interface/arw_right_on.bmp");
+        }
+
+        public void OnPointerExit(UnityEngine.EventSystems.PointerEventData eventData) {
+            Arrow.texture = RoWidgets.Texture("basic_interface/arw_right.bmp");
+        }
+
+        private void OnDisable() {
+            if (Arrow != null) {
+                Arrow.texture = RoWidgets.Texture("basic_interface/arw_right.bmp");
+            }
+        }
     }
 
     public void UpdateData(ZC.STATUS stats) {
@@ -167,7 +212,10 @@ public class StatsWindowController : DraggableUIWindow {
         };
         foreach (var button in IncreaseButtons) {
             var need = needs[button.Key];
-            button.Value.interactable = need > 0 && Stats.stpoint >= need;
+            var canRaise = need > 0 && Stats.stpoint >= need;
+            button.Value.interactable = canRaise;
+            // No arrow where there's nothing to press, as in the official window
+            Arrows[button.Key].enabled = canRaise;
         }
     }
 
