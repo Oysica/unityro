@@ -419,9 +419,9 @@ public class PartyWindow : MonoBehaviour {
             // In the chat as the official client does, each time the server sends them (logging in,
             // making or joining a party, a change)
             var exp = ExpOption == 0 ? "各自取得" : ExpOption == 1 ? "均等分配" : "無法均等分配 (等級差距過大)";
-            Say($"隊伍設定 - 經驗值分配方式 : {exp}", SettingsColor);
-            Say($"隊伍設定 - 道具蒐集方式 : {(SharePickup ? "隊伍隊員全體共有" : "各自取得")}", SettingsColor);
-            Say($"隊伍設定 - 物品分配方式 : {(ShareLoot ? "均等分配" : "各自取得")}", SettingsColor);
+            Say($"隊伍設定 - 經驗值分配方式 : {exp}", SettingsColor, ChatBoxController.Category.PartySettings);
+            Say($"隊伍設定 - 道具蒐集方式 : {(SharePickup ? "隊伍隊員全體共有" : "各自取得")}", SettingsColor, ChatBoxController.Category.PartySettings);
+            Say($"隊伍設定 - 物品分配方式 : {(ShareLoot ? "均等分配" : "各自取得")}", SettingsColor, ChatBoxController.Category.PartySettings);
             Changed();
         }
     }

@@ -27,7 +27,24 @@ public class ChatBoxController : MonoBehaviour {
         Clan,
         // Items got or dropped; equipment put on or taken off
         Item,
-        Equip
+        Equip,
+        // The rest of the official list (a bit each: 25 of an int's 32)
+        StatusAilment,
+        PartyItem,
+        PartyAilment,
+        SkillFail,
+        PartySettings,
+        EquipBroken,
+        Siege,
+        Battle,
+        PartyBattle,
+        Exp,
+        Quest,
+        Battleground,
+        GuildNotice,
+        Call,
+        ExpLimit,
+        StatChange
     }
 
     // A tab of the chat: what it's called and which kinds of message it shows (bit per Category)
@@ -56,7 +73,7 @@ public class ChatBoxController : MonoBehaviour {
     // Every kind, those added later too
     private const int ALL_CATEGORIES = ~0;
     private const string TABS_PREF = "chat_tabs";
-    private const float SETTINGS_WIDTH = 230f;
+    private const float SETTINGS_WIDTH = 260f;
     private const float INPUT_BUTTON_WIDTH = 40f;
     private const float CHANNEL_ROW_HEIGHT = 18f;
 
@@ -69,12 +86,22 @@ public class ChatBoxController : MonoBehaviour {
     // The official "視窗顯示資料" list: each kind of message a tab shows or not
     private static readonly Category[] ListedCategories = {
         Category.System, Category.Public, Category.Whisper, Category.Party, Category.Guild,
-        Category.Ally, Category.Clan, Category.Item, Category.Equip
+        Category.Ally, Category.Clan, Category.Item, Category.Equip, Category.StatusAilment,
+        Category.PartyItem, Category.PartyAilment, Category.SkillFail, Category.PartySettings, Category.EquipBroken,
+        Category.Siege, Category.Battle, Category.PartyBattle, Category.Exp, Category.Quest,
+        Category.Battleground, Category.GuildNotice, Category.Call, Category.ExpLimit, Category.StatChange
     };
     private static readonly string[] ListedLabels = {
         "一般訊息", "顯示公開聊天訊息", "顯示悄悄話聊天訊息", "顯示隊伍聊天訊息", "顯示公會聊天訊息",
-        "聯盟聊天訊息顯示", "代表公會聊天訊息顯示", "獲得物品 / 顯示掉落訊息", "裝備裝載 / 顯示解除訊息"
+        "聯盟聊天訊息顯示", "代表公會聊天訊息顯示", "獲得物品 / 顯示掉落訊息", "裝備裝載 / 顯示解除訊息", "顯示狀態異常訊息",
+        "顯示隊伍員的主要物品獲得訊息", "顯示隊伍員的狀態異常訊息", "顯示技能使用失敗訊息", "顯示隊伍設定訊息", "顯示裝備損壞訊息",
+        "顯示攻城情報訊息", "戰鬥訊息", "隊員戰鬥訊息", "獲得經驗值", "標示任務資訊",
+        "標示戰場資訊", "公會聊天訊息顯示", "顯示呼叫訊息", "上線經驗值已達上限的提示", "裝備/解除裝備時顯示能力值變化"
     };
+    // The list shows this many at a time and scrolls, as the official one
+    private const int VISIBLE_ROWS = 9;
+    private const float LIST_ROW_HEIGHT = 19f;
+    private const float SCROLLBAR_WIDTH = 10f;
     private static readonly string[] ChannelLabels = { "公開", "隊伍", "公會", "聯盟", "代表" };
     private static readonly string[] ChannelMenuLabels = { "公開發言", "隊伍發言頻道", "公會發言頻道", "公會聯盟發言頻道", "代表公會發言頻道" };
 
@@ -328,20 +355,27 @@ public class ChatBoxController : MonoBehaviour {
         });
         y -= 26f;
 
+        // The kinds of message, in a list that scrolls
+        var listHeight = VISIBLE_ROWS * LIST_ROW_HEIGHT;
+        var list = AaWidgets.ScrollList(window, true, out var listScroll, LIST_ROW_HEIGHT - 18f, new RectOffset(0, 0, 0, 0));
+        var view = listScroll.transform as RectTransform;
+        view.anchorMin = view.anchorMax = view.pivot = new Vector2(0f, 1f);
+        view.anchoredPosition = new Vector2(8f, y);
+        view.sizeDelta = new Vector2(SETTINGS_WIDTH - 18f - SCROLLBAR_WIDTH, listHeight);
+        AddScrollbar(window, listScroll, new Vector2(SETTINGS_WIDTH - 8f - SCROLLBAR_WIDTH, y), listHeight);
+
         var badges = new List<RawImage>();
         Checkbox allOn = null;
         for (var i = 0; i < ListedCategories.Length; i++) {
             var bit = 1 << (int) ListedCategories[i];
             var row = new GameObject(ListedLabels[i], typeof(RectTransform)).AddComponent<Image>();
-            row.transform.SetParent(window, false);
+            row.transform.SetParent(list, false);
             row.color = Color.clear;
+            AaWidgets.Layout(row, height: 18f);
             var rowRect = row.rectTransform;
-            rowRect.anchorMin = rowRect.anchorMax = rowRect.pivot = new Vector2(0f, 1f);
-            rowRect.anchoredPosition = new Vector2(8f, y);
-            rowRect.sizeDelta = new Vector2(SETTINGS_WIDTH - 16f, 18f);
             var badge = RoWidgets.Picture(rowRect, "State", OnOff((tab.Mask & bit) != 0), new Vector2(0f, -3f), new Vector2(26f, 11f));
             badges.Add(badge);
-            RoWidgets.Text(rowRect, ListedLabels[i], 12f, RoWidgets.TextColor, new Vector2(32f, -1f), new Vector2(SETTINGS_WIDTH - 50f, 16f));
+            RoWidgets.Text(rowRect, ListedLabels[i], 12f, RoWidgets.TextColor, new Vector2(32f, -1f), new Vector2(SETTINGS_WIDTH - 60f - SCROLLBAR_WIDTH, 16f));
             var button = row.gameObject.AddComponent<Button>();
             button.transition = Selectable.Transition.None;
             button.targetGraphic = row;
@@ -352,8 +386,8 @@ public class ChatBoxController : MonoBehaviour {
                 SaveTabs();
                 ApplyFilter();
             });
-            y -= 19f;
         }
+        y -= listHeight;
 
         // all on: every kind at once (and off again)
         y -= 4f;
@@ -385,6 +419,25 @@ public class ChatBoxController : MonoBehaviour {
         window.pivot = Vector2.zero;
         window.position = corners[1];
         window.SetAsLastSibling();
+    }
+
+    // A plain bar at the list's right, as the official window's
+    private static void AddScrollbar(RectTransform parent, ScrollRect scroll, Vector2 position, float height) {
+        var bar = AaWidgets.NewImage("Scrollbar", parent, new Color32(231, 231, 231, 255));
+        var rect = bar.rectTransform;
+        rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
+        rect.anchoredPosition = position;
+        rect.sizeDelta = new Vector2(SCROLLBAR_WIDTH, height);
+        var area = AaWidgets.NewRect("Sliding Area", rect);
+        AaWidgets.Stretch(area);
+        var handle = AaWidgets.NewImage("Handle", area, new Color32(165, 189, 231, 255));
+        handle.rectTransform.sizeDelta = Vector2.zero;
+        var scrollbar = bar.gameObject.AddComponent<Scrollbar>();
+        scrollbar.handleRect = handle.rectTransform;
+        scrollbar.targetGraphic = handle;
+        scrollbar.direction = Scrollbar.Direction.BottomToTop;
+        scroll.verticalScrollbar = scrollbar;
+        scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
     }
 
     private void CloseTabSettings() {
