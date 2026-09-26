@@ -894,7 +894,11 @@ public class DataUtility {
 
             foreach (var descriptor in descriptors) {
                 try {
-                    string table = FileManager.Load(descriptor) as string;
+                    // Map names are in the client's language (Big5 here), which UTF-8 turns into U+FFFD for
+                    // good; the other tables stay as they were (resnametable's Korean paths among them)
+                    string table = Path.GetFileName(descriptor).Equals("mapnametable.txt", StringComparison.OrdinalIgnoreCase)
+                        ? ROIO.Utils.Extensions.StringExtensions.ClientEncoding.GetString(FileManager.ReadSync(descriptor).ToArray())
+                        : FileManager.Load(descriptor) as string;
                     var path = Path.Combine(GENERATED_RESOURCES_PATH, "txt", Path.GetDirectoryName(descriptor));
                     Directory.CreateDirectory(path);
 
