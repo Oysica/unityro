@@ -61,6 +61,7 @@ public class MapUiController : MonoBehaviour {
         MobileControlsController.Create(this);
         AutoAttackWindow.Create(this);
         PartyWindow.Create(this);
+        TradeWindow.Create(this);
     }
 
     public void DisplayItemDetails(ItemInfo itemInfo, Vector2 position) {

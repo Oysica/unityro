@@ -257,20 +257,21 @@
     //ZC_ROLE_CHANGE = 0xe1,
     //CZ_REQ_EXPEL_MEMBER = 0xe2,
     //CZ_EXIT_ROOM = 0xe3,
-    //CZ_REQ_EXCHANGE_ITEM = 0xe4,
+    // Player trade (clif.cpp clif_trade*, clif_parse_Trade*); the requests aren't shuffled after 2018-03-07
+    CZ_REQ_EXCHANGE_ITEM = 0xe4,
     //ZC_REQ_EXCHANGE_ITEM = 0xe5,
-    //CZ_ACK_EXCHANGE_ITEM = 0xe6,
+    CZ_ACK_EXCHANGE_ITEM = 0xe6,
     //ZC_ACK_EXCHANGE_ITEM = 0xe7,
-    //CZ_ADD_EXCHANGE_ITEM = 0xe8,
+    CZ_ADD_EXCHANGE_ITEM = 0xe8,
     //ZC_ADD_EXCHANGE_ITEM = 0xe9,
-    //ZC_ACK_ADD_EXCHANGE_ITEM = 0xea,
-    //CZ_CONCLUDE_EXCHANGE_ITEM = 0xeb,
-    //ZC_CONCLUDE_EXCHANGE_ITEM = 0xec,
-    //CZ_CANCEL_EXCHANGE_ITEM = 0xed,
-    //ZC_CANCEL_EXCHANGE_ITEM = 0xee,
-    //CZ_EXEC_EXCHANGE_ITEM = 0xef,
-    //ZC_EXEC_EXCHANGE_ITEM = 0xf0,
-    //ZC_EXCHANGEITEM_UNDO = 0xf1,
+    ZC_ACK_ADD_EXCHANGE_ITEM = 0xea,
+    CZ_CONCLUDE_EXCHANGE_ITEM = 0xeb,
+    ZC_CONCLUDE_EXCHANGE_ITEM = 0xec,
+    CZ_CANCEL_EXCHANGE_ITEM = 0xed,
+    ZC_CANCEL_EXCHANGE_ITEM = 0xee,
+    CZ_EXEC_EXCHANGE_ITEM = 0xef,
+    ZC_EXEC_EXCHANGE_ITEM = 0xf0,
+    ZC_EXCHANGEITEM_UNDO = 0xf1,
     ZC_NOTIFY_STOREITEM_COUNTINFO = 0xf2,
     //CZ_MOVE_ITEM_FROM_BODY_TO_STORE = 0xf3,
     ZC_ADD_ITEM_TO_STORE = 0xb44, // 0xf4 on old clients
@@ -508,8 +509,8 @@
     //ZC_STORE_NORMAL_ITEMLIST2 = 0x1f0,
     //AC_NOTIFY_ERROR = 0x1f1,
     //ZC_UPDATE_CHARSTAT2 = 0x1f2,
-    //ZC_REQ_EXCHANGE_ITEM2 = 0x1f4,
-    //ZC_ACK_EXCHANGE_ITEM2 = 0x1f5,
+    ZC_REQ_EXCHANGE_ITEM2 = 0x1f4,
+    ZC_ACK_EXCHANGE_ITEM2 = 0x1f5,
     //ZC_REQ_BABY = 0x1f6,
     //CZ_JOIN_BABY = 0x1f7,
     //ZC_START_BABY = 0x1f8,
@@ -1063,6 +1064,7 @@
     CZ_CLAN_CHAT = 0x098D, // clif.cpp clif_parse_clan_chat, variable length ("name : message")
     ZC_NOTIFY_CLAN_CHAT = 0x098E, // PACKET_ZC_NOTIFY_CLAN_CHAT, variable length (clif.cpp clif_clan_message)
     CZ_ALLY_CHAT = 0x0BDD, // guild alliance chat, PACKETVER >= 20240101 (Pandas clif_parse_AllyMessage)
+    ZC_ADD_EXCHANGE_ITEM4 = 0x0B42, // PACKET_ZC_ADD_EXCHANGE_ITEM, PACKETVER_MAIN_NUM >= 20200916, 62 bytes fixed (clif.cpp clif_tradeadditem)
     ZC_ALLY_CHAT = 0x0BDE, // guild alliance chat, variable length (Pandas clif_ally_send_message)
     #endregion
 

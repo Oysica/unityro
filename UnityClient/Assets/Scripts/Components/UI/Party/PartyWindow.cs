@@ -626,6 +626,7 @@ public class PartyWindow : MonoBehaviour {
         if (FindFriend(player.AID) == null) {
             options.Add(new KeyValuePair<string, int>("加為好友", 3));
         }
+        options.Add(new KeyValuePair<string, int>("交易", 4));
         AaWidgets.Pick(UI.transform as RectTransform, name, options, 0, false, choice => {
             if (choice == 1) {
                 Invite(name);
@@ -633,6 +634,8 @@ public class PartyWindow : MonoBehaviour {
                 UI.ChatBox.StartWhisper(name);
             } else if (choice == 3) {
                 AddFriend(name);
+            } else if (choice == 4 && TradeWindow.Instance != null) {
+                TradeWindow.Instance.RequestTrade(player);
             }
         });
     }

@@ -21,10 +21,18 @@ public class GenericUIItem : MonoBehaviour,
     }
 
     public void OnPointerClick(PointerEventData eventData) {
+        var trade = TradeWindow.Instance;
+        var trading = trade != null && trade.IsOpen;
         if (eventData.button == PointerEventData.InputButton.Right) {
-            // Alt + right click moves the item between the inventory and an open storage
+            var alt = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+            // Alt + right click puts the item in an open trade, or moves it between the inventory
+            // and an open storage
+            if (alt && trading) {
+                trade.OfferItem(itemInfo);
+                return;
+            }
             var storage = MapUiController.Instance.Storage;
-            if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && storage != null && storage.IsOpen) {
+            if (alt && storage != null && storage.IsOpen) {
                 storage.MoveItem(itemInfo);
                 return;
             }
@@ -33,6 +41,11 @@ public class GenericUIItem : MonoBehaviour,
 
         if (eventData.clickCount == 2) {
             MapController.Instance.UIController.HideTooltip();
+            // While trading, a double tap (a phone has no Alt) puts it in the trade
+            if (trading) {
+                trade.OfferItem(itemInfo);
+                return;
+            }
             UseItem();
         }
     }
