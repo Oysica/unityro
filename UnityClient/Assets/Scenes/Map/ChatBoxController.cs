@@ -126,6 +126,7 @@ public class ChatBoxController : MonoBehaviour {
     private Button SendButton;
     private GameObject ChannelMenu;
     private ScrollRect Scroll;
+    private bool FollowEnd;
 
     private void Awake() {
         NetworkClient = FindObjectOfType<NetworkClient>();
@@ -318,6 +319,24 @@ public class ChatBoxController : MonoBehaviour {
     }
 
     private bool Shows(Category category) => (Tabs.Tabs[CurrentTab].Mask & (1 << (int) category)) != 0;
+
+    private bool IsAtEnd() {
+        if (Scroll == null || Scroll.content == null || Scroll.viewport == null) {
+            return true;
+        }
+        // All of it in view, or scrolled (nearly) to the bottom
+        return Scroll.content.rect.height <= Scroll.viewport.rect.height + 1f || Scroll.verticalNormalizedPosition <= 0.02f;
+    }
+
+    // Lines came while at the end: it's kept there, the lines laid out first
+    private void LateUpdate() {
+        if (!FollowEnd || Scroll == null) {
+            return;
+        }
+        FollowEnd = false;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(LinearLayout.transform as RectTransform);
+        Scroll.verticalNormalizedPosition = 0f;
+    }
 
     private void AddTab() {
         if (Tabs.Tabs.Count >= MAX_TABS) {
@@ -713,6 +732,11 @@ public class ChatBoxController : MonoBehaviour {
     }
 
     public GameObject DisplayText(string text, Color color, Category category = Category.System) {
+        // At the end already: the new line is followed there, once laid out (not when scrolled up to
+        // read something older)
+        if (IsAtEnd()) {
+            FollowEnd = true;
+        }
         var line = Instantiate(TextLinePrefab);
         var uiText = line.GetComponentInChildren<TextMeshProUGUI>();
 
