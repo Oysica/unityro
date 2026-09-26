@@ -41,6 +41,10 @@ public class SpriteEntityViewer : GameEntityViewer {
     private GameObject Mesh3D;
 
     private bool IsReady = false;
+    // Asked for before the sprites were ready (a player seen lying dead or sitting): played once
+    // they are, instead of the idle the viewer would start on
+    private MotionRequest? PendingMotion;
+    private MotionRequest? PendingNextMotion;
 
     private bool IsHead => ViewerType == ViewerType.HEAD ||
         ViewerType == ViewerType.HEAD_BOTTOM ||
@@ -55,6 +59,12 @@ public class SpriteEntityViewer : GameEntityViewer {
         Init();
         InitShadow();
         IsReady = true;
+
+        if (PendingMotion.HasValue) {
+            var motion = PendingMotion.Value;
+            PendingMotion = null;
+            ChangeMotion(motion, PendingNextMotion);
+        }
     }
 
     private void InitFramePaceCalculator() {
@@ -314,8 +324,11 @@ public class SpriteEntityViewer : GameEntityViewer {
     }
 
     public override void ChangeMotion(MotionRequest motion, MotionRequest? nextMotion = null) {
-        if (!IsReady)
+        if (!IsReady) {
+            PendingMotion = motion;
+            PendingNextMotion = nextMotion;
             return;
+        }
 
         State = motion.Motion switch {
             SpriteMotion.Dead => SpriteState.Dead,
