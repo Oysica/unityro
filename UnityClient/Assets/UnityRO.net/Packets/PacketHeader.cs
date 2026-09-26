@@ -400,8 +400,8 @@
     //ZC_ITEMCOMPOSITION_LIST = 0x17b,
     //CZ_REQ_ITEMCOMPOSITION = 0x17c,
     //ZC_ACK_ITEMCOMPOSITION = 0x17d,
-    //CZ_GUILD_CHAT = 0x17e,
-    //ZC_GUILD_CHAT = 0x17f,
+    CZ_GUILD_CHAT = 0x17e,
+    ZC_GUILD_CHAT = 0x17f,
     //CZ_REQ_HOSTILE_GUILD = 0x180,
     //ZC_ACK_REQ_HOSTILE_GUILD = 0x181,
     //ZC_MEMBER_ADD = 0x182,
@@ -1060,6 +1060,10 @@
     ZC_GROUP_ISALIVE = 0xab2, // party member alive/dead, job/level (clif.cpp clif_party_dead / clif_party_job_and_level)
     ZC_WHISPER02 = 0x09DE, // PACKET_ZC_WHISPER, PACKETVER_MAIN_NUM >= 20131204, variable length (packets_struct.hpp, clif.cpp clif_wis_message)
     ZC_ACK_WHISPER02 = 0x09DF, // PACKET_ZC_ACK_WHISPER, PACKETVER >= 20131223, 7 bytes fixed (packets.hpp, clif.cpp clif_wis_end)
+    CZ_CLAN_CHAT = 0x098D, // clif.cpp clif_parse_clan_chat, variable length ("name : message")
+    ZC_NOTIFY_CLAN_CHAT = 0x098E, // PACKET_ZC_NOTIFY_CLAN_CHAT, variable length (clif.cpp clif_clan_message)
+    CZ_ALLY_CHAT = 0x0BDD, // guild alliance chat, PACKETVER >= 20240101 (Pandas clif_parse_AllyMessage)
+    ZC_ALLY_CHAT = 0x0BDE, // guild alliance chat, variable length (Pandas clif_ally_send_message)
     #endregion
 
     #region PANDAS_CUSTOM

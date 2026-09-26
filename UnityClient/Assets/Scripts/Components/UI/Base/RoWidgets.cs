@@ -102,7 +102,9 @@ public static class RoWidgets {
         hit.color = Color.clear;
         var layout = root.AddComponent<HorizontalLayoutGroup>();
         layout.childControlWidth = layout.childControlHeight = true;
-        layout.childForceExpandWidth = layout.childForceExpandHeight = false;
+        // The pieces as tall as the button, taller than their picture in the phone's chat input row
+        layout.childForceExpandWidth = false;
+        layout.childForceExpandHeight = true;
 
         var left = Piece(root.transform, "Left", BUTTON_SIDE, 0f);
         var mid = Piece(root.transform, "Mid", 0f, 1f);
@@ -249,7 +251,59 @@ public static class RoWidgets {
         return input;
     }
 
-    private static RawImage Piece(Transform parent, string name, float width, float flexible) {
+    public static void SetButtonText(Button button, string text) {
+        button.GetComponentInChildren<TextMeshProUGUI>().text = text;
+    }
+
+    /// <summary>
+    /// A tab as the official chat window's (basic_interface/tab_*: white, tab_a_*: blue when chosen)
+    /// </summary>
+    public static Button Tab(Transform parent, string text, UnityAction onClick, float width, float height, bool selected) {
+        var root = new GameObject(text, typeof(RectTransform));
+        root.transform.SetParent(parent, false);
+        var hit = root.AddComponent<Image>();
+        hit.color = Color.clear;
+        var layout = root.AddComponent<HorizontalLayoutGroup>();
+        layout.childControlWidth = layout.childControlHeight = true;
+        layout.childForceExpandWidth = false;
+        layout.childForceExpandHeight = true;
+        Piece(root.transform, "Left", 4f, 0f, height);
+        Piece(root.transform, "Mid", 0f, 1f, height);
+        Piece(root.transform, "Right", 4f, 0f, height);
+
+        var label = new GameObject("Label", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
+        label.transform.SetParent(root.transform, false);
+        label.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+        label.text = text;
+        label.fontSize = 11f;
+        label.color = TextColor;
+        label.alignment = TextAlignmentOptions.Center;
+        label.enableWordWrapping = false;
+        label.raycastTarget = false;
+        label.rectTransform.anchorMin = Vector2.zero;
+        label.rectTransform.anchorMax = Vector2.one;
+        label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
+
+        var element = root.AddComponent<LayoutElement>();
+        element.minWidth = element.preferredWidth = width;
+        element.minHeight = element.preferredHeight = height;
+
+        var button = root.AddComponent<Button>();
+        button.transition = Selectable.Transition.None;
+        button.targetGraphic = hit;
+        button.onClick.AddListener(onClick);
+        SetTabSelected(button, selected);
+        return button;
+    }
+
+    public static void SetTabSelected(Button tab, bool selected) {
+        var prefix = selected ? "tab_a_" : "tab_";
+        tab.transform.Find("Left").GetComponent<RawImage>().texture = Texture($"basic_interface/{prefix}l.bmp");
+        tab.transform.Find("Mid").GetComponent<RawImage>().texture = Texture($"basic_interface/{prefix}m.bmp");
+        tab.transform.Find("Right").GetComponent<RawImage>().texture = Texture($"basic_interface/{prefix}r.bmp");
+    }
+
+    private static RawImage Piece(Transform parent, string name, float width, float flexible, float height = BUTTON_HEIGHT) {
         var piece = new GameObject(name, typeof(RectTransform)).AddComponent<RawImage>();
         piece.transform.SetParent(parent, false);
         piece.raycastTarget = false;
@@ -257,7 +311,7 @@ public static class RoWidgets {
         element.minWidth = element.preferredWidth = width;
         element.flexibleWidth = flexible;
         // A RawImage has no height of its own to give the layout
-        element.minHeight = element.preferredHeight = BUTTON_HEIGHT;
+        element.minHeight = element.preferredHeight = height;
         return piece;
     }
 

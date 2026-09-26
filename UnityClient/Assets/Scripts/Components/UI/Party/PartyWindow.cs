@@ -254,9 +254,10 @@ public class PartyWindow : MonoBehaviour {
         Say(text, PartyChatColor);
     }
 
-    private void Say(string text, Color color) {
+    // The party's under the chat's 隊伍 tab
+    private void Say(string text, Color color, ChatBoxController.Category category = ChatBoxController.Category.Party) {
         if (UI != null && UI.ChatBox != null) {
-            UI.ChatBox.DisplayText(text, color);
+            UI.ChatBox.DisplayText(text, color, category);
         }
     }
 
@@ -534,7 +535,7 @@ public class PartyWindow : MonoBehaviour {
             friend.Name = state.Name;
         }
         if (changed && Time.unscaledTime >= FriendNoticesFrom) {
-            Say(friend.IsOnline ? $"好友 {friend.Name} 上線了。" : $"好友 {friend.Name} 離線了。", FriendChatColor);
+            Say(friend.IsOnline ? $"好友 {friend.Name} 上線了。" : $"好友 {friend.Name} 離線了。", FriendChatColor, ChatBoxController.Category.System);
         }
         Changed();
     }
@@ -556,16 +557,16 @@ public class PartyWindow : MonoBehaviour {
                     // Friends only when both were online for it
                     Friends.Add(new Friend { AID = added.AID, CID = added.CID, Name = name, IsOnline = true });
                 }
-                Say($"你和 {name} 成為了好友。", FriendChatColor);
+                Say($"你和 {name} 成為了好友。", FriendChatColor, ChatBoxController.Category.System);
                 break;
             case 1:
-                Say($"{name} 拒絕了你的好友邀請。", FriendChatColor);
+                Say($"{name} 拒絕了你的好友邀請。", FriendChatColor, ChatBoxController.Category.System);
                 break;
             case 2:
-                Say("你的好友名單已滿。", FriendChatColor);
+                Say("你的好友名單已滿。", FriendChatColor, ChatBoxController.Category.System);
                 break;
             default:
-                Say($"{name} 的好友名單已滿。", FriendChatColor);
+                Say($"{name} 的好友名單已滿。", FriendChatColor, ChatBoxController.Category.System);
                 break;
         }
         Changed();
@@ -574,7 +575,7 @@ public class PartyWindow : MonoBehaviour {
     private void OnFriendDeleted(ushort cmd, int size, InPacket packet) {
         if (packet is ZC.DELETE_FRIENDS deleted && FindFriend(deleted.AID) is Friend friend) {
             Friends.Remove(friend);
-            Say($"{friend.Name} 已從好友名單移除。", FriendChatColor);
+            Say($"{friend.Name} 已從好友名單移除。", FriendChatColor, ChatBoxController.Category.System);
             Changed();
         }
     }
@@ -638,16 +639,16 @@ public class PartyWindow : MonoBehaviour {
 
     public bool AddFriend(string name) {
         if (string.IsNullOrWhiteSpace(name)) {
-            Say("請先輸入角色名稱。", FriendChatColor);
+            Say("請先輸入角色名稱。", FriendChatColor, ChatBoxController.Category.System);
             return false;
         }
         if (Friends.Count >= MAX_FRIENDS) {
-            Say("你的好友名單已滿。", FriendChatColor);
+            Say("你的好友名單已滿。", FriendChatColor, ChatBoxController.Category.System);
             return false;
         }
         // They're asked; ZC_ADD_FRIENDS_LIST says what came of it
         new CZ.ADD_FRIENDS(name).Send();
-        Say($"已向 {name} 送出好友邀請。", FriendChatColor);
+        Say($"已向 {name} 送出好友邀請。", FriendChatColor, ChatBoxController.Category.System);
         return true;
     }
 

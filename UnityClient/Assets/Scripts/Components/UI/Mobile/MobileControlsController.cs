@@ -394,6 +394,8 @@ public class MobileControlsController : MonoBehaviour {
                 messageField.pointSize = DesktopChatPointSize;
             }
             ChatLaidOutWidth = 0f;
+            // Its tabs, channel and 發送 button
+            UI.ChatBox.Relayout();
             return;
         }
 
@@ -431,6 +433,8 @@ public class MobileControlsController : MonoBehaviour {
         if (scroll != null) {
             scroll.anchorMin = new Vector2(scroll.anchorMin.x, (CHAT_INPUT_HEIGHT + 10f) / CHAT_HEIGHT);
         }
+        // Its tabs, channel and 發送 button, the message box taking what they leave
+        UI.ChatBox.Relayout(CHAT_INPUT_HEIGHT);
     }
 
     #endregion
