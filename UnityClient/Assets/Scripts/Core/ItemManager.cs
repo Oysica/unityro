@@ -67,7 +67,7 @@ public class ItemManager : MonoBehaviour {
                 MapUiController.Instance.UpdateEquipment();
             } else {
                 // 1 = the character's level is too low (clif.hpp ITEM_EQUIP_ACK_FAILLEVEL), 2 = any other refusal
-                MapController.Instance.UIController.ChatBox.DisplayMessage(ACK_WEAR_EQUIP_V5.result == 1 ? 1774 : 372, 0);
+                MapController.Instance.UIController.ChatBox.DisplayMessage(ACK_WEAR_EQUIP_V5.result == 1 ? 1774 : 372, 0, ChatBoxController.Category.Equip);
             }
         }
     }
@@ -174,7 +174,7 @@ public class ItemManager : MonoBehaviour {
             (Session.CurrentSession.Entity as Entity).Inventory.AddItem(itemInfo);
             MapController.Instance.UIController.UpdateEquipment();
 
-            MapController.Instance.UIController.ChatBox.DisplayMessage(153, ChatMessageType.BLUE,
+            MapController.Instance.UIController.ChatBox.DisplayMessage(153, ChatMessageType.BLUE, ChatBoxController.Category.Item,
                 new KeyValuePair<string, string>("%s", itemInfo.IsIdentified ? item.identifiedDisplayName : item.unidentifiedDisplayName),
                 new KeyValuePair<string, string>("%d", ITEM_PICKUP_ACK7.itemInfo.amount.ToString())
             );

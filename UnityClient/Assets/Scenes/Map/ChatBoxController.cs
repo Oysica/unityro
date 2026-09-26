@@ -24,7 +24,22 @@ public class ChatBoxController : MonoBehaviour {
         System,
         // 公會聯盟 and 代表公會 (clan)
         Ally,
-        Clan
+        Clan,
+        // Items got or dropped; equipment put on or taken off
+        Item,
+        Equip
+    }
+
+    // A tab of the chat: what it's called and which kinds of message it shows (bit per Category)
+    [Serializable]
+    private class TabSetting {
+        public string Name;
+        public int Mask;
+    }
+
+    [Serializable]
+    private class TabSettings {
+        public List<TabSetting> Tabs = new List<TabSetting>();
     }
 
     // In the order of the channel menu
@@ -36,8 +51,12 @@ public class ChatBoxController : MonoBehaviour {
         Clan
     }
 
-    private const float TAB_WIDTH = 38f;
     private const float TAB_HEIGHT = 17f;
+    private const int MAX_TABS = 6;
+    // Every kind, those added later too
+    private const int ALL_CATEGORIES = ~0;
+    private const string TABS_PREF = "chat_tabs";
+    private const float SETTINGS_WIDTH = 230f;
     private const float INPUT_BUTTON_WIDTH = 40f;
     private const float CHANNEL_ROW_HEIGHT = 18f;
 
@@ -47,9 +66,14 @@ public class ChatBoxController : MonoBehaviour {
     private static readonly Color ClanColor = new Color32(255, 180, 230, 255);
     private static readonly Color ChosenRowColor = new Color32(165, 189, 231, 255);
     private static readonly Color PointedRowColor = new Color32(222, 231, 247, 255);
-    private static readonly string[] TabLabels = { "全部", "公開", "隊伍", "公會", "聯盟", "代表", "密語", "系統" };
-    private static readonly Category?[] TabFilters = {
-        null, Category.Public, Category.Party, Category.Guild, Category.Ally, Category.Clan, Category.Whisper, Category.System
+    // The official "視窗顯示資料" list: each kind of message a tab shows or not
+    private static readonly Category[] ListedCategories = {
+        Category.System, Category.Public, Category.Whisper, Category.Party, Category.Guild,
+        Category.Ally, Category.Clan, Category.Item, Category.Equip
+    };
+    private static readonly string[] ListedLabels = {
+        "一般訊息", "顯示公開聊天訊息", "顯示悄悄話聊天訊息", "顯示隊伍聊天訊息", "顯示公會聊天訊息",
+        "聯盟聊天訊息顯示", "代表公會聊天訊息顯示", "獲得物品 / 顯示掉落訊息", "裝備裝載 / 顯示解除訊息"
     };
     private static readonly string[] ChannelLabels = { "公開", "隊伍", "公會", "聯盟", "代表" };
     private static readonly string[] ChannelMenuLabels = { "公開發言", "隊伍發言頻道", "公會發言頻道", "公會聯盟發言頻道", "代表公會發言頻道" };
@@ -64,7 +88,10 @@ public class ChatBoxController : MonoBehaviour {
     private EntityManager EntityManager;
     private string LastWhisperTarget;
 
-    private Category? Filter;
+    private TabSettings Tabs;
+    private int CurrentTab;
+    private RectTransform TabStrip;
+    private GameObject TabSettingsWindow;
     private Channel SendChannel = Channel.Public;
     private readonly List<Button> TabButtons = new List<Button>();
     private Button ChannelButton;
@@ -97,6 +124,7 @@ public class ChatBoxController : MonoBehaviour {
         }
 
         Scroll = GetComponentInChildren<ScrollRect>(true);
+        LoadTabs();
         BuildTabs();
         BuildInputButtons();
     }
@@ -107,23 +135,40 @@ public class ChatBoxController : MonoBehaviour {
 
     #region Layout
 
+    /// <summary>
+    /// The player's tabs, then + to add one
+    /// </summary>
     private void BuildTabs() {
-        var strip = new GameObject("Channel Tabs", typeof(RectTransform)).GetComponent<RectTransform>();
-        strip.SetParent(transform, false);
-        strip.anchorMin = strip.anchorMax = strip.pivot = new Vector2(0f, 1f);
-        strip.anchoredPosition = new Vector2(2f, -1f);
-        var layout = strip.gameObject.AddComponent<HorizontalLayoutGroup>();
-        layout.spacing = 1f;
-        layout.childControlWidth = layout.childControlHeight = true;
-        layout.childForceExpandWidth = layout.childForceExpandHeight = false;
-        var fitter = strip.gameObject.AddComponent<ContentSizeFitter>();
-        fitter.horizontalFit = fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        if (TabStrip == null) {
+            TabStrip = new GameObject("Channel Tabs", typeof(RectTransform)).GetComponent<RectTransform>();
+            TabStrip.SetParent(transform, false);
+            TabStrip.anchorMin = TabStrip.anchorMax = TabStrip.pivot = new Vector2(0f, 1f);
+            TabStrip.anchoredPosition = new Vector2(2f, -1f);
+            var layout = TabStrip.gameObject.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 1f;
+            layout.childControlWidth = layout.childControlHeight = true;
+            layout.childForceExpandWidth = layout.childForceExpandHeight = false;
+            var fitter = TabStrip.gameObject.AddComponent<ContentSizeFitter>();
+            fitter.horizontalFit = fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        }
 
-        for (var i = 0; i < TabLabels.Length; i++) {
+        for (var i = TabStrip.childCount - 1; i >= 0; i--) {
+            var child = TabStrip.GetChild(i).gameObject;
+            child.SetActive(false);
+            Destroy(child);
+        }
+        TabButtons.Clear();
+        for (var i = 0; i < Tabs.Tabs.Count; i++) {
             var index = i;
-            TabButtons.Add(RoWidgets.Tab(strip, TabLabels[i], () => ShowTab(index), TAB_WIDTH, TAB_HEIGHT, i == 0));
+            var name = Tabs.Tabs[i].Name;
+            TabButtons.Add(RoWidgets.Tab(TabStrip, name, () => OnTabClicked(index), TabWidth(name), TAB_HEIGHT, i == CurrentTab));
+        }
+        if (Tabs.Tabs.Count < MAX_TABS) {
+            RoWidgets.Tab(TabStrip, "+", AddTab, 20f, TAB_HEIGHT, false);
         }
     }
+
+    private static float TabWidth(string name) => Mathf.Clamp(14f + 11f * name.Length, 34f, 100f);
 
     private void BuildInputButtons() {
         var panel = transform.Find("Panel");
@@ -177,11 +222,52 @@ public class ChatBoxController : MonoBehaviour {
 
     #region Tabs
 
-    private void ShowTab(int index) {
-        Filter = TabFilters[index];
-        for (var i = 0; i < TabButtons.Count; i++) {
-            RoWidgets.SetTabSelected(TabButtons[i], i == index);
+    /// <summary>
+    /// Kept on the device: a single 全部 at first
+    /// </summary>
+    private void LoadTabs() {
+        try {
+            var json = PlayerPrefs.GetString(TABS_PREF, "");
+            if (!string.IsNullOrEmpty(json)) {
+                Tabs = JsonUtility.FromJson<TabSettings>(json);
+            }
+        } catch (Exception) {
+            Tabs = null;
         }
+        if (Tabs == null || Tabs.Tabs == null || Tabs.Tabs.Count == 0) {
+            Tabs = new TabSettings();
+            Tabs.Tabs.Add(new TabSetting { Name = "全部", Mask = ALL_CATEGORIES });
+        }
+        CurrentTab = 0;
+    }
+
+    private void SaveTabs() {
+        try {
+            PlayerPrefs.SetString(TABS_PREF, JsonUtility.ToJson(Tabs));
+            PlayerPrefs.Save();
+        } catch (Exception) {
+            // Only the next session loses them
+        }
+    }
+
+    // The tab shown tapped again: what it shows, its name
+    private void OnTabClicked(int index) {
+        if (index == CurrentTab) {
+            OpenTabSettings(index);
+        } else {
+            ShowTab(index);
+        }
+    }
+
+    private void ShowTab(int index) {
+        CurrentTab = Mathf.Clamp(index, 0, Tabs.Tabs.Count - 1);
+        for (var i = 0; i < TabButtons.Count; i++) {
+            RoWidgets.SetTabSelected(TabButtons[i], i == CurrentTab);
+        }
+        ApplyFilter();
+    }
+
+    private void ApplyFilter() {
         foreach (Transform child in LinearLayout.transform) {
             var line = child.GetComponent<Line>();
             child.gameObject.SetActive(line == null || Shows(line.Category));
@@ -189,7 +275,162 @@ public class ChatBoxController : MonoBehaviour {
         ScrollToEnd();
     }
 
-    private bool Shows(Category category) => Filter == null || Filter == category;
+    private bool Shows(Category category) => (Tabs.Tabs[CurrentTab].Mask & (1 << (int) category)) != 0;
+
+    private void AddTab() {
+        if (Tabs.Tabs.Count >= MAX_TABS) {
+            return;
+        }
+        Tabs.Tabs.Add(new TabSetting { Name = $"分頁{Tabs.Tabs.Count + 1}", Mask = ALL_CATEGORIES });
+        SaveTabs();
+        CurrentTab = Tabs.Tabs.Count - 1;
+        BuildTabs();
+        ApplyFilter();
+        OpenTabSettings(CurrentTab);
+    }
+
+    private void RemoveTab(int index) {
+        if (Tabs.Tabs.Count <= 1) {
+            return;
+        }
+        Tabs.Tabs.RemoveAt(index);
+        SaveTabs();
+        CurrentTab = Mathf.Min(CurrentTab, Tabs.Tabs.Count - 1);
+        BuildTabs();
+        ApplyFilter();
+    }
+
+    /// <summary>
+    /// As the official "…視窗顯示資料": the tab's name, and ON/OFF for each kind of message, over the
+    /// chat's top left. It takes effect as it's changed.
+    /// </summary>
+    private void OpenTabSettings(int index) {
+        CloseTabSettings();
+        var tab = Tabs.Tabs[index];
+        var ui = MapUiController.Instance != null ? MapUiController.Instance.transform : transform.parent;
+        var window = RoWidgets.Window(ui, "Chat Tab Settings", $"{tab.Name}視窗顯示資料", new Vector2(SETTINGS_WIDTH, 100f), CloseTabSettings);
+        TabSettingsWindow = window.gameObject;
+        var title = window.GetComponentInChildren<TextMeshProUGUI>();
+
+        var y = -22f;
+        RoWidgets.Text(window, "分頁名稱", 12f, RoWidgets.TextColor, new Vector2(8f, y), new Vector2(60f, 16f));
+        var nameField = RoWidgets.InputField(window, tab.Name, 8, new Vector2(66f, y + 1f), new Vector2(SETTINGS_WIDTH - 74f, 18f));
+        nameField.onEndEdit.AddListener(entered => {
+            var name = entered.Trim();
+            if (name.Length == 0 || name == tab.Name) {
+                nameField.SetTextWithoutNotify(tab.Name);
+                return;
+            }
+            tab.Name = name;
+            title.text = $"{name}視窗顯示資料";
+            SaveTabs();
+            BuildTabs();
+        });
+        y -= 26f;
+
+        var badges = new List<RawImage>();
+        Checkbox allOn = null;
+        for (var i = 0; i < ListedCategories.Length; i++) {
+            var bit = 1 << (int) ListedCategories[i];
+            var row = new GameObject(ListedLabels[i], typeof(RectTransform)).AddComponent<Image>();
+            row.transform.SetParent(window, false);
+            row.color = Color.clear;
+            var rowRect = row.rectTransform;
+            rowRect.anchorMin = rowRect.anchorMax = rowRect.pivot = new Vector2(0f, 1f);
+            rowRect.anchoredPosition = new Vector2(8f, y);
+            rowRect.sizeDelta = new Vector2(SETTINGS_WIDTH - 16f, 18f);
+            var badge = RoWidgets.Picture(rowRect, "State", OnOff((tab.Mask & bit) != 0), new Vector2(0f, -3f), new Vector2(26f, 11f));
+            badges.Add(badge);
+            RoWidgets.Text(rowRect, ListedLabels[i], 12f, RoWidgets.TextColor, new Vector2(32f, -1f), new Vector2(SETTINGS_WIDTH - 50f, 16f));
+            var button = row.gameObject.AddComponent<Button>();
+            button.transition = Selectable.Transition.None;
+            button.targetGraphic = row;
+            button.onClick.AddListener(() => {
+                tab.Mask ^= bit;
+                badge.texture = OnOff((tab.Mask & bit) != 0);
+                allOn.Set(AllListedOn(tab));
+                SaveTabs();
+                ApplyFilter();
+            });
+            y -= 19f;
+        }
+
+        // all on: every kind at once (and off again)
+        y -= 4f;
+        allOn = new Checkbox(window, "all on", AllListedOn(tab), new Vector2(8f, y), () => {
+            var on = !AllListedOn(tab);
+            tab.Mask = on ? ALL_CATEGORIES : 0;
+            for (var i = 0; i < badges.Count; i++) {
+                badges[i].texture = OnOff(on);
+            }
+            SaveTabs();
+            ApplyFilter();
+            return on;
+        });
+        y -= 20f;
+
+        var buttons = RoWidgets.ButtonRow(window);
+        if (Tabs.Tabs.Count > 1) {
+            RoWidgets.Button(buttons, "刪除分頁", () => {
+                CloseTabSettings();
+                RemoveTab(index);
+            });
+        }
+        RoWidgets.Button(buttons, "關閉", CloseTabSettings);
+        window.sizeDelta = new Vector2(SETTINGS_WIDTH, -y + RoWidgets.BUTTON_HEIGHT + 12f);
+
+        // Over the chat's top left corner
+        var corners = new Vector3[4];
+        ((RectTransform) transform).GetWorldCorners(corners);
+        window.pivot = Vector2.zero;
+        window.position = corners[1];
+        window.SetAsLastSibling();
+    }
+
+    private void CloseTabSettings() {
+        if (TabSettingsWindow != null) {
+            Destroy(TabSettingsWindow);
+            TabSettingsWindow = null;
+        }
+    }
+
+    private static bool AllListedOn(TabSetting tab) {
+        foreach (var category in ListedCategories) {
+            if ((tab.Mask & (1 << (int) category)) == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static Texture2D OnOff(bool on) => RoWidgets.Texture(on ? "renewalparty/icon_party_on.bmp" : "renewalparty/icon_party_off.bmp");
+
+    // The official check box (checkbox_0|1) with its label; the tap answers whether it's now ticked
+    private class Checkbox {
+        private readonly RawImage Box;
+
+        public Checkbox(RectTransform parent, string label, bool on, Vector2 position, Func<bool> onClick) {
+            var row = new GameObject(label, typeof(RectTransform)).AddComponent<Image>();
+            row.transform.SetParent(parent, false);
+            row.color = Color.clear;
+            var rect = row.rectTransform;
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = new Vector2(80f, 16f);
+            Box = RoWidgets.Picture(rect, "Box", null, new Vector2(0f, -3f), new Vector2(10f, 10f));
+            RoWidgets.Text(rect, label, 12f, RoWidgets.TextColor, new Vector2(16f, 0f), new Vector2(64f, 16f));
+            Set(on);
+            var button = row.gameObject.AddComponent<Button>();
+            button.transition = Selectable.Transition.None;
+            button.targetGraphic = row;
+            button.onClick.AddListener(() => Set(onClick()));
+        }
+
+        public void Set(bool on) {
+            Box.texture = RoWidgets.Texture(on ? "checkbox_1.bmp" : "checkbox_0.bmp");
+            Box.color = Color.white;
+        }
+    }
 
     private void ScrollToEnd() {
         if (Scroll != null) {
@@ -423,13 +664,21 @@ public class ChatBoxController : MonoBehaviour {
     }
 
     public void DisplayMessage(int messageID, ChatMessageType messageType, params KeyValuePair<string, string>[] replacePairs) {
+        DisplayMessage(messageID, messageType, CategoryOf(messageType), replacePairs);
+    }
+
+    /// <summary>
+    /// A message of msgstringtable, under the tabs showing <paramref name="category"/> (items got,
+    /// equipment, ...)
+    /// </summary>
+    public void DisplayMessage(int messageID, ChatMessageType messageType, Category category, params KeyValuePair<string, string>[] replacePairs) {
         var text = (string) Tables.MsgStringTable[$"{messageID}"] ?? $"{messageID}";
 
         foreach(var pair in replacePairs) {
             text = text.Replace(pair.Key, pair.Value);
         }
 
-        DisplayText(text, GetTextColor(messageType), CategoryOf(messageType));
+        DisplayText(text, GetTextColor(messageType), category);
     }
 
     private static Category CategoryOf(ChatMessageType messageType) {
