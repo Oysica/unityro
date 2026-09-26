@@ -24,6 +24,11 @@ public class EscapeWindow : DraggableUIWindow, IEscapeWindowController {
 
     private void Awake() {
         EntityControl = FindObjectOfType<EntityControl>();
+        // Title bars across the whole window, as its body (they took their picture's width)
+        RoWidgets.FitTitleBar(transform as RectTransform);
+        if (SoundSettingsWindow != null) {
+            RoWidgets.FitTitleBar(SoundSettingsWindow.transform as RectTransform);
+        }
     }
 
     void Start() {

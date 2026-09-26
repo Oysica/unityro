@@ -92,6 +92,38 @@ public static class RoWidgets {
     }
 
     /// <summary>
+    /// A prefab window's title bar as wide as the window, as its body is: otherwise the bar takes
+    /// its picture's size (256 wide), short of the window on both sides
+    /// </summary>
+    public static void FitTitleBar(RectTransform window) {
+        var bar = window != null ? window.Find("Title Bar") as RectTransform : null;
+        if (bar == null) {
+            return;
+        }
+        var panel = bar.GetComponent<CustomPanel>();
+        if (panel != null) {
+            panel.overrideSize = false;
+        }
+        var width = window.rect.width;
+        if (window.GetComponent<LayoutGroup>() != null) {
+            // Laid out by the window: told how wide to be
+            var element = bar.GetComponent<LayoutElement>();
+            if (element == null) {
+                element = bar.gameObject.AddComponent<LayoutElement>();
+            }
+            element.minWidth = element.preferredWidth = width;
+            element.minHeight = element.preferredHeight = 17f;
+            bar.sizeDelta = new Vector2(width, 17f);
+        } else {
+            bar.anchorMin = new Vector2(0f, 1f);
+            bar.anchorMax = Vector2.one;
+            bar.pivot = new Vector2(0.5f, 1f);
+            bar.anchoredPosition = Vector2.zero;
+            bar.sizeDelta = new Vector2(0f, 17f);
+        }
+    }
+
+    /// <summary>
     /// A button of three pieces, lit when pointed at, pressed in when held, grey when disabled
     /// </summary>
     public static Button Button(Transform parent, string text, UnityAction onClick, float width = -1f) {
