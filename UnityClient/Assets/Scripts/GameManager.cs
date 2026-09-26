@@ -241,6 +241,7 @@ public class GameManager : MonoBehaviour {
         new GameObject("CursorRenderer").AddComponent<CursorRenderer>();
         new GameObject("GridRenderer").AddComponent<GridRenderer>();
         new GameObject("ItemManager").AddComponent<ItemManager>();
+        new GameObject("SkillUnitManager").AddComponent<SkillUnitManager>();
     }
 
     private void MaybeInitOfflineUtils() {

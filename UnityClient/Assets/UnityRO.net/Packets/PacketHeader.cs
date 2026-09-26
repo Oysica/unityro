@@ -314,7 +314,7 @@
     //CZ_REMEMBER_WARPPOINT = 0x11d,
     //ZC_ACK_REMEMBER_WARPPOINT = 0x11e,
     //ZC_SKILL_ENTRY = 0x11f,
-    //ZC_SKILL_DISAPPEAR = 0x120,
+    ZC_SKILL_DISAPPEAR = 0x120,
     //ZC_NOTIFY_CARTITEM_COUNTINFO = 0x121,
     //ZC_CART_EQUIPMENT_ITEMLIST = 0x122,
     //ZC_CART_NORMAL_ITEMLIST = 0x123,
@@ -455,7 +455,7 @@
     //ZC_GUILD_INFO2 = 0x1b6,
     //CZ_GUILD_ZENY = 0x1b7,
     //ZC_GUILD_ZENY_ACK = 0x1b8,
-    //ZC_DISPEL = 0x1b9,
+    ZC_DISPEL = 0x1b9,
     //CZ_REMOVE_AID = 0x1ba,
     //CZ_SHIFT = 0x1bb,
     //CZ_RECALL = 0x1bc,
@@ -768,7 +768,7 @@
     //ZC_REQ_CRACKPROOF = 0x43a,
     //CZ_ACK_CRACKPROOF = 0x43b,
     //ZC_CRACKPROOF_ERRCODE = 0x43c,
-    //ZC_SKILL_POSTDELAY = 0x43d,
+    ZC_SKILL_POSTDELAY = 0x43d,
     //ZC_SKILL_POSTDELAY_LIST = 0x43e,
     //ZC_MSG_STATE_CHANGE2 = 0x43f,
     //ZC_MILLENNIUMSHIELD = 0x440,
@@ -1027,6 +1027,7 @@
     // Registered as parse-and-discard since this client has no guild UI.
     ZC_GUILD_INFO3 = 0x0B7B, // PACKET_ZC_GUILD_INFO, PACKETVER >= 20200902, 118 bytes fixed (packets_struct.hpp:5014)
     ZC_UPDATE_GDID = 0x02F7, // PACKET_ZC_UPDATE_GDID, PACKETVER_MAIN_NUM >= 20220216, 47 bytes fixed (packets_struct.hpp:5574)
+    ZC_SKILL_ENTRY5 = 0x09CA, // clif.cpp clif_getareachar_skillunit, PACKETVER >= 20130731, 23 bytes with its length (ground skills)
     // These three caused real damage: any packet the parser doesn't
     // recognize desyncs PacketSerializer.ReadPacket() and silently drops
     // whatever else was batched in the same TCP read alongside it -

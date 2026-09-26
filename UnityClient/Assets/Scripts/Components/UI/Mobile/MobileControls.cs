@@ -63,33 +63,46 @@ public static class MobileControls {
     }
 
     /// <summary>
-    /// The monster the attack button and attack skills go for, until it dies or gets away
+    /// What the attack button and attack skills go for, until it dies or gets away: a monster, or
+    /// an enemy player where players fight. A player tapped elsewhere is locked on too, for
+    /// support skills
     /// </summary>
     public static Entity Target { get; set; }
 
     /// <summary>
-    /// The target, or the nearest monster when there's none
+    /// The target, or the nearest monster (or enemy player) when there's none
     /// </summary>
     public static Entity FindTarget(Entity self) {
         if (!IsValidTarget(Target, self)) {
-            Target = FindNearby(self, EntityType.MOB, TARGET_RANGE).FirstOrDefault();
+            Target = FindNearbyTargets(self, TARGET_RANGE).FirstOrDefault();
         }
         return Target;
     }
 
     /// <summary>
-    /// The next monster around, nearest first
+    /// The next monster (or enemy player) around, nearest first
     /// </summary>
     public static Entity NextTarget(Entity self) {
-        var monsters = FindNearby(self, EntityType.MOB, TARGET_RANGE);
-        if (monsters.Count == 0) {
+        var targets = FindNearbyTargets(self, TARGET_RANGE);
+        if (targets.Count == 0) {
             Target = null;
             return null;
         }
 
-        var index = Target == null ? -1 : monsters.IndexOf(Target);
-        Target = monsters[(index + 1) % monsters.Count];
+        var index = Target == null ? -1 : targets.IndexOf(Target);
+        Target = targets[(index + 1) % targets.Count];
         return Target;
+    }
+
+    /// <summary>
+    /// Monsters, and players where they may be fought, nearest first
+    /// </summary>
+    public static List<Entity> FindNearbyTargets(Entity self, float range) {
+        var position = self.transform.position;
+        return UnityEngine.Object.FindObjectsOfType<Entity>()
+            .Where(entity => entity != self && (entity.Type == EntityType.MOB || MapRules.IsEnemy(entity)) && IsAlive(entity) && CellDistance(position, entity.transform.position) <= range)
+            .OrderBy(entity => CellDistance(position, entity.transform.position))
+            .ToList();
     }
 
     public static List<Entity> FindNearby(Entity self, EntityType type, float range) {
@@ -101,11 +114,22 @@ public static class MobileControls {
     }
 
     /// <summary>
-    /// A live monster still close enough to go for
+    /// A live monster (or enemy player) still close enough to go for
     /// </summary>
     public static bool IsValidTarget(Entity entity, Entity self) {
         return entity != null
-            && entity.Type == EntityType.MOB
+            && (entity.Type == EntityType.MOB || MapRules.IsEnemy(entity))
+            && IsAlive(entity)
+            && CellDistance(self.transform.position, entity.transform.position) <= TARGET_KEEP_RANGE;
+    }
+
+    /// <summary>
+    /// Another player locked on, alive and near: support skills go on them
+    /// </summary>
+    public static bool IsSelected(Entity entity, Entity self) {
+        return entity != null
+            && entity.Type == EntityType.PC
+            && entity != self
             && IsAlive(entity)
             && CellDistance(self.transform.position, entity.transform.position) <= TARGET_KEEP_RANGE;
     }

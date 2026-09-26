@@ -9,11 +9,15 @@ using UnityEngine.AddressableAssets;
 
 namespace ROIO.Loaders {
     public class EffectLoader {
-        private static Dictionary<string, int> textureIdLookup = new Dictionary<string, int>();
-        private static List<string> textureNames = new List<string>();
-        private static List<Texture2D> textures = new List<Texture2D>();
 
-        public static STR Load(MemoryStreamReader data, string path) {
+        /// <summary>
+        /// Where an effect's pictures come from, by their Addressable key, when the game sets it
+        /// (the extracted ones, else the GRF in the editor); the Addressables alone otherwise
+        /// </summary>
+        public static Func<string, Texture2D> TextureSource;
+
+        /// <param name="name">The file's name, which names its atlas</param>
+        public static STR Load(MemoryStreamReader data, string path, string name = null) {
             var header = data.ReadBinaryString(4);
 
             if (!header.Equals(STR.Header)) {
@@ -26,11 +30,18 @@ namespace ROIO.Loaders {
             }
 
             STR str = ScriptableObject.CreateInstance<STR>();
+            str.name = name;
             str.version = version;
             str.fps = data.ReadUInt();
             str.maxKey = data.ReadUInt();
             var layerCount = data.ReadUInt();
             data.Seek(16, System.IO.SeekOrigin.Current);
+
+            // This file's pictures, numbered as its atlas packs them (first seen first): the
+            // numbers were shared by every file loaded, so from the second one on they pointed
+            // at other pictures, or past the end of the atlas
+            var textureIds = new Dictionary<string, int>();
+            var textures = new List<Texture2D>();
 
             //read layers
             str.layers = new STR.Layer[layerCount];
@@ -43,17 +54,23 @@ namespace ROIO.Loaders {
                 layer.texturesIds = new List<int>();
                 for (int j = 0; j < textureCount; j++) {
                     var tex = data.ReadBinaryString(128);
-                    var texture = Addressables.LoadAssetAsync<Texture2D>(path + "/" + Path.ChangeExtension(tex, ".png")).WaitForCompletion();
-                    layer.textures[j] = texture;
-
-                    if (!textureNames.Contains(tex)) {
-                        layer.texturesIds.Add(textureNames.Count);
-                        textureIdLookup.Add(tex, textureNames.Count);
-                        textureNames.Add(tex);
+                    if (!textureIds.TryGetValue(tex, out var id)) {
+                        var key = path + "/" + Path.ChangeExtension(tex, ".png");
+                        var texture = TextureSource != null
+                            ? TextureSource(key)
+                            : Addressables.LoadAssetAsync<Texture2D>(key).WaitForCompletion();
+                        // A missing one keeps its place, or the atlas would skip it
+                        if (texture == null) {
+                            texture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+                            texture.SetPixel(0, 0, Color.clear);
+                            texture.Apply();
+                        }
+                        id = textures.Count;
+                        textureIds[tex] = id;
                         textures.Add(texture);
-                    } else {
-                        layer.texturesIds.Add(textureIdLookup[tex]);
                     }
+                    layer.textures[j] = textures[id];
+                    layer.texturesIds.Add(id);
                 }
 
                 //read animations

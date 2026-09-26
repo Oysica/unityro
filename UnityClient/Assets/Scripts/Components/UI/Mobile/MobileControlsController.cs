@@ -210,6 +210,10 @@ public class MobileControlsController : MonoBehaviour {
             icon.enabled = false;
             SkillIcons[i] = icon;
 
+            // Darkened round the button with the seconds left while the skill can't be used yet
+            var shape = button.targetGraphic as Image;
+            SkillCooldownOverlay.Add(button.transform as RectTransform, () => SlotSkill(slot), shape != null ? shape.sprite : null, 18f);
+
             // Skills and items dragged here go to the slot, as on the shortcut bar
             var trigger = button.gameObject.AddComponent<EventTrigger>();
             var drop = new EventTrigger.Entry { eventID = EventTriggerType.Drop };
@@ -511,7 +515,10 @@ public class MobileControlsController : MonoBehaviour {
             }
         } else if (MobileControls.AutoLock && now >= NextAutoLock) {
             NextAutoLock = now + AUTO_LOCK_SECONDS;
-            MobileControls.FindTarget(self);
+            // A player tapped on stays locked on (for support skills) till another target is chosen
+            if (!MobileControls.IsSelected(MobileControls.Target, self)) {
+                MobileControls.FindTarget(self);
+            }
         }
     }
 
@@ -522,7 +529,8 @@ public class MobileControlsController : MonoBehaviour {
         var self = Self;
         var target = MobileControls.Target;
         var camera = Camera.main;
-        var show = self != null && camera != null && MobileControls.IsValidTarget(target, self);
+        var show = self != null && camera != null
+            && (MobileControls.IsValidTarget(target, self) || MobileControls.IsSelected(target, self));
 
         if (show) {
             var feet = target.transform.position;
@@ -622,6 +630,14 @@ public class MobileControlsController : MonoBehaviour {
         if (control != null) {
             control.RequestSitStand();
         }
+    }
+
+    /// <summary>
+    /// The skill in a shortcut slot, 0 for none or an item
+    /// </summary>
+    private int SlotSkill(int slot) {
+        var container = HotkeyBar != null ? HotkeyBar.GetSlot(slot) : null;
+        return container != null && container.Hotkey != null && container.Hotkey.IsSkill ? container.Hotkey.Id : 0;
     }
 
     private void UseShortcut(int slot) {

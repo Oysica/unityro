@@ -148,7 +148,7 @@ namespace ROIO {
                             spr.filename = file;
                             return spr;
                         case "str":
-                            return EffectLoader.Load(br, Path.GetDirectoryName(file).Replace("\\", "/"));
+                            return EffectLoader.Load(br, Path.GetDirectoryName(file).Replace("\\", "/"), Path.GetFileNameWithoutExtension(file));
                         case "act":
                             return ActionLoader.Load(br);
 

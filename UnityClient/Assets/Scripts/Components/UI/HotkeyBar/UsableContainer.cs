@@ -26,6 +26,8 @@ public class UsableContainer : MonoBehaviour,
     private void Awake() {
         Canvas = Canvas.FindMainCanvas();
         SetHotkey(null);
+        // Darkened with the seconds left while the skill can't be used yet
+        SkillCooldownOverlay.Add(UsableImage.rectTransform, () => Hotkey != null && Hotkey.IsSkill ? Hotkey.Id : 0, null, 11f);
     }
 
     /// <summary>
@@ -61,7 +63,8 @@ public class UsableContainer : MonoBehaviour,
         var entity = Session.CurrentSession.Entity as Entity;
         if (Hotkey.IsSkill) {
             var skillInfo = entity.SkillTree.OwnedSkillsInfos.Find(it => it.SkillID == Hotkey.Id);
-            if (skillInfo != null && skillInfo.Level > 0) {
+            // Not while it's darkened, counting down
+            if (skillInfo != null && skillInfo.Level > 0 && SkillCooldowns.IsReady(skillInfo.SkillID)) {
                 var level = (short) Mathf.Clamp(Hotkey.Count, 1, skillInfo.Level);
                 entity.GetComponent<EntityControl>().UseSkill(skillInfo, level);
             }

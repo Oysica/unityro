@@ -23,14 +23,25 @@ public class StrEffectRenderer : MonoBehaviour {
     private static int[] tempTris = new int[6];
     private float[] angles;
 
-    private Dictionary<string, Material> materials = new Dictionary<string, Material>(8);
+    // One material per effect picture, shared by every layer and every copy of the effect (a
+    // Sanctuary shows one on each of its cells); a layer's colour goes in its renderer's own
+    // block. A new material was made for each layer on every frame, and never freed
+    private static readonly Dictionary<Texture, Material> SharedMaterials = new Dictionary<Texture, Material>();
+    private static readonly int ColorId = Shader.PropertyToID("_Color");
+    private MaterialPropertyBlock ColorBlock;
+
+    /// <summary>
+    /// Starts over when done, for what stays on the ground (Safety Wall, Sanctuary, ...) until
+    /// taken away
+    /// </summary>
+    public bool Loop;
 
     private float time;
     private int frame;
 
-    private Material GetEffectMaterial(int layer, int srcBlend, int destBlend) {
-        var hash = $"{Anim.name}-{layer}-{srcBlend.ToString()}-{destBlend.ToString()}";
-        if(materials.TryGetValue(hash, out var val))
+    private Material GetEffectMaterial() {
+        var atlas = Anim.Atlas;
+        if(SharedMaterials.TryGetValue(atlas, out var val) && val != null)
             return val;
 
         var mat = new Material(Shader.Find("Ragnarok/EffectShader"));
@@ -39,9 +50,10 @@ public class StrEffectRenderer : MonoBehaviour {
         mat.SetFloat("_ZWrite", 0);
         mat.SetFloat("_Cull", 0);
 
-        mat.SetTexture("_MainTex", Anim.Atlas);
+        mat.SetTexture("_MainTex", atlas);
         mat.SetColor("_Color", Color.white);
 
+        SharedMaterials[atlas] = mat;
         return mat;
     }
 
@@ -115,10 +127,13 @@ public class StrEffectRenderer : MonoBehaviour {
         mf.sharedMesh = mesh;
     }
 
-    private void UpdateLayerData(GameObject go, Material mat, Vector2 pos, Color color) {
+    private void UpdateLayerData(GameObject go, MeshRenderer mr, Vector2 pos, Color color) {
         go.transform.localPosition = new Vector3((pos.x - 320f) / 35f, -(pos.y - 360f) / 35f, 0);
         go.transform.localScale = Vector3.one;
-        mat.SetColor("_Color", color);
+        if(ColorBlock == null)
+            ColorBlock = new MaterialPropertyBlock();
+        ColorBlock.SetColor(ColorId, color);
+        mr.SetPropertyBlock(ColorBlock);
     }
 
     private bool UpdateAnimationLayer(int layerNum) {
@@ -152,15 +167,12 @@ public class StrEffectRenderer : MonoBehaviour {
         if(nextAnim >= 0)
             to = layer.animations[nextAnim];
         var delta = frame - from.frame;
-        var blendSrc = (int)from.srcAlpha;
-        var blendDest = (int)from.destAlpha;
 
-        var mat = GetEffectMaterial(layerNum, blendSrc, blendDest);
         var go = layerObjects[layerNum];
         var mr = layerRenderers[layerNum];
         var mf = layerFilters[layerNum];
         var mesh = layerMeshes[layerNum];
-        mr.material = mat;
+        mr.sharedMaterial = GetEffectMaterial();
 
         if(nextAnim != startAnim + 1 || to?.frame != from.frame) {
             if(to != null && lastSource <= from.frame)
@@ -168,7 +180,7 @@ public class StrEffectRenderer : MonoBehaviour {
 
             var fixedFrame = layer.texturesIds[(int)from.animFrame];
             UpdateMesh(mf, mesh, from.xy, from.uv, from.angle, fixedFrame);
-            UpdateLayerData(go, mat, from.position, from.color);
+            UpdateLayerData(go, mr, from.position, from.color);
             return true;
         }
 
@@ -206,7 +218,7 @@ public class StrEffectRenderer : MonoBehaviour {
         var texIndex = layer.texturesIds[frameId];
 
         UpdateMesh(mf, mesh, tempPositions2, tempUvs2, angle, texIndex);
-        UpdateLayerData(go, mat, pos, color);
+        UpdateLayerData(go, mr, pos, color);
 
         return true;
     }
@@ -236,6 +248,11 @@ public class StrEffectRenderer : MonoBehaviour {
         frame = newFrame;
 
         if(frame > Anim.maxKey) {
+            if(Loop) {
+                time = 0f;
+                frame = -1;
+                return;
+            }
             Destroy(gameObject);
             return;
         }

@@ -16,8 +16,12 @@ public partial class ZC {
         public const int SIZE = 47;
         public PacketHeader Header => HEADER;
 
+        // Our guild, 0 for none: players of another may be enemies in GvG and guild wars
+        public uint GuildId;
+
         public void Read(MemoryStreamReader br, int size) {
-            // 45-byte body; nothing to act on (no guild UI in this client).
+            // The rest of the 45-byte body is left to the reader to skip (no guild UI in this client)
+            GuildId = br.ReadUInt();
         }
     }
 }

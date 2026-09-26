@@ -201,6 +201,9 @@ public class EntityManager : MonoBehaviour {
     }
 
     public void ClearEntities() {
+        // Skills left on the ground go with the rest; the server sends those around the new place
+        SkillUnitManager.Clear();
+
         // Entities of a map scene that was already unloaded are gone; the cache must not hand them out again
         foreach (var entity in entityCache.Values.Where(it => it != null)) {
             Destroy(entity.gameObject);

@@ -49,7 +49,8 @@ namespace ROIO.Models.FileTypes {
             }
 
             var textures = layers.SelectMany(it => it.textures).Distinct().ToList();
-            var baseName = Path.GetFileNameWithoutExtension(name);
+            // Loaded without its file's name, this threw and the effect never showed
+            var baseName = Path.GetFileNameWithoutExtension(name ?? "effect");
             var atlasName = $"{baseName.Replace("\\", "_")}_atlas";
 
             var extraTexture = new Texture2D(2, 2, TextureFormat.RGBA32, false);

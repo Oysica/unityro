@@ -126,6 +126,10 @@ public class Entity : MonoBehaviour, INetworkEntity {
         NetworkClient.HookPacket(ZC.ACK_TOUSESKILL.HEADER, OnUseSkillResult);
         NetworkClient.HookPacket(ZC.NOTIFY_SKILL2.HEADER, OnEntityUseSkillToAttack);
         NetworkClient.HookPacket(ZC.USESKILL_ACK2.HEADER, OnEntityCastSkill);
+        NetworkClient.HookPacket(ZC.DISPEL.HEADER, OnEntityCastCancel);
+        NetworkClient.HookPacket(ZC.SKILL_POSTDELAY.HEADER, OnSkillCooldown);
+        NetworkClient.HookPacket(ZC.NOTIFY_MAPPROPERTY2.HEADER, OnMapProperty);
+        NetworkClient.HookPacket(ZC.UPDATE_GDID.HEADER, OnGuildChanged);
         NetworkClient.HookPacket(ZC.USE_SKILL.HEADER, OnEntityUseSkill);
         NetworkClient.HookPacket(ZC.RECOVERY.HEADER, OnRecovery);
         NetworkClient.HookPacket(ZC.ATTACK_FAILURE_FOR_DISTANCE.HEADER, OnAttackFailureForDistance);
@@ -164,6 +168,7 @@ public class Entity : MonoBehaviour, INetworkEntity {
         Status.max_hp = data.MaxHP;
         Status.char_id = GID;
         Status.account_id = AID;
+        Status.guild_id = (int) data.GuildID;
 
         Status.hair_color = data.HairColor;
         Status.clothes_color = data.ClothesColor;
@@ -445,6 +450,7 @@ public class Entity : MonoBehaviour, INetworkEntity {
     /// </summary>
     public void Respawn(EntitySpawnData data) {
         StopMoving();
+        Status.guild_id = (int) data.GuildID;
         Direction = ((NpcDirection) data.PosDir[2]).ToDirection();
         transform.position = new Vector3(data.PosDir[0], PathFinder?.GetCellHeight(data.PosDir[0], data.PosDir[1]) ?? 0f, data.PosDir[1]);
 
@@ -547,7 +553,6 @@ public class Entity : MonoBehaviour, INetworkEntity {
     private void OnEntityCastSkill(ushort cmd, int size, InPacket packet) {
         if (packet is ZC.USESKILL_ACK2 USESKILL_ACK2) {
             var srcEntity = EntityManager.GetEntity(USESKILL_ACK2.AID);
-            var dstEntity = EntityManager.GetEntity(USESKILL_ACK2.targetID);
 
             if (!srcEntity) {
                 return;
@@ -555,14 +560,93 @@ public class Entity : MonoBehaviour, INetworkEntity {
 
             if (USESKILL_ACK2.delayTime > 0) {
                 srcEntity.CastSkill(USESKILL_ACK2.delayTime / 1000f, USESKILL_ACK2.property);
+                // Cast on the ground (no one's the target): the magic circle where it will go
+                if (USESKILL_ACK2.targetID == 0) {
+                    GroundCastCircle.Show(USESKILL_ACK2.AID, USESKILL_ACK2.SKID, USESKILL_ACK2.xPos, USESKILL_ACK2.yPos, USESKILL_ACK2.delayTime / 1000f);
+                }
             }
+        }
+    }
+
+    /// <summary>
+    /// Someone's casting was interrupted: no more ring or bar
+    /// </summary>
+    private void OnEntityCastCancel(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.DISPEL DISPEL) {
+            GroundCastCircle.Hide(DISPEL.AID);
+            var entity = EntityManager.FindEntity(DISPEL.AID);
+            if (entity != null) {
+                entity.StopCasting();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Whether players fight on this map: the attack button, the target lock and clicks go for
+    /// enemy players too where they do
+    /// </summary>
+    private void OnMapProperty(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.NOTIFY_MAPPROPERTY2 property) {
+            MapRules.Set(property.Flags);
+        }
+    }
+
+    /// <summary>
+    /// Our guild: other guilds' players are the enemies in GvG and guild wars
+    /// </summary>
+    private void OnGuildChanged(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.UPDATE_GDID guild) {
+            Status.guild_id = (int) guild.GuildId;
+        }
+    }
+
+    /// <summary>
+    /// One of our skills can't be used again for a while, its own cooldown
+    /// </summary>
+    private void OnSkillCooldown(ushort cmd, int size, InPacket packet) {
+        if (packet is ZC.SKILL_POSTDELAY SKILL_POSTDELAY) {
+            SkillCooldowns.StartCooldown(SKILL_POSTDELAY.SkillId, SKILL_POSTDELAY.DelayMs / 1000f);
         }
     }
 
     public void CastSkill(float delayTime, uint property) {
         PlayAudio("data/wav/effect/ef_beginspell.wav");
         CastingEffect.StartCasting(delayTime, "data/texture/effect/ring_yellow.png", gameObject);
+        if (Canvas != null) {
+            Canvas.StartCasting(delayTime, PictureBounds());
+        }
         ChangeMotion(new MotionRequest { Motion = SpriteMotion.Casting, delay = 0 });
+    }
+
+    public void StopCasting() {
+        CastingEffect.StopCasting(gameObject);
+        if (Canvas != null) {
+            Canvas.StopCasting();
+        }
+    }
+
+    /// <summary>
+    /// Where the picture (body, head, headgear, ...) is in the world, the shadow left out
+    /// </summary>
+    private Bounds? PictureBounds() {
+        Bounds? picture = null;
+        if (EntityViewer == null) {
+            return picture;
+        }
+
+        foreach (var part in EntityViewer.GetComponentsInChildren<Renderer>()) {
+            if (part.name == "Shadow") {
+                continue;
+            }
+            if (picture.HasValue) {
+                var bounds = picture.Value;
+                bounds.Encapsulate(part.bounds);
+                picture = bounds;
+            } else {
+                picture = part.bounds;
+            }
+        }
+        return picture;
     }
 
     // Skills whose name isn't called out (roBrowser SkillNameDisplayExclude): hiding, jokes and the

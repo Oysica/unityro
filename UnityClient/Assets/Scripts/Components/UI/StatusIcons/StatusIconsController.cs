@@ -13,6 +13,7 @@ public class StatusIconsController : MonoBehaviour {
 
     private const float ICON_SIZE = 24f;
     private const float BLINK_BELOW_SECONDS = 10f;
+    private const int EFST_POSTDELAY = 46;
 
     private class StatusIcon {
         public int Efst;
@@ -64,6 +65,11 @@ public class StatusIconsController : MonoBehaviour {
     private void OnStateChange(ushort cmd, int size, InPacket packet) {
         switch (packet) {
             case ZC.MSG_STATE_CHANGE3 change when IsMine(change.AID):
+                // The delay after a skill holds every skill back: the shortcuts count it down
+                if (change.Type == EFST_POSTDELAY) {
+                    var ms = change.State == 1 ? (change.RemainMs > 0 ? change.RemainMs : change.TotalMs) : 0;
+                    SkillCooldowns.StartAfterCastDelay(ms / 1000f);
+                }
                 if (change.State == 1) {
                     Show(change.Type, change.RemainMs);
                 } else {

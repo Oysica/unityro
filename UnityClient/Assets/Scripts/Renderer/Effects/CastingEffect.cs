@@ -31,6 +31,17 @@ class CastingEffect : MonoBehaviour {
         cast.Init();
     }
 
+    /// <summary>
+    /// The ring of a casting that was interrupted
+    /// </summary>
+    public static void StopCasting(GameObject followTarget) {
+        foreach (var cast in FindObjectsOfType<CastingEffect>()) {
+            if (cast.FollowTarget == followTarget) {
+                Destroy(cast.gameObject);
+            }
+        }
+    }
+
     public void Init() {
         prim = PrimitiveCylinderEffect.LaunchEffect(gameObject, CastMaterial, 4, Duration);
         prim.Updater = prim.Update3DCasting;

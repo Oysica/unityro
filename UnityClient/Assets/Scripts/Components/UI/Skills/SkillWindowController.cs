@@ -263,6 +263,10 @@ public class SkillWindowController : DraggableUIWindow, ISkillWindowController {
     }
 
     public void UseSkill(SkillInfo skillInfo, short level) {
+        // Not while its shortcuts are darkened, counting down
+        if (!SkillCooldowns.IsReady(skillInfo.SkillID)) {
+            return;
+        }
         EntityControl.UseSkill(skillInfo, level);
     }
 }

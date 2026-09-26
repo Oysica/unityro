@@ -14,15 +14,22 @@ public static class ScreenInput {
     private const float TAP_MAX_MOVE_INCHES = 0.12f;
     private const float DEFAULT_DPI = 160f;
 
+    /// <summary>
+    /// Held this long without moving, a touch is a long press (a player's menu); a tap is shorter
+    /// </summary>
+    public const float LONG_PRESS_SECONDS = 0.5f;
+
     private struct TouchStart {
         public float Time;
         public Vector2 Position;
         public bool OverUI;
         public bool Gesture;
+        public bool LongPressed;
     }
 
     private static readonly Dictionary<int, TouchStart> Starts = new Dictionary<int, TouchStart>();
     private static readonly List<Vector2> Taps = new List<Vector2>();
+    private static readonly List<Vector2> LongPresses = new List<Vector2>();
     private static readonly List<Touch> Touches = new List<Touch>();
     private static readonly List<RaycastResult> RaycastResults = new List<RaycastResult>();
     private static int ProcessedFrame = -1;
@@ -39,6 +46,16 @@ public static class ScreenInput {
         get {
             Refresh();
             return Taps;
+        }
+    }
+
+    /// <summary>
+    /// Where the world has been held down on long enough this frame, once per touch
+    /// </summary>
+    public static List<Vector2> WorldLongPresses {
+        get {
+            Refresh();
+            return LongPresses;
         }
     }
 
@@ -78,6 +95,7 @@ public static class ScreenInput {
         }
         ProcessedFrame = Time.frameCount;
         Taps.Clear();
+        LongPresses.Clear();
         Touches.Clear();
 
         var maxMove = TAP_MAX_MOVE_INCHES * (Screen.dpi > 0 ? Screen.dpi : DEFAULT_DPI);
@@ -102,6 +120,14 @@ public static class ScreenInput {
 
             if (!isUp) {
                 Touches.Add(touch);
+                // Held still long enough: a long press, told once
+                if (!start.Gesture && !start.LongPressed
+                    && Time.unscaledTime - start.Time >= LONG_PRESS_SECONDS
+                    && (touch.position - start.Position).magnitude <= maxMove) {
+                    start.LongPressed = true;
+                    Starts[touch.fingerId] = start;
+                    LongPresses.Add(touch.position);
+                }
             } else if (touch.phase == TouchPhase.Ended
                 && !start.Gesture
                 && Time.unscaledTime - start.Time <= TAP_MAX_SECONDS

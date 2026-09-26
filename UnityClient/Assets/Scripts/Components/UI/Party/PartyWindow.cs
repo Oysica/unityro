@@ -706,9 +706,16 @@ public class PartyWindow : MonoBehaviour {
     }
 
     /// <summary>
-    /// A member of the list tapped: whisper; the leader also hands the lead over or expels
+    /// A member of the list tapped: whisper; the leader also hands the lead over or expels.
+    /// A support skill waiting for its target goes on them instead, as in the official client
     /// </summary>
     private void ShowMemberMenu(Member member) {
+        var me = Session.CurrentSession != null ? Session.CurrentSession.Entity as Entity : null;
+        var control = me != null ? me.GetComponent<EntityControl>() : null;
+        if (control != null && member.IsOnline && control.UseSelectedSkillOnPlayer(member.AID)) {
+            return;
+        }
+
         var self = IsSelf(member.AID);
         var options = new List<KeyValuePair<string, int>>();
         if (!self) {
