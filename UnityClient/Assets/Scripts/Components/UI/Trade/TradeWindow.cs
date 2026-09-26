@@ -228,6 +228,11 @@ public class TradeWindow : MonoBehaviour, IDropHandler {
         switch (ack.Result) {
             case 0:
                 Ours.Add(new Offer { Name = ItemName(pending.Item), Icon = pending.Item.res, Amount = pending.Amount });
+                // Out of the inventory as soon as it's in, as the official client: the server won't
+                // say so when the trade is done (trade.cpp pc_delitem without telling), and sends it
+                // back if the trade is cancelled
+                (Session.CurrentSession.Entity as Entity).Inventory.RemoveItem(pending.Item.index, pending.Amount);
+                UI.UpdateEquipment();
                 Refresh();
                 break;
             case 1:
